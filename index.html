@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרק 1 - מבוא לנגזרים פיננסיים: למה צריך מכשירים מתוחכמים!</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    
+    <style>
+        :root {
+            --primary: #0f172a;      /* Slate 900 */
+            --primary-light: #1e293b;
+            --secondary: #3b82f6;    /* Blue 500 */
+            --secondary-dark: #2563eb;
+            --accent: #f59e0b;       /* Amber 500 */
+            --success: #10b981;      /* Emerald 500 */
+            --danger: #ef4444;       /* Red 500 */
+            --bg-page: #f8fafc;
+            --surface: #ffffff;
+            --text-dark: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Assistant', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            line-height: 1.7;
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Global Layout --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 6rem 0 8rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #93c5fd;
+            padding: 0.5rem 1.5rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            max-width: 800px;
+        }
+
+        /* --- Content Layout --- */
+        .content-wrapper {
+            margin-top: -4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid var(--bg-page);
+            padding-bottom: 1rem;
+        }
+
+        .section-header i {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-dark);
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin: 0;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            color: var(--primary-light);
+            margin: 2rem 0 1rem;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+        }
+
+        strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* --- Highlight & Pedagogical Boxes --- */
+        .concept-box {
+            background: #eff6ff;
+            border-right: 5px solid var(--secondary);
+            padding: 1.5rem 2rem;
+            border-radius: 8px 0 0 8px;
+            margin: 2rem 0;
+        }
+
+        .concept-title {
+            color: var(--secondary-dark);
+            font-weight: 800;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-box {
+            background: #fffbeb;
+            border-right: 5px solid var(--accent);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        /* --- Multiple Choice Questions (MCQ) --- */
+        .mcq-box {
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            position: relative;
+        }
+        .mcq-box::before {
+            content: '\f059';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: -15px;
+            right: 2rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);
+        }
+        .mcq-title {
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .mcq-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #f8fafc;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mcq-option:hover {
+            border-color: var(--secondary);
+            background: #eff6ff;
+        }
+        .mcq-option input[type="radio"] {
+            transform: scale(1.3);
+            accent-color: var(--secondary);
+        }
+        .mcq-solution summary {
+            color: white;
+            background: var(--secondary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            display: inline-flex;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .mcq-solution summary:hover {
+            background: var(--secondary-dark);
+        }
+        .mcq-answer-content {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #ecfdf5;
+            border-right: 4px solid var(--success);
+            border-radius: 8px;
+        }
+        .mcq-answer-content.error {
+            background: #fef2f2;
+            border-right: 4px solid var(--danger);
+        }
+
+        /* --- Grids for Market Players --- */
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .player-card {
+            background: var(--bg-page);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .player-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+            border-color: var(--secondary);
+        }
+
+        .player-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .p-hedger .player-icon { color: var(--success); }
+        .p-speculator .player-icon { color: var(--danger); }
+        .p-arbitrage .player-icon { color: var(--secondary); }
+
+        .player-card h4 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        /* --- Market Overview Blocks --- */
+        .market-markets {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .market-item {
+            display: flex;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .market-logo {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 180px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .market-logo span {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-weight: 400;
+            margin-top: 0.5rem;
+        }
+
+        .market-content {
+            padding: 1.5rem;
+        }
+
+        /* --- Case Study --- */
+        .case-study {
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            border: 2px solid #cbd5e1;
+            padding: 2.5rem;
+            border-radius: 16px;
+            margin-top: 2rem;
+        }
+
+        .case-timeline {
+            border-right: 3px solid var(--secondary);
+            padding-right: 2rem;
+            margin-bottom: 2rem;
+            margin-right: 1rem;
+        }
+
+        .timeline-step {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-step::before {
+            content: '';
+            position: absolute;
+            right: -2.7rem;
+            top: 0.3rem;
+            width: 15px; height: 15px;
+            background: var(--secondary);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--secondary);
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 800px;
+            height: 450px; /* Fixed height to prevent aspect ratio stretching */
+            margin: 2rem auto;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        /* --- Interactive Exercises (Accordion) --- */
+        .exercise-box {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .exercise-question {
+            padding: 1.5rem;
+            background: #f1f5f9;
+            font-weight: 600;
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .exercise-question .q-badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 6px;
+            margin-left: 0.5rem;
+            font-size: 1rem;
+        }
+
+        details {
+            padding: 0;
+            margin: 0;
+        }
+
+        /* For regular exercises details */
+        .exercise-box details summary {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--secondary-dark);
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            transition: background 0.2s;
+        }
+
+        .exercise-box details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .exercise-box details summary:hover {
+            background: #f8fafc;
+        }
+
+        .exercise-box details summary::before {
+            content: "\f0da";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.2s;
+        }
+
+        .exercise-box details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        .exercise-solution {
+            padding: 1.5rem;
+            border-top: 1px dashed var(--border-color);
+            background: #ecfdf5; /* subtle green background for solution */
+        }
+
+        /* Extra math blocks */
+        .math-breakdown {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            direction: ltr; /* math formulas look better in LTR */
+            text-align: left;
+            margin: 1rem 0;
+            color: var(--primary);
+            white-space: pre-wrap;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .section-card { padding: 1.5rem; }
+            .market-item { flex-direction: column; }
+            .market-logo { min-height: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="container relative">
+            <span class="hero-badge"><i class="fas fa-layer-group"></i> פרק 1</span>
+            <h1>מבוא לנגזרים פיננסיים: <br> למה צריך מכשירים מתוחכמים!</h1>
+            <p>הרצאת עומק באורך 3 שעות: הבנה אינטואיטיבית של שוק הנגזרים, הכרת השחקנים המובילים, סקירת הבורסות בעולם, ומקרי בוחן אנליטיים (כולל גידור דלק בחברות תעופה) בתוספת תרגולים מעשיים מהבסיס ועד לרמה הכמותית הגבוהה.</p>
+        </div>
+    </header>
+
+    <main class="container content-wrapper">
+
+        <!-- Section 1: Intuitive explanation -->
+        <section class="section-card">
+            <div class="section-header">
+                <i class="fas fa-lightbulb"></i>
+                <h2>מהם נגזרים פיננסיים! (הסבר אינטואיטיבי)</h2>
+            </div>
+            
+            <p>כשאנו מסתכלים על השוק הפיננסי הקלאסי, אנו מכירים נכסים רגילים: מניות, אגרות חוב, מטבע חוץ (כמו דולר), או סחורות (זהב, נפט, חיטה). אלו הם <strong>"נכסי הבסיס" (Underlying Assets)</strong>.</p>
+            <p><strong>נגזר (Derivative)</strong> הוא בסך הכל <strong>חוזה</strong>. זהו חוזה שבו שני צדדים מתחייבים או מקבלים זכות לבצע פעולה עתידית לפי תנאים שנקבעו מראש. למה הוא נקרא "נגזר"? משום שהשווי שלו <em>נגזר</em> (שואב את ערכו) מהמחיר של נכס הבסיס שעליו הוא חתום.</p>
+
+            <div class="concept-box">
+                <div class="concept-title"><i class="fas fa-ticket-alt"></i> דוגמה מוחשית: תלוש לטיסה עתידית</div>
+                <p>נניח שאתם רוצים לטוס לניו-יורק בקיץ (בעוד חצי שנה). כיום כרטיס טיסה עולה 1,000$. אתם חוששים שעד הקיץ המחיר יזנק ל-1,500$. אתם מגיעים לסוכן נסיעות, והוא מציע לכם <strong>לשלם עכשיו 50$ בלבד</strong> בעבור "שובָר".</p>
+                <p>השובר הזה הוא <strong>חוזה (נגזר מסוג אופציה)</strong> שמקנה לכם את הזכות (אך לא החובה) לקנות כרטיס טיסה בקיץ ב-1,000$ בדיוק. ערך השובר <em>נגזר</em> ממחיר כרטיס הטיסה. אם בקיץ מחיר הטיסה בשוק יהיה 1,500$, השובר שלכם יהיה שווה המון (חסכתם 500$). אם מחיר הטיסה יתרסק ל-700$, פשוט תזרקו את השובר לפח (הפסדתם רק את ה-50$ ששילמתם עליו).</p>
+            </div>
+
+            <p>למה אנחנו צריכים מכשירים כאלו? הרי אפשר פשוט לקנות את הנכס וזהו! הסיבות העיקריות הן <strong>ניהול סיכונים (גידור), מנוף פיננסי הגורם להגדלת רווחים (או הפסדים) באחוזים ניכרים על הון קטן, וחיסכון בעלויות עסקה</strong>. אין צורך לאחסן חביות נפט במחסן הבית שלך אם אתה רק רוצה לסחור על תנודות המחיר שלהן – בחוזה נגזר אתה סוחר על המחיר מבלי להחזיק בנכס פיזית.</p>
+
+            <div class="mcq-box">
+                <div class="mcq-title">בחן את עצמך: נכס בסיס לעומת נגזר</div>
+                <div class="mcq-options">
+                    <label class="mcq-option"><input type="radio" name="sq1"><span>א. נכס הבסיס נסחר רק בזירות OTC, ואילו הנגזר רק בבורסה הממוסדת.</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq1"><span>ב. ברכישת נכס בסיס תמיד קיים מנוף פיננסי עצום לעומת רכישת נגזר.</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq1"><span>ג. כל שינוי בערכו של הנגזר נובע משינוי במחיר השוק של נכס הבסיס אליו הוא צמוד, ולא להפך.</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq1"><span>ד. נגזר פיננסי הוא בסך הכל הסכם להלוואה בריבית קבועה.</span></label>
+                </div>
+                <details class="mcq-solution">
+                    <summary>הצג פתרון מוסתר</summary>
+                    <div class="mcq-answer-content">
+                        <strong>התשובה הנכונה היא ג'.</strong><br>
+                        נגזר (Derivative) מעצם הגדרתו שואב ("גוזר") את הערך שלו מנכס בסיס קיים (Underlying Asset). מחירי טיסות (נכס הבסיס בדוגמה) קובעים את שווי שובר הטיסה (הנגזר). א' לא נכון כי שניהם יכולים להיסחר ב-OTC ובבורסות, ב' לא נכון כי המנוף מצוי בנגזרים, וד' לא נכון כי הסכם הלוואה הוא אג"ח רגיל.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Section 2: Market Players -->
+        <section class="section-card">
+            <div class="section-header">
+                <i class="fas fa-users-cog"></i>
+                <h2>מי השחקנים בשוק? המערכת האקולוגית של הנגזרים</h2>
+            </div>
+            
+            <p>שוק הנגזרים אינו יכול לפעול ללא מגוון רחב של משתתפים. כל שחקן מגיע לשוק עם מניע שונה לחלוטין. הצירוף של כל השחקנים יחד יוצר <strong>נזילות</strong> (אפשרות לבצע עסקאות במהירות).</p>
+
+            <div class="players-grid">
+                <!-- Hedgers -->
+                <div class="player-card p-hedger">
+                    <div class="player-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h4>מגדרים (Hedgers)</h4>
+                    <p><strong>המטרה: </strong> להפחית או למנוע סיכון (להבטיח ודאות עסקית).</p>
+                    <p>מגדר הוא גוף עסקי החשוף לשינויים במחיר של נכס מסוים בגלל פעילותו האמיתית (למשל חקלאי שמוכר חיטה, יבואן שמשלם ביורו). המגדר לא מחפש לעשות קופה מעסקה פיננסית, הוא רק רוצה <strong>לנעול מחיר</strong> כדי להבטיח את רווחיות העסק העיקרי שלו.</p>
+                </div>
+
+                <!-- Speculators -->
+                <div class="player-card p-speculator">
+                    <div class="player-icon"><i class="fas fa-chart-line"></i></div>
+                    <h4>ספקולנטים (Speculators)</h4>
+                    <p><strong>המטרה: </strong> להפיק רווח הון מותנה בלקיחת סיכון מחושב.</p>
+                    <p>בניגוד למגדרים, לספקולנטים אין קשר טבעי לנכס (קרנות גידור, סוחרים יומיים). דעתם היא שמחיר נכס מסוים יעלה או ירד, והם משתמשים בנגזרים כמנוף. הם מספקים המון נזילות לשוק ופועלים "לספוג" את הסיכון שהמגדרים רוצים להיפטר ממנו.</p>
+                </div>
+
+                <!-- Arbitrageurs -->
+                <div class="player-card p-arbitrage">
+                    <div class="player-icon"><i class="fas fa-balance-scale-right"></i></div>
+                    <h4>ארביטראז'יסטים (Arbitrageurs)</h4>
+                    <p><strong>המטרה: </strong> רווח ודאי ונטול סיכון תוך ניצול פערי מחירים.</p>
+                    <p>אלגוריתמים ובנקים המחפשים עיוותים זמניים במחירים בין שווקים או מוצרים. למשל, סחורה נסחרת בשוק A ב-100$ ובשוק B ב-102$. הארביטראז'יסט קונה בעמדה A ומוכר מיידית בעמדה B, ומרוויח פער נטול סיכון. פעולתם מביאה <strong>ליעילות השוק</strong> והשוואת מחירים (חוק המחיר האחיד).</p>
+                </div>
+            </div>
+
+            <div class="mcq-box">
+                <div class="mcq-title">בחן את עצמך: זיהוי תפקיד בסביבת המסחר</div>
+                <div class="mcq-options">
+                    <label class="mcq-option"><input type="radio" name="sq2"><span>א. חברת חשמל שמייבאת פחם כדי לייצר חשמל וקונה חוזה הגנה נגד זינוק מחירי הפחם היא "ארביטראז'יסטית".</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq2"><span>ב. קרן הון סיכון שמזהה שמחיר הניקל צפוי לעלות עקב מהפכת הרכבים החשמליים, וקונה חוזים עתידיים ללא כוונה להחזיק בניקל הפיזי, היא "ספקולנטית".</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq2"><span>ג. בוט מסחר שקונה מטבע ביטקוין ביפן ומוכר אותו בארה"ב בשבריר שנייה כדי לגרוף בדיוק 1$ לפעולה נטולת סיכון, הוא "מגדר".</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq2"><span>ד. הספקולנט פוגע בשלמות השוק וחייבים להרחיק אותו מהבורסה למען בטיחות המגדרים.</span></label>
+                </div>
+                <details class="mcq-solution">
+                    <summary>הצג פתרון מוסתר</summary>
+                    <div class="mcq-answer-content">
+                        <strong>התשובה הנכונה היא ב'.</strong><br>
+                        חברת החשמל היא מגדר (Hedger). הקרן שמזהה מגמה אך לא קשורה לביזנס של הניקל היא אכן ספקולנטית הלוקחת סיכון מחושב כדי להרוויח. בוט המסחר עושה ארביטראז' טהור. הספקולנט אינו "רע" לשוק, נהפוך הוא - הוא מספק אוקיינוס של נזילות שמאפשרת למגדרים למצוא קונה או מוכר בכל רגע נתון.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Section 3: Market Overview -->
+        <section class="section-card">
+            <div class="section-header">
+                <i class="fas fa-globe-americas"></i>
+                <h2>סקירת השווקים בעולם: איפה המסחר קורה?</h2>
+            </div>
+            
+            <p>המסחר בנגזרים מתחלק בגדול לשני סוגים של שווקים: מסחר המאורגן בבורסה תחת כללים נוקשים ומסחר פרטי "מעבר לדלפק".</p>
+
+            <div class="market-markets">
+                
+                <div class="market-item">
+                    <div class="market-logo" style="background:#0f172a;">
+                        CME Group
+                        <span>בורסת שיקגו</span>
+                    </div>
+                    <div class="market-content">
+                        <h4>בורסת שיקגו (CBOT / CME)</h4>
+                        <p>הבורסה הגדולה והחשובה בעולם למסחר בנגזרים (חוזים עתידיים ואופציות). מקורה היסטורי במאה ה-19, אז חקלאים במערב התיכון של ארה"ב הגיעו לשיקגו וביקשו להגן ולנעול מחירים לחיטה ולתירס לפני עונת הקציר. כיום נסחרים שם נגזרים על ריביות, מדדי מניות (כמו S&P500), מטבעות, סחורות אנרגיה, זהב ואף מוצרי חקלאות מסורתיים. החוזים סטנדרטיים לחלוטין תחת תנאי וערבויות הבורסה.</p>
+                    </div>
+                </div>
+
+                <div class="market-item">
+                    <div class="market-logo" style="background:#2563eb;">
+                        TASE
+                        <span>הבורסה בת"א</span>
+                    </div>
+                    <div class="market-content">
+                        <h4>הבורסה לניירות ערך בתל אביב - מעו"ף</h4>
+                        <p>הזירה המרכזית בישראל. השם מעו"ף נוצר מראשי תיבות "מכשירים עתידיים ופיננסיים". המוצרים הבולטים ביותר הנסחרים בישראל הם <strong>אופציות וחוזים עתידיים על מדד תל אביב 35 (TA-35)</strong>, וכן <strong>אופציות הדולר/שקל</strong>. שוק זה חיוני לגופים מוסדיים בישראל (קרנות פנסיה) המבקשים לגדר את חשיפתם לתנודות שוק המניות הישראלי ולשער החליפין.</p>
+                    </div>
+                </div>
+
+                <div class="market-item">
+                    <div class="market-logo" style="background:#64748b;">
+                        OTC
+                        <span>Over The Counter</span>
+                    </div>
+                    <div class="market-content">
+                        <h4>שווקים שמעבר לדלפק (OTC)</h4>
+                        <p>זהו לא בניין אלא רשת תקשורת בין גופים פיננסיים גדולים (בנקים, תאגידי ענק). ב-OTC החוזים <strong>אינם סטנדרטיים</strong>, וניתן "לתפור" חוזה ספציפי לצרכי הלקוח (Custom Made) – למשל חוזה על שער הראנד הדרום אפריקאי לפקיעה בעוד 14 וחצי חודשים בסכום אקזוטי. החיסרון הגדול: שוק לא מוסדר וקיים בו <strong>סיכון אשראי צד ג'</strong> – הסכנה שהצד השני לחוזה יפשוט את הרגל ולא ישלם.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mcq-box">
+                <div class="mcq-title">בחן את עצמך: זירות המסחר (Exchange vs OTC)</div>
+                <div class="mcq-options">
+                    <label class="mcq-option"><input type="radio" name="sq3"><span>א. שוק ה-OTC מתאפיין בחוזים סטנדרטיים אחידים ללא אפשרות תפירה לאישית.</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq3"><span>ב. לבורסה ממוסדת (כמו CME) אין מסלקה ולכן סיכון האשראי של הצד השני עליה הוא קריטי ביותר.</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq3"><span>ג. היתרון הגדול של ה-OTC הוא היכולת לייצר חוזה מותאם אישית לחלוטין, והחיסרון המרכזי הוא סיכון אשראי (הצד הנגדי עלול לפשוט רגל).</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq3"><span>ד. מסחר במעוף בישראל יכול להיעשות רק במטבעות זרים ולא במדדי מניות.</span></label>
+                </div>
+                <details class="mcq-solution">
+                    <summary>הצג פתרון מוסתר</summary>
+                    <div class="mcq-answer-content">
+                        <strong>התשובה הנכונה היא ג'.</strong><br>
+                        ה-OTC מאפשר לחברות ענק לקבל הגנה כירורגית מדויקת שבורסות לא מספקות עקב "התפריט הנוקשה" שלהן. עם זאת, ב-OTC אינך נתמך על ידי מסלקת אמצע נוקשה, ולפיכך אתה חשוף לסיכון שהבנק (הצד הנגדי שלך) יקרוס. תשובה א' חיה בסתירה ל-OTC. תשובה ב' הפוכה למציאות. תשובה ד' אינה נכונה שכן מדד הדגל של המעוף הוא אופציות מדד תל-אביב 35.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Section 4: Case Study -->
+        <section class="section-card">
+            <div class="section-header">
+                <i class="fas fa-plane-departure"></i>
+                <h2>מקרה בוחן מדגים: איך חברת תעופה מגדרת מחירי דלק</h2>
+            </div>
+            
+            <p>חברת תעופה (למשל, אל-על או יונייטד) סובלת מרגישות פסיכוטית למחירי הדלק הסילוני (Jet Fuel) שמהווה נתח עצום מההוצאות שלה. הנה הדגמה מספרית כיצד החברה פועלת כדי להימנע מפשיטת רגל כתוצאה ממלחמה בלתי צפויה שעלולה להקפיץ את מחירי הנפט.</p>
+
+            <div class="case-study">
+                <div class="case-timeline">
+                    <div class="timeline-step">
+                        <h4>נקודת הזמן: היום (t=0)</h4>
+                        <p>מנהל הכספים (CFO) מעריך שהחברה תצרוך בעוד חצי שנה בדיוק <strong>1,000,000 חביות נפט</strong>. המחיר היום בשוק הוא <strong>80$ לחבית</strong>. <br>
+                        החשש: אם מחירי הנפט יקפצו ל-120$ בגלל משבר, ההוצאה תזנק, החברה תפסיד הון ואולי אף תפשוט רגל. מצד שני מחיר טיסה לאזרחים נמכר כבר היום ולא ניתן לבקש מהלקוח הממריא עוד 400$ ברגע העלייה למטוס.</p>
+                    </div>
+                    
+                    <div class="timeline-step">
+                        <h4>פעולת הגידור (Hedging) בבורסה</h4>
+                        <p>חברת התעופה לא קונה נפט רגיל מלאחסן אותו עכשיו, כי עלויות האחסון אדירות. במקום זאת, היא מתקשרת ב<strong>חוזה עתידי (Future Contract) </strong> לקניית מיליון חביות נפט בעוד חצי שנה, במחיר שנקבע להיום, נניח <strong>82$ לחבית</strong>. (ה-82 הוא מחיר הפורוורד שנוצר בשוק החוזים העתידיים).</p>
+                    </div>
+
+                    <div class="timeline-step" style="margin-bottom: 0;">
+                        <h4>נקודת הזמן במימוש (t=0.5 years) - התרחש משבר רציני</h4>
+                        <p>עברה חצי שנה. פרצה מלחמה במזרח התיכון, מחיר הנפט בחוץ ("מחיר הספוט") זינק ל-<strong>110$ לחבית</strong>.</p>
+                        <ul style="margin-right: 1.5rem; color:#0f172a; margin-top:0.5rem; list-style-type:circle;">
+                            <li><strong>מה קורה מבחינת טיסות?</strong> החברה קונה בפועל נפט למטוסים בשוק הרגיל (Spot) ומשלמת 110$ כפול מיליון חביות = 110 מיליון דולר הוצאה (קטסטרופה תזרימית).</li>
+                            <li><strong>מה קורה בתיק הנגזרים (הפיננסי)?</strong> החוזה העתידי הבטיח כניסה ב-82$. השוק שווה 110$. כלומר החוזה שווה <span style="color:var(--success); font-weight:bold;">110 - 82 = 28$</span> לכל חבית! החברה מקבלת מחשבון המסחר רווח פיננסי של <strong>+28 מיליון $</strong>.</li>
+                            <li><strong>בסך הכל (Net Cost):</strong> הוציאו -110M$, הרוויחו +28M$. <span style="background:#e2e8f0; padding:0 0.5rem; font-weight:bold;">ההוצאה האפקטיבית נשארה 82 מיליון $!</span> בדיוק כפי שהמגדר ביטח את עצמו מלכתחילה. החברה מוגנת לגמרי מתנודתיות.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h4 style="text-align:center; color:var(--primary); margin-bottom: 1rem;">הוצאות הדלק של החברה (M$) בהתאם למחיר השוק העתידי</h4>
+                    <canvas id="hedgingChart"></canvas>
+                    <p style="font-size:0.85rem; text-align:center; color:var(--text-muted); margin-top:0.5rem;">כפי שניתן לראות, בעזרת הגידור הקו הכחול מתיישר: ההוצאה מקובעת על 82 מיליון מבלי לחשוש להפתעות.</p>
+                </div>
+            </div>
+            
+            <div class="mcq-box">
+                <div class="mcq-title">בחן את עצמך: ניתוח תרחישים עתידיים</div>
+                <div class="mcq-options">
+                    <label class="mcq-option"><input type="radio" name="sq4"><span>א. לוּ מחיר הנפט ביום הפקיעה היה קורס ל-40$, חברת התעופה הייתה חוסכת המון כסף וההוצאה האפקטיבית שלה הייתה נשארת 40M$.</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq4"><span>ב. בגידור מושלם על ידי חוזה עתידי שנעול ב-82$, חברת התעופה חייבת לשלם בסוף התקופה 82M$ ללא תלות במחיר השוק (גם אם המחיר עלה ל-200$ וגם אם קרס ל-10$).</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq4"><span>ג. החוזה העתידי מקבע רק את ההפסד, אך מאפשר לחברה להרוויח אם המחיר יורד.</span></label>
+                    <label class="mcq-option"><input type="radio" name="sq4"><span>ד. אם מחיר השוק יישאר על 82$ בדיוק, החוזה העתידי עצמו יניב לחברה רווח קפיטלי אדיר.</span></label>
+                </div>
+                <details class="mcq-solution">
+                    <summary>הצג פתרון מוסתר</summary>
+                    <div class="mcq-answer-content">
+                        <strong>התשובה הנכונה היא ב'.</strong><br>
+                        גידור באמצעות <b>חוזה עתידי (Future/Forward)</b> הוא מחייב לשני הכיוונים! החברה אכן מוגנת מעליית מחירים (הגרף תמיד ירוץ על קו ה-82M), אך היא מפספסת את "חגיגת המחירים" אם הנפט קורס. גם אם המחיר בחוץ הוא 40$, החברה תוציא על דלק אמיתי -40M$, אבל תפסיד בתיק הפיננסי הקפוא שלה -42M$, שוב סך הוצאה קיבוע מוחלט סביב ה-82M$. מי שרוצה להרוויח וגם להיות מוגן, רוכש <b>אופציות</b> ולא חוזים עתידיים שוויוניים.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Section 5: Exercises with solutions -->
+        <section class="section-card" style="background:#f8fafc; border: 2px solid var(--secondary);">
+            <div class="section-header">
+                <i class="fas fa-pencil-ruler"></i>
+                <h2>שעת תרגול כמותי: ממתחילים ועד לקלקולציות מורכבות</h2>
+            </div>
+            
+            <p>חלק זה משלב שאלות תיאורטיות ושאלות חישוביות לקראת הבחינה. מומלץ לחשב את התוצאה לבד בטרם לחיצה על לחצן בדיקת הפתרון.</p>
+
+            <!-- Q1 -->
+            <div class="exercise-box">
+                <div class="exercise-question">
+                    <span class="q-badge">שאלה 1</span> זיהוי שחקנים בשוק
+                    <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                        קבלן בנייה ישראלי זכה במכרז להקמת כביש אגרה בישראל. הפרויקט יארך 3 שנים. הקבלן נדרש לייבא כמויות עצומות של ברזל מאירופה ולשלם עבורן ב<strong>אירו</strong>. הכנסות הקבלן הן ב<strong>שקלים</strong> ממשרד התחבורה. על מנת למנוע סיכון ששער האירו יזנק מול השקל וישחק את רווחיות הפרויקט, הקבלן קונה חוזים עתידיים על האירו/שקל. <br>
+                        איזה סוג שחקן הקבלן מתפקד בשוק הנגזרים במקרה זה? נמק בקצרה.
+                    </p>
+                </div>
+                <details>
+                    <summary>הצג פתרון מלא</summary>
+                    <div class="exercise-solution">
+                        <strong>תשובה:</strong> הקבלן פועל בשוק בתור <strong>מגדר (Hedger)</strong>.<br>
+                        <strong>הסבר:</strong> לקבלן יש חשיפה טבעית ואמיתית לסיכון (הוצאות באירו, הכנסות בשקלים). הנגזרים משמשים אותו אך ורק לבניית ודאות.
+                    </div>
+                </details>
+            </div>
+
+            <!-- Q2 -->
+            <div class="exercise-box">
+                <div class="exercise-question">
+                    <span class="q-badge">שאלה 2</span> הזדמנויות ארביטראז' מידיות
+                    <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                        סוחר מזהה באותו שבריר שנייה זהב ב-CME ניו יורק תמורת <strong>2,000$</strong> לאונקיה, ובלונדון תמורת <strong>2,020$</strong>. עמלות העברה עומדות על 2$. איזה מהלך יבצע السוחר ומה הרווח?
+                    </p>
+                </div>
+                <details>
+                    <summary>הצג פתרון מלא</summary>
+                    <div class="exercise-solution">
+                        <strong>תשובה:</strong> הסוחר יבצע פעולת <strong>ארביטראז' (Arbitrage)</strong>.<br>
+                        <strong>הסבר:</strong> קנייה של הזול (ניו יורק, 2000), מכירה בו זמנית של היקר (לונדון, 2020), הפחתת העמלה (2). הסוחר נועל 18$ רווח סינתטי נטול סיכון (Arbitrage PnL).
+                    </div>
+                </details>
+            </div>
+
+            <!-- Q3 -->
+            <div class="exercise-box">
+                <div class="exercise-question">
+                    <span class="q-badge">שאלה 3</span> בחירת זירת מסחר (בורסה לעומת OTC)
+                    <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                        קרן גידור צריכה להגן על תנודות פסו למול פאונד לפקיעה מאוד ספציפית בעוד 11 חודשים ו-3 ימים, בסכום לא מעוגל. היכן עליה לבצע את העסקה ולמה?
+                    </p>
+                </div>
+                <details>
+                    <summary>הצג פתרון מלא</summary>
+                    <div class="exercise-solution">
+                        <strong>תשובה:</strong> שוק ה-<strong>OTC (מעבר לדלפק)</strong>.<br>
+                        <strong>הסבר:</strong> בשוק ה-OTC ניתן "לתפור" עסקאות Custom על כל סכום וכל מועד נדרש. עם זאת יש כאן Counterparty Risk משום שאין מסלקה שערבה לעסקה במקרה של חדלות פירעון של הבנק.
+                    </div>
+                </details>
+            </div>
+
+            <!-- Q4 (Quant) -->
+            <div class="exercise-box" style="border-right: 4px solid var(--accent);">
+                <div class="exercise-question">
+                    <span class="q-badge" style="background: var(--accent);">שאלה 4 (חישובית)</span> גידור מט"ח כמותי
+                    <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                        חברת הייטק הולכת לשלם בעוד 3 חודשים תשלום לספק אמריקאי על סך של <strong>$500,000</strong>.
+                        שער הספוט (מיידי) של הדולר היום הוא <strong>3.60 שקל לדולר</strong>. 
+                        מנהל הכספים מחליט לגדר היום באמצעות חוזה פורוורד (Forward) למשך 3 חודשים בשער שנעזר היום <strong>3.64 שקל לדולר</strong>. <br><br>
+                        לאחר 3 חודשים, ביום התשלום, שערו של הדולר בשוק זינק ועלה ל-<strong>3.80 שקל לדולר</strong>.
+                        <br>א) מה הייתה ההוצאה הכוללת בשקלים אם החברה <em>לא הייתה מגדרת</em> כלל?
+                        <br>ב) מהי ההוצאה הכוללת בשקלים עכשיו כאשר החברה גידרה?
+                        <br>ג) מהו במדויק ה"רווח הפיננסי" מתיק הנגזרים (החוזה העתידי) בלבד?
+                    </p>
+                </div>
+                <details>
+                    <summary>הצג פתרון מתמטי</summary>
+                    <div class="exercise-solution">
+                        <p><strong>א. ללא גידור (השוק המיידי במועד פקיעה):</strong></p>
+                        <div class="math-breakdown">
+Unhedged Cost = $500,000 × 3.80 ₪/$ = 1,900,000 ₪
+                        </div>
+                        <p>המועצה הייתה סופגת הוצאה אימתנית בגלל פיחות השקל.</p>
+                        
+                        <p><strong>ב. עם גידור קשיח (Forward נעול):</strong></p>
+                        <div class="math-breakdown">
+Hedged Cost = $500,000 × 3.64 ₪/$ = 1,820,000 ₪
+                        </div>
+                        <p>מרגע החתימה על הפורוורד ב-3.64, המחיר באמת ננעל. משבר השקל בסעיף א' לא רלבנטי. החברה חסכה 80,000 ש"ח בהוצאות שקליות בזכות מהלך הגידור.</p>
+                        
+                        <p><strong>ג. חישוב רווח פיננסי מהחוזה עצמו PnL:</strong></p>
+                        <div class="math-breakdown">
+Long Forward Payoff = Size × (Spot at T - Forward rate)
+Payoff = $500,000 × (3.80 - 3.64) = $500,000 × 0.16 = +80,000 ₪
+                        </div>
+                        <p>החברה הפסידה תפעולית 1.9 מיליון ש"ח בעת המרת המטבע בפועל, אבל צ'ק של 80,000 ש"ח הגיע מאגף הנגזרים, וכך היא הוציאה "נטו" רק 1.82M ש"ח.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Q5 (Quant) -->
+            <div class="exercise-box" style="border-right: 4px solid var(--danger);">
+                <div class="exercise-question">
+                    <span class="q-badge" style="background: var(--danger);">שאלה 5 (חישובית)</span> חשבון מתח של ספקולנט (Margin & Leverage)
+                    <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                        ספקולנט פותח פוזיציית קנייה (Long) על <strong>10 חוזים עתידיים</strong> של מדד ה-S&P 500 בבורסת CME. 
+                        המדד עומד על <strong>5,000 נקודות</strong>, ומכפיל החוזה הוא <strong>50$</strong> לכל נקודת מדד. 
+                        הבורסה דורשת "בטחונות ראשוניים" (Initial Margin) של <strong>20,000$ לכל חוזה</strong>. סה"כ הופקד כסף לבטחון (200,000$). <br><br>
+                        כעבור שבוע, מדד ה-S&P 500 קפץ ל-<strong>5,100 נקודות</strong> (קפיצה של 2% בלבד). הספקולנט סוגר את הפוזיציה.
+                        <br>א) מהו הרווח הכספי נטו של הספקולנט במזומן מפעולה זו בדולרים?
+                        <br>ב) מהו שיעור התשואה על ההון העצמי (ROI: Return on Equity) של הספקולנט בעסקה?
+                    </p>
+                </div>
+                <details>
+                    <summary>הצג פתרון מתמטי מפורט</summary>
+                    <div class="exercise-solution">
+                        <p><strong>א. רווח כספי נטו:</strong></p>
+                        <p>המדד עלה מ-5000 ל-5100, כלומר נוצר רווח של 100 נקודות מדד לכל חוזה.</p>
+                        <div class="math-breakdown">
+Profit per Contract = 100 points × $50 multiplier = $5,000
+Total Profit = 10 Contracts × $5,000 = $50,000
+                        </div>
+
+                        <p><strong>ב. שיעור התשואה (מנוף פיננסי):</strong></p>
+                        <p>ההון העצמי האמיתי שהרובוט הימר עליו הוא הפקדת הברוקר (ביטחונות). הביטחונות על 10 חוזים: 10 * 20,000$ = 200,000$.</p>
+                        <div class="math-breakdown">
+ROI = (Net Profit / Invested Equity) * 100
+ROI = ($50,000 / $200,000) = 0.25 = 25% Returns!
+                        </div>
+                        <p>שימו לב לאפקט <b>המנוף השערורייתי של שוק הנגזרים</b>: המדד הראשי עלה ב-2% בלבד בחוץ, אך באמצעות הפקדת הבטוחות (Margin) המוגבלת בחוזה, הספקולנט ייצר 25% תשואה על הכסף שלו תוך שבוע אחד. אילו היה רוכש תעודת סל רגילה, הוא היה מרוויח רק 2%.</p>
+                    </div>
+                </details>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer style="text-align: center; padding: 4rem 1rem 2rem; color: var(--text-muted); background: white; border-top: 1px solid var(--border-color); margin-top: 3rem;">
+        <i class="fas fa-university" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1.5rem;"></i>
+        <h3 style="margin-top:0; color:var(--primary); font-size:1.3rem;">ניהול פיננסי / שוק ההון</h3>
+        <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 1.5rem;">פרק 1 הסתיים. בחלק הבא (פרק 2) נפתח את המודלים המתמטיים המדויקים לתמחור פורוורד ולתימחור אופציות Black And Scholes.</p>
+        <p style="font-size: 0.95rem;">כל הזכויות שמורות &copy; 2026. צוות ההוראה.</p>
+    </footer>
+
+    <!-- Chart Configuration -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('hedgingChart').getContext('2d');
+            
+            // Generate data points for possible market prices from $40 to $150
+            var labels = [];
+            var dataNoHedge = [];
+            var dataWithHedge = [];
+
+            for(var price = 50; price <= 140; price+=10) {
+                labels.push('$' + price + ' לחבית');
+                // Unhedged: cost is Price * 1,000,000. In millions, it's just 'price'.
+                dataNoHedge.push(price);
+                // Hedged: Locked at $82
+                dataWithHedge.push(82);
+            }
+
+            var tvmChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'הוצאה ללא חוזה (חשופה לסיכון לחלוטין)',
+                            data: dataNoHedge,
+                            borderColor: '#ef4444', // Red marking danger
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0
+                        },
+                        {
+                            label: 'הוצאה עם גידור באמצעות חוזה עתידי',
+                            data: dataWithHedge,
+                            borderColor: '#3b82f6', // Blueprint secured
+                            backgroundColor: 'transparent',
+                            borderWidth: 4,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0,
+                            pointRadius: 6,
+                            pointBackgroundColor: '#1e3a8a'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false, // Disabling animation entirely as requested
+                    plugins: {
+                        annotation: {
+                            annotations: {
+                                targetLine: {
+                                    type: 'line',
+                                    yMin: 82,
+                                    yMax: 82,
+                                    borderColor: 'rgba(37, 99, 235, 0.4)',
+                                    borderWidth: 2,
+                                    borderDash: [6, 6],
+                                    label: {
+                                        content: 'מחיר נעול: 82M$',
+                                        display: true,
+                                        position: 'start',
+                                        backgroundColor: 'rgba(30, 58, 138, 0.9)',
+                                        font: { family: "'Assistant', sans-serif" }
+                                    }
+                                },
+                                dangerMarker: {
+                                    type: 'point',
+                                    xValue: '$110 לחבית',
+                                    yValue: 110,
+                                    backgroundColor: '#ef4444',
+                                    radius: 6,
+                                    borderColor: 'white',
+                                    borderWidth: 2
+                                },
+                                dangerLabel: {
+                                    type: 'label',
+                                    xValue: '$110 לחבית',
+                                    yValue: 120, // slightly above the point
+                                    content: ['110M$ מכה לקופה!', '(ללא גידור)'],
+                                    backgroundColor: '#ef4444',
+                                    color: 'white',
+                                    font: { family: "'Assistant', sans-serif", size: 12, weight: 'bold' },
+                                    borderRadius: 6,
+                                    padding: 6
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: { font: { family: "'Assistant', sans-serif", size: 15, weight: 'bold' } }
+                        },
+                        tooltip: {
+                            rtl: true,
+                            bodyFont: { family: "'Assistant', sans-serif", size: 14 },
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + ' מיליון דולר';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'עלות פרויקט הדלק (מיליוני דולרים)',
+                                font: { family: "'Assistant', sans-serif", size: 14, weight: 'bold' }
+                            },
+                            min: 40,
+                            max: 150
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'מחיר הנפט בשוק ביום הפקיעה',
+                                font: { family: "'Assistant', sans-serif", size: 14, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
