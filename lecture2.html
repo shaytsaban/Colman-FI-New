@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרק 2 - אופציות CALL ו-PUT: הזכות שמשנה הכל</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary: #0f172a;
+            --primary-light: #1e293b;
+            --secondary: #3b82f6;
+            --secondary-dark: #2563eb;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --purple: #8b5cf6;
+            --bg-page: #f8fafc;
+            --surface: #ffffff;
+            --text-dark: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Assistant', sans-serif; }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            line-height: 1.7;
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #e0e7ff 0%, #dbeafe 50%, #ede9fe 100%);
+            color: var(--primary);
+            padding: 6rem 0 8rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at top left, rgba(139,92,246,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at bottom right, rgba(59,130,246,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .hero-badge {
+            background: rgba(59,130,246,0.15);
+            border: 1px solid rgba(59,130,246,0.3);
+            color: var(--secondary-dark);
+            padding: 0.5rem 1.5rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            color: var(--primary);
+        }
+        .hero p { font-size: 1.3rem; color: var(--text-dark); max-width: 800px; }
+
+        /* Content */
+        .content-wrapper { margin-top: -4rem; position: relative; z-index: 10; }
+
+        .section-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid var(--bg-page);
+            padding-bottom: 1rem;
+        }
+        .section-header i {
+            background: rgba(59,130,246,0.1);
+            color: var(--secondary-dark);
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1.5rem;
+        }
+        .section-header h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin: 0;
+        }
+
+        h3 { font-size: 1.6rem; color: var(--primary-light); margin: 2rem 0 1rem; font-weight: 700; }
+        h4 { font-size: 1.3rem; color: var(--primary); margin: 1.5rem 0 0.8rem; font-weight: 700; }
+        p { margin-bottom: 1.2rem; }
+        strong { color: var(--primary); font-weight: 700; }
+
+        /* Boxes */
+        .concept-box {
+            background: #eff6ff;
+            border-right: 5px solid var(--secondary);
+            padding: 1.5rem 2rem;
+            border-radius: 8px 0 0 8px;
+            margin: 2rem 0;
+        }
+        .concept-title {
+            color: var(--secondary-dark);
+            font-weight: 800;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-box {
+            background: #fffbeb;
+            border-right: 5px solid var(--accent);
+            padding: 1.5rem 2rem;
+            border-radius: 8px 0 0 8px;
+            margin: 2rem 0;
+        }
+        .alert-title {
+            color: #b45309;
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .danger-box {
+            background: #fef2f2;
+            border-right: 5px solid var(--danger);
+            padding: 1.5rem 2rem;
+            border-radius: 8px 0 0 8px;
+            margin: 2rem 0;
+        }
+
+        .success-box {
+            background: #ecfdf5;
+            border-right: 5px solid var(--success);
+            padding: 1.5rem 2rem;
+            border-radius: 8px 0 0 8px;
+            margin: 2rem 0;
+        }
+
+        .purple-box {
+            background: #f5f3ff;
+            border-right: 5px solid var(--purple);
+            padding: 1.5rem 2rem;
+            border-radius: 8px 0 0 8px;
+            margin: 2rem 0;
+        }
+
+        /* Recap strip */
+        .recap-strip {
+            background: #eff6ff;
+            border: 2px solid #bfdbfe;
+            color: var(--text-dark);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        .recap-strip h3 { color: var(--secondary-dark); margin-top: 0; font-size: 1.3rem; }
+        .recap-strip ul { margin-right: 1.5rem; color: var(--text-dark); }
+        .recap-strip li { margin-bottom: 0.3rem; }
+
+        /* Comparison grid */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .compare-card {
+            border-radius: 16px;
+            padding: 2rem;
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
+        }
+        .compare-card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 80px; height: 80px;
+            border-radius: 0 0 0 80px;
+            opacity: 0.1;
+        }
+        .compare-card.call-card {
+            background: #ecfdf5;
+            border-color: var(--success);
+        }
+        .compare-card.call-card::before { background: var(--success); }
+        .compare-card.put-card {
+            background: #fef2f2;
+            border-color: var(--danger);
+        }
+        .compare-card.put-card::before { background: var(--danger); }
+
+        .compare-card h3 { margin-top: 0; }
+        .compare-card .big-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+        .call-card .big-icon { color: var(--success); }
+        .put-card .big-icon { color: var(--danger); }
+
+        /* Four-way grid */
+        .four-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .four-card {
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            background: white;
+        }
+        .four-card h4 {
+            display: flex; align-items: center; gap: 0.5rem;
+            margin-top: 0;
+        }
+
+        /* MCQ */
+        .mcq-box {
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            position: relative;
+        }
+        .mcq-box::before {
+            content: '\f059';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: -15px;
+            right: 2rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 6px rgba(245,158,11,0.3);
+        }
+        .mcq-title { color: var(--primary); font-weight: 800; margin-bottom: 1.5rem; font-size: 1.3rem; }
+        .mcq-options { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+        .mcq-option {
+            display: flex; align-items: center; gap: 1rem;
+            background: #f8fafc; padding: 1rem;
+            border: 1px solid #e2e8f0; border-radius: 8px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .mcq-option:hover { border-color: var(--secondary); background: #eff6ff; }
+        .mcq-option input[type="radio"] { transform: scale(1.3); accent-color: var(--secondary); }
+        .mcq-solution summary {
+            color: white; background: var(--secondary);
+            padding: 0.8rem 1.5rem; border-radius: 8px;
+            display: inline-flex; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .mcq-solution summary:hover { background: var(--secondary-dark); }
+        .mcq-answer-content {
+            margin-top: 1.5rem; padding: 1.5rem;
+            background: #ecfdf5;
+            border-right: 4px solid var(--success);
+            border-radius: 8px;
+        }
+
+        /* Exercise box */
+        .exercise-box {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .exercise-question {
+            padding: 1.5rem;
+            background: #f1f5f9;
+            font-weight: 600;
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .exercise-question .q-badge {
+            background: var(--secondary);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 6px;
+            margin-left: 0.5rem;
+            font-size: 1rem;
+        }
+        .exercise-box details summary {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--secondary-dark);
+            list-style: none;
+            display: flex; align-items: center; gap: 0.5rem;
+            background: white; transition: background 0.2s;
+        }
+        .exercise-box details summary::-webkit-details-marker { display: none; }
+        .exercise-box details summary:hover { background: #f8fafc; }
+        .exercise-box details summary::before {
+            content: "\f0da"; font-family: "Font Awesome 6 Free";
+            font-weight: 900; transition: transform 0.2s;
+        }
+        .exercise-box details[open] summary::before { transform: rotate(90deg); }
+        .exercise-solution {
+            padding: 1.5rem;
+            border-top: 1px dashed var(--border-color);
+            background: #ecfdf5;
+        }
+
+        .math-breakdown {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05rem;
+            direction: ltr;
+            text-align: left;
+            margin: 1rem 0;
+            color: var(--primary);
+            white-space: pre-wrap;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        /* Playground */
+        .playground {
+            background: #f0f9ff;
+            border: 2px solid #93c5fd;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 2.5rem 0;
+            color: var(--text-dark);
+            box-shadow: 0 10px 25px rgba(59,130,246,0.08);
+        }
+        .playground h3 { color: var(--secondary-dark); margin-top: 0; }
+        .playground p { color: var(--text-dark); }
+        .playground-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        .pg-inputs { display: flex; flex-direction: column; gap: 1rem; }
+        .pg-input-group label {
+            display: block;
+            color: var(--secondary-dark);
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+        .pg-input-group input, .pg-input-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            background: #ffffff;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            font-family: 'Assistant', sans-serif;
+            transition: border-color 0.2s;
+        }
+        .pg-input-group input:focus, .pg-input-group select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: #ffffff;
+        }
+        .pg-input-group select option { color: #0f172a; }
+        .pg-btn {
+            background: linear-gradient(135deg, var(--secondary), var(--purple));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: 'Assistant', sans-serif;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        .pg-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59,130,246,0.4); }
+        .pg-results {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .pg-result-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1.2rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+        .pg-result-card .label { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.3rem; }
+        .pg-result-card .value { font-size: 1.8rem; font-weight: 800; }
+        .pg-result-card .value.profit { color: #059669; }
+        .pg-result-card .value.loss { color: #dc2626; }
+        .pg-result-card .value.neutral { color: #d97706; }
+
+        /* Interactive table */
+        .fill-table-wrapper {
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+        .fill-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+            background: white;
+        }
+        .fill-table thead th {
+            background: #dbeafe;
+            color: var(--primary);
+            padding: 1rem 0.8rem;
+            font-weight: 700;
+            text-align: center;
+            white-space: nowrap;
+            border-bottom: 2px solid #93c5fd;
+        }
+        .fill-table tbody td {
+            padding: 0.8rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .fill-table tbody tr:hover { background: #f1f5f9; }
+        .fill-table .given { background: #f0f9ff; font-weight: 600; color: var(--primary); }
+        .fill-table input[type="number"] {
+            width: 90px;
+            padding: 0.5rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 1rem;
+            font-family: 'Assistant', sans-serif;
+            transition: border-color 0.2s;
+        }
+        .fill-table input[type="number"]:focus { outline: none; border-color: var(--secondary); }
+        .fill-table input.correct { border-color: var(--success); background: #ecfdf5; }
+        .fill-table input.wrong { border-color: var(--danger); background: #fef2f2; }
+
+        .check-table-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+            font-family: 'Assistant', sans-serif;
+            transition: 0.2s;
+        }
+        .check-table-btn:hover { background: var(--secondary-dark); }
+
+        .show-answers-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+            margin-right: 1rem;
+            font-family: 'Assistant', sans-serif;
+            transition: 0.2s;
+        }
+        .show-answers-btn:hover { background: #d97706; }
+
+        .table-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            display: none;
+        }
+
+        /* Chart container */
+        .chart-container {
+            width: 100%;
+            max-width: 800px;
+            height: 420px;
+            margin: 2rem auto;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Scenario timeline */
+        .scenario-box {
+            background: linear-gradient(180deg, #f8fafc, #ffffff);
+            border: 2px solid #cbd5e1;
+            padding: 2.5rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+        }
+
+        /* Summary table */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+        .summary-table th, .summary-table td {
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .summary-table thead th {
+            background: #dbeafe;
+            color: var(--primary);
+            font-weight: 700;
+            border-bottom: 2px solid #93c5fd;
+        }
+        .summary-table tbody tr:nth-child(even) { background: #f8fafc; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .section-card { padding: 1.5rem; }
+            .compare-grid, .four-grid { grid-template-columns: 1fr; }
+            .playground-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="container">
+        <span class="hero-badge"><i class="fas fa-layer-group"></i> פרק 2</span>
+        <h1>אופציות CALL ו-PUT: <br>הזכות שמשנה הכל</h1>
+        <p>הרצאת עומק באורך 3 שעות: הבנה מלאה של אופציות רכש (Call) ואופציות מכר (Put), צד הקונה וצד הכותב, חישובי רווח/הפסד עם פרמיה, סימולטורים אינטראקטיביים, טבלאות מילוי עצמי, ותרגול הדרגתי מרמת מתחיל ועד מורכבות גבוהה.</p>
+    </div>
+</header>
+
+<main class="container content-wrapper">
+
+<!-- ===== RECAP ===== -->
+<section class="section-card">
+    <div class="section-header">
+        <i class="fas fa-history"></i>
+        <h2>רענון בזק: מה למדנו בפרק 1?</h2>
+    </div>
+    <div class="recap-strip">
+        <h3><i class="fas fa-undo-alt"></i> חמשת מושגי היסוד מהפרק הקודם</h3>
+        <ul>
+            <li><strong>נגזר פיננסי (Derivative):</strong> חוזה שערכו נגזר מנכס בסיס (מניה, מטבע, סחורה, מדד).</li>
+            <li><strong>נכס בסיס (Underlying Asset):</strong> הנכס "האמיתי" שעליו מבוסס הנגזר.</li>
+            <li><strong>מגדרים (Hedgers):</strong> מנטרלים סיכון עסקי קיים. <strong>ספקולנטים:</strong> לוקחים סיכון להרוויח. <strong>ארביטראז':</strong> ניצול פערי מחירים ללא סיכון.</li>
+            <li><strong>בורסה ממוסדת</strong> (חוזים סטנדרטיים + מסלקה) לעומת <strong>OTC</strong> (חוזים מותאמים אישית + סיכון צד נגדי).</li>
+            <li><strong>חוזה עתידי (Forward / Future):</strong> מחייב את שני הצדדים — נועל מחיר לשני הכיוונים, גם עלייה וגם ירידה.</li>
+        </ul>
+    </div>
+    <div class="alert-box">
+        <div class="alert-title"><i class="fas fa-arrow-left"></i> השאלה הגדולה שנותרה פתוחה</div>
+        <p>בפרק 1 ראינו שחוזה עתידי <strong>נועל מחיר לשני הכיוונים</strong> — גם מגן מפני עלייה, אבל גם מונע מאיתנו ליהנות מירידה. <strong>מה אם רוצים להיות מוגנים מפני מחיר גבוה, אבל להשאיר לעצמנו את האפשרות ליהנות אם המחיר יורד?</strong> התשובה: <strong>אופציות!</strong> וזה בדיוק מה שנלמד עכשיו.</p>
+    </div>
+</section>
+
+<!-- ===== SECTION 1: WHAT IS AN OPTION ===== -->
+<section class="section-card">
+    <div class="section-header">
+        <i class="fas fa-key"></i>
+        <h2>מהי אופציה? ההגדרה המדויקת</h2>
+    </div>
+
+    <p><strong>אופציה (Option)</strong> היא חוזה המקנה ל<strong>קונה</strong> האופציה את <strong>הזכות, אך לא את החובה</strong>, לקנות או למכור נכס בסיס במחיר קבוע מראש (שנקרא <strong>"מחיר המימוש" — Strike Price</strong>), עד או במועד מוגדר (שנקרא <strong>"מועד הפקיעה" — Expiration Date</strong>).</p>
+
+    <p>בתמורה לזכות הזו, הקונה משלם ל<strong>כותב</strong> (מוכר) האופציה סכום כסף שנקרא <strong>"פרמיה" (Premium)</strong>. הפרמיה היא המחיר של הזכות עצמה.</p>
+
+    <div class="concept-box">
+        <div class="concept-title"><i class="fas fa-home"></i> אנלוגיה: דמי מפתח על דירה</div>
+        <p>דמיינו שאתם מתעניינים בדירה שמחירה 2,000,000 ש"ח. אתם לא בטוחים שתרצו לקנות, אבל חוששים שמישהו אחר יחטוף אותה. אתם משלמים לבעל הדירה <strong>50,000 ש"ח "דמי שימור"</strong> (הפרמיה) בתמורה ל<strong>זכות</strong> לקנות את הדירה ב-2,000,000 ש"ח בעוד 3 חודשים.</p>
+        <p>אם בעוד 3 חודשים הדירות באזור שווות 2,500,000 ש"ח — תממשו! חסכתם 500,000 (פחות 50K פרמיה = רווח נקי 450K). אם דירות ירדו ל-1,700,000 — לא תממשו, תפסידו רק את 50K הפרמיה, ותקנו בזול בשוק.</p>
+    </div>
+
+    <h3>ארבעת המרכיבים של כל אופציה</h3>
+    <table class="summary-table">
+        <thead><tr><th>מרכיב</th><th>סימון</th><th>הסבר</th><th>דוגמה</th></tr></thead>
+        <tbody>
+            <tr><td><strong>נכס בסיס</strong></td><td>S</td><td>הנכס שעליו נכתבת האופציה</td><td>מניית אפל, דולר/שקל, נפט</td></tr>
+            <tr><td><strong>מחיר מימוש</strong></td><td>K (Strike)</td><td>המחיר שבו ניתן לקנות/למכור את הנכס</td><td>K = 150$ למניית אפל</td></tr>
+            <tr><td><strong>מועד פקיעה</strong></td><td>T (Expiration)</td><td>התאריך האחרון לשימוש בזכות</td><td>T = 30 ביוני 2026</td></tr>
+            <tr><td><strong>פרמיה</strong></td><td>c / p</td><td>המחיר ששולם עבור הזכות</td><td>פרמיה = 8$ למניה</td></tr>
+        </tbody>
+    </table>
+
+    <div class="mcq-box">
+        <div class="mcq-title">בחן את עצמך: מהות האופציה</div>
+        <div class="mcq-options">
+            <label class="mcq-option"><input type="radio" name="q_opt1"><span>א. אופציה מחייבת את הקונה לבצע עסקה במועד הפקיעה, בדיוק כמו חוזה עתידי.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_opt1"><span>ב. אופציה מקנה לקונה זכות אך לא חובה, ולכן הקונה משלם פרמיה בעבור הזכות הזו.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_opt1"><span>ג. הפרמיה של האופציה מוחזרת לקונה אם הוא מחליט לא לממש.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_opt1"><span>ד. כותב האופציה הוא מי שמחליט אם לממש או לא.</span></label>
+        </div>
+        <details class="mcq-solution">
+            <summary>הצג פתרון</summary>
+            <div class="mcq-answer-content">
+                <strong>התשובה הנכונה היא ב'.</strong><br>
+                האופציה שונה מהחוזה העתידי בדיוק בנקודה הזו: הקונה מקבל <strong>זכות ולא חובה</strong>. על הזכות הזו הוא משלם פרמיה. הפרמיה לא מוחזרת (א' ו-ג' שגויות). הכותב הוא הצד <strong>הפסיבי</strong> — הקונה הוא שמחליט אם לממש (ד' שגויה).
+            </div>
+        </details>
+    </div>
+</section>
+
+<!-- ===== SECTION 2: CALL vs PUT ===== -->
+<section class="section-card">
+    <div class="section-header">
+        <i class="fas fa-exchange-alt"></i>
+        <h2>שני סוגי האופציות: CALL ו-PUT</h2>
+    </div>
+
+    <p>קיימים בדיוק שני סוגים בסיסיים של אופציות. כל אופציה בעולם היא אחד מהם (או שילוב שלהם):</p>
+
+    <div class="compare-grid">
+        <div class="compare-card call-card">
+            <span class="big-icon"><i class="fas fa-arrow-trend-up"></i></span>
+            <h3 style="color: #047857;">אופציית רכש — CALL</h3>
+            <p><strong>הגדרה:</strong> זכות ל<strong>קנות</strong> את נכס הבסיס במחיר המימוש (K).</p>
+            <p><strong>מתי שווה כסף?</strong> כשמחיר השוק (S) <strong>עולה מעל</strong> מחיר המימוש (K).</p>
+            <p><strong>הקונה מרוויח כש:</strong> S &gt; K + פרמיה</p>
+            <p><strong>דוגמה:</strong> קניתי CALL על מניית אפל עם K=150$. אם אפל עולה ל-180$, אני יכול לקנות ב-150$ ולמכור ב-180$.</p>
+            <p style="margin-bottom:0;"><strong>אינטואיציה:</strong> "אני מאמין שהמחיר <em>יעלה</em>!"</p>
+        </div>
+
+        <div class="compare-card put-card">
+            <span class="big-icon"><i class="fas fa-arrow-trend-down"></i></span>
+            <h3 style="color: #b91c1c;">אופציית מכר — PUT</h3>
+            <p><strong>הגדרה:</strong> זכות ל<strong>מכור</strong> את נכס הבסיס במחיר המימוש (K).</p>
+            <p><strong>מתי שווה כסף?</strong> כשמחיר השוק (S) <strong>יורד מתחת</strong> למחיר המימוש (K).</p>
+            <p><strong>הקונה מרוויח כש:</strong> K &gt; S + פרמיה</p>
+            <p><strong>דוגמה:</strong> קניתי PUT על מניית אפל עם K=150$. אם אפל יורדת ל-120$, אני יכול למכור ב-150$ (אף שבשוק היא שווה 120$).</p>
+            <p style="margin-bottom:0;"><strong>אינטואיציה:</strong> "אני מאמין שהמחיר <em>ירד</em>!" (או: אני רוצה ביטוח).</p>
+        </div>
+    </div>
+
+    <div class="alert-box">
+        <div class="alert-title"><i class="fas fa-exclamation-triangle"></i> נקודת מפתח: זכות ≠ חובה</div>
+        <p>בשני המקרים, <strong>הקונה</strong> של האופציה תמיד מחזיק ב<strong>זכות</strong>. הוא ימַמֵש אותה רק כשזה משתלם לו. <strong>הכותב</strong> (המוכר) של האופציה תמיד מחויב — אם הקונה מממש, הכותב חייב לספק. בתמורה, הכותב קיבל את הפרמיה מראש.</p>
+    </div>
+
+    <h3>הנוסחאות הבסיסיות — Payoff (תזרים במימוש)</h3>
+    <p>להלן התזרים <strong>ביום הפקיעה</strong> (לפני הפרמיה). הסימן <code>max</code> אומר: "קח את הגדול מבין שתי האפשרויות".</p>
+
+    <div class="math-breakdown">
+Call Payoff (קונה) = max(S - K, 0)
+  אם S > K  ←  הקונה מממש, מרוויח S - K
+  אם S ≤ K  ←  הקונה לא מממש, תזרים = 0
+
+Put Payoff (קונה) = max(K - S, 0)
+  אם S < K  ←  הקונה מממש, מרוויח K - S
+  אם S ≥ K  ←  הקונה לא מממש, תזרים = 0
+    </div>
+
+    <p>ו<strong>הרווח/הפסד הסופי (Profit/Loss)</strong> כולל את הפרמיה:</p>
+    <div class="math-breakdown">
+Call P&L (קונה) = max(S - K, 0) - Premium
+Put P&L (קונה) = max(K - S, 0) - Premium
+
+Call P&L (כותב) = Premium - max(S - K, 0)
+Put P&L (כותב) = Premium - max(K - S, 0)
+    </div>
+
+    <div class="concept-box">
+        <div class="concept-title"><i class="fas fa-info-circle"></i> תובנה קריטית: אסימטריה</div>
+        <p><strong>הקונה:</strong> ההפסד המקסימלי מוגבל לפרמיה. הרווח בלתי מוגבל (ב-CALL) או מוגבל ל-K פחות פרמיה (ב-PUT).</p>
+        <p><strong>הכותב:</strong> הרווח המקסימלי מוגבל לפרמיה. ההפסד עלול להיות בלתי מוגבל (בכתיבת CALL) או מוגבל ל-K פחות פרמיה (בכתיבת PUT).</p>
+        <p>זהו אחד העקרונות החשובים ביותר בעולם האופציות: <strong>הקונה שילם פרמיה וקנה "שקט נפשי". הכותב קיבל פרמיה וקנה "כאב ראש".</strong></p>
+    </div>
+
+    <div class="mcq-box">
+        <div class="mcq-title">בחן את עצמך: CALL לעומת PUT</div>
+        <div class="mcq-options">
+            <label class="mcq-option"><input type="radio" name="q_cp1"><span>א. קונה של PUT מרוויח כשמחיר נכס הבסיס עולה מעל מחיר המימוש.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_cp1"><span>ב. כותב של CALL מרוויח כשמחיר המניה עולה בחדות, כי הוא מחויב למכור במחיר גבוה.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_cp1"><span>ג. קונה של CALL מפסיד לכל היותר את הפרמיה ששילם, גם אם מחיר המניה צונח לאפס.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_cp1"><span>ד. לכותב של PUT אין שום סיכון, כי הקונה הוא שמחליט.</span></label>
+        </div>
+        <details class="mcq-solution">
+            <summary>הצג פתרון</summary>
+            <div class="mcq-answer-content">
+                <strong>התשובה הנכונה היא ג'.</strong><br>
+                קונה CALL שילם פרמיה, ואם המניה יורדת — פשוט לא מממש. ההפסד שלו = הפרמיה בלבד. א' שגויה (PUT מרוויח בירידה). ב' שגויה (כותב CALL דווקא <strong>מפסיד</strong> כשהמניה עולה). ד' שגויה (כותב PUT חשוף להפסד אם המניה צונחת).
+            </div>
+        </details>
+    </div>
+</section>
+
+<!-- ===== SECTION 3: THE FOUR POSITIONS ===== -->
+<section class="section-card">
+    <div class="section-header">
+        <i class="fas fa-th-large"></i>
+        <h2>ארבע הפוזיציות הבסיסיות בשוק האופציות</h2>
+    </div>
+
+    <p>בשוק האופציות ישנם <strong>בדיוק ארבעה "כסאות"</strong> שאפשר לשבת בהם. כל עסקה ערוכה בין קונה לכותב, על אופציית CALL או PUT. הבנת כל ארבע הפוזיציות היא הבסיס לכל מה שנעשה מכאן ואילך.</p>
+
+    <div class="four-grid">
+        <div class="four-card" style="border-top: 4px solid var(--success);">
+            <h4><span style="color:var(--success);">&#9650;</span> Long Call (קונה אופציית רכש)</h4>
+            <p><strong>ציפייה:</strong> נכס הבסיס יעלה.</p>
+            <p><strong>זכות:</strong> לקנות ב-K.</p>
+            <p><strong>רווח מקסימלי:</strong> אינסופי (ככל שהמחיר עולה).</p>
+            <p><strong>הפסד מקסימלי:</strong> הפרמיה ששולמה.</p>
+            <p><strong>נקודת איזון (Break-Even):</strong> K + Premium</p>
+        </div>
+
+        <div class="four-card" style="border-top: 4px solid var(--danger);">
+            <h4><span style="color:var(--danger);">&#9660;</span> Short Call (כותב אופציית רכש)</h4>
+            <p><strong>ציפייה:</strong> נכס הבסיס לא יעלה (ישאר או ירד).</p>
+            <p><strong>חובה:</strong> למכור ב-K אם הקונה מממש.</p>
+            <p><strong>רווח מקסימלי:</strong> הפרמיה שנתקבלה.</p>
+            <p><strong>הפסד מקסימלי:</strong> אינסופי!</p>
+            <p><strong>נקודת איזון:</strong> K + Premium</p>
+        </div>
+
+        <div class="four-card" style="border-top: 4px solid var(--danger);">
+            <h4><span style="color:var(--danger);">&#9660;</span> Long Put (קונה אופציית מכר)</h4>
+            <p><strong>ציפייה:</strong> נכס הבסיס ירד.</p>
+            <p><strong>זכות:</strong> למכור ב-K.</p>
+            <p><strong>רווח מקסימלי:</strong> K − Premium (אם הנכס יורד לאפס).</p>
+            <p><strong>הפסד מקסימלי:</strong> הפרמיה ששולמה.</p>
+            <p><strong>נקודת איזון:</strong> K − Premium</p>
+        </div>
+
+        <div class="four-card" style="border-top: 4px solid var(--success);">
+            <h4><span style="color:var(--success);">&#9650;</span> Short Put (כותב אופציית מכר)</h4>
+            <p><strong>ציפייה:</strong> נכס הבסיס לא ירד (ישאר או יעלה).</p>
+            <p><strong>חובה:</strong> לקנות ב-K אם הקונה מממש.</p>
+            <p><strong>רווח מקסימלי:</strong> הפרמיה שנתקבלה.</p>
+            <p><strong>הפסד מקסימלי:</strong> K − Premium (אם הנכס יורד לאפס).</p>
+            <p><strong>נקודת איזון:</strong> K − Premium</p>
+        </div>
+    </div>
+
+    <div class="purple-box">
+        <div class="concept-title" style="color: #6d28d9;"><i class="fas fa-brain"></i> כלל אצבע חשוב</div>
+        <p><strong>הקונה (Long)</strong> — תמיד משלם פרמיה, תמיד מחזיק בזכות, ההפסד שלו תמיד מוגבל.</p>
+        <p><strong>הכותב (Short)</strong> — תמיד מקבל פרמיה, תמיד מחויב, הרווח שלו תמיד מוגבל לפרמיה.</p>
+        <p><strong>המשחק הוא "סכום אפס":</strong> הרווח של הקונה = ההפסד של הכותב, ולהפך.</p>
+    </div>
+
+    <div class="mcq-box">
+        <div class="mcq-title">בחן את עצמך: זיהוי פוזיציה</div>
+        <div class="mcq-options">
+            <label class="mcq-option"><input type="radio" name="q_pos1"><span>א. משקיע שמאמין שמחיר הזהב ירד מ-2000$ ל-1800$ בתוך חודש, ירצה לקנות אופציית CALL על זהב.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_pos1"><span>ב. משקיע שמאמין שמחיר הזהב ירד, ירצה לקנות אופציית PUT על זהב.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_pos1"><span>ג. כותב אופציית PUT רוצה שמחיר נכס הבסיס ירד כמה שיותר.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_pos1"><span>ד. קונה אופציית CALL מפסיד אם המחיר עולה מעבר ל-K.</span></label>
+        </div>
+        <details class="mcq-solution">
+            <summary>הצג פתרון</summary>
+            <div class="mcq-answer-content">
+                <strong>התשובה הנכונה היא ב'.</strong><br>
+                מי שמאמין בירידת מחיר קונה PUT (זכות למכור במחיר גבוה יותר מהשוק). א' שגויה (CALL מרוויח בעלייה). ג' שגויה (כותב PUT מפסיד בירידה!). ד' שגויה (קונה CALL דווקא מרוויח בעלייה).
+            </div>
+        </details>
+    </div>
+</section>
+
+<!-- ===== SECTION 4: PAYOFF DIAGRAMS ===== -->
+<section class="section-card">
+    <div class="section-header">
+        <i class="fas fa-chart-area"></i>
+        <h2>תרשימי רווח והפסד (Payoff Diagrams)</h2>
+    </div>
+
+    <p>תרשים ה-Payoff הוא הכלי החזותי החשוב ביותר בעולם האופציות. ציר ה-X מציג את <strong>מחיר נכס הבסיס ביום הפקיעה (S)</strong>, וציר ה-Y מציג את <strong>הרווח או ההפסד (P&L)</strong> הסופי של המשקיע.</p>
+
+    <h3>Long Call — תרשים אינטראקטיבי</h3>
+    <p>הדוגמה: אופציית CALL עם K = 100$, פרמיה = 8$. נקודת איזון: 108$.</p>
+    <div class="chart-container">
+        <canvas id="longCallChart"></canvas>
+    </div>
+
+    <h3>Long Put — תרשים אינטראקטיבי</h3>
+    <p>הדוגמה: אופציית PUT עם K = 100$, פרמיה = 6$. נקודת איזון: 94$.</p>
+    <div class="chart-container">
+        <canvas id="longPutChart"></canvas>
+    </div>
+
+    <h3>Short Call & Short Put</h3>
+    <p>תרשימי הכותב הם <strong>תמונת מראה</strong> מדויקת של תרשימי הקונה. הרווח של הקונה הוא ההפסד של הכותב ולהפך.</p>
+    <div class="chart-container">
+        <canvas id="shortChart"></canvas>
+    </div>
+</section>
+
+<!-- ===== SECTION 5: PLAYGROUND 1 — CALL ===== -->
+<section class="section-card" style="background: #f0fdf4; border: 2px solid var(--success);">
+    <div class="section-header">
+        <i class="fas fa-gamepad" style="background: rgba(16,185,129,0.1); color: var(--success);"></i>
+        <h2>סימולטור CALL — מעבדה אינטראקטיבית</h2>
+    </div>
+    <p>הזינו את הפרמטרים ובדקו מיד מה קורה לקונה ולכותב בכל תרחיש. שחקו עם ערכים שונים!</p>
+
+    <div class="playground" id="callPlayground">
+        <h3><i class="fas fa-phone-volume"></i> מחשבון אופציית CALL</h3>
+        <p>הכניסו ערכים ולחצו "חשב" כדי לראות את התוצאות.</p>
+        <div class="playground-grid">
+            <div class="pg-inputs">
+                <div class="pg-input-group">
+                    <label>מחיר מימוש (K) — Strike</label>
+                    <input type="number" id="callK" value="100" min="0" step="1">
+                </div>
+                <div class="pg-input-group">
+                    <label>פרמיה ששולמה (Premium)</label>
+                    <input type="number" id="callPremium" value="8" min="0" step="0.5">
+                </div>
+                <div class="pg-input-group">
+                    <label>מחיר נכס הבסיס ביום הפקיעה (S)</label>
+                    <input type="number" id="callS" value="120" min="0" step="1">
+                </div>
+                <button class="pg-btn" onclick="calcCall()"><i class="fas fa-calculator"></i> &nbsp; חשב תוצאות</button>
+            </div>
+            <div class="pg-results" id="callResults">
+                <div class="pg-result-card">
+                    <div class="label">האם הקונה מממש?</div>
+                    <div class="value neutral" id="callExercise">—</div>
+                </div>
+                <div class="pg-result-card">
+                    <div class="label">Payoff (תזרים לפני פרמיה)</div>
+                    <div class="value neutral" id="callPayoff">—</div>
+                </div>
+                <div class="pg-result-card">
+                    <div class="label">רווח/הפסד קונה (P&L)</div>
+                    <div class="value neutral" id="callBuyerPL">—</div>
+                </div>
+                <div class="pg-result-card">
+                    <div class="label">רווח/הפסד כותב (P&L)</div>
+                    <div class="value neutral" id="callWriterPL">—</div>
+                </div>
+                <div class="pg-result-card">
+                    <div class="label">נקודת איזון (Break-Even)</div>
+                    <div class="value neutral" id="callBE">—</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SECTION 6: PLAYGROUND 2 — PUT ===== -->
+<section class="section-card" style="background: #fef2f2; border: 2px solid var(--danger);">
+    <div class="section-header">
+        <i class="fas fa-gamepad" style="background: rgba(239,68,68,0.1); color: var(--danger);"></i>
+        <h2>סימולטור PUT — מעבדה אינטראקטיבית</h2>
+    </div>
+    <p>כעת, אותו הדבר עבור אופציית PUT. שנו ערכים ובדקו כל תרחיש!</p>
+
+    <div class="playground" id="putPlayground">
+        <h3><i class="fas fa-shield-alt"></i> מחשבון אופציית PUT</h3>
+        <div class="playground-grid">
+            <div class="pg-inputs">
+                <div class="pg-input-group">
+                    <label>מחיר מימוש (K) — Strike</label>
+                    <input type="number" id="putK" value="100" min="0" step="1">
+                </div>
+                <div class="pg-input-group">
+                    <label>פרמיה ששולמה (Premium)</label>
+                    <input type="number" id="putPremium" value="6" min="0" step="0.5">
+                </div>
+                <div class="pg-input-group">
+                    <label>מחיר נכס הבסיס ביום הפקיעה (S)</label>
+                    <input type="number" id="putS" value="85" min="0" step="1">
+                </div>
+                <button class="pg-btn" onclick="calcPut()" style="background: linear-gradient(135deg, var(--danger), #b91c1c);"><i class="fas fa-calculator"></i> &nbsp; חשב תוצאות</button>
+            </div>
+            <div class="pg-results" id="putResults">
+                <div class="pg-result-card">
+                    <div class="label">האם הקונה מממש?</div>
+                    <div class="value neutral" id="putExercise">—</div>
+                </div>
+                <div class="pg-result-card">
+                    <div class="label">Payoff (תזרים לפני פרמיה)</div>
+                    <div class="value neutral" id="putPayoff">—</div>
+                </div>
+                <div class="pg-result-card">
+                    <div class="label">רווח/הפסד קונה (P&L)</div>
+                    <div class="value neutral" id="putBuyerPL">—</div>
+                </div>
+                <div class="pg-result-card">
+                    <div class="label">רווח/הפסד כותב (P&L)</div>
+                    <div class="value neutral" id="putWriterPL">—</div>
+                </div>
+                <div class="pg-result-card">
+                    <div class="label">נקודת איזון (Break-Even)</div>
+                    <div class="value neutral" id="putBE">—</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SECTION 7: FILL-IN TABLE 1 — CALL ===== -->
+<section class="section-card">
+    <div class="section-header">
+        <i class="fas fa-table"></i>
+        <h2>טבלת מילוי עצמי 1: אופציית CALL</h2>
+    </div>
+
+    <div class="scenario-box">
+        <h4><i class="fas fa-file-alt"></i> נתוני התרחיש</h4>
+        <p>משקיע <strong>קנה אופציית CALL</strong> על מניית "טכנו-על בע"מ" עם הפרטים הבאים:</p>
+        <p><strong>מחיר מימוש (K) = 50 ש"ח &nbsp;|&nbsp; פרמיה = 4 ש"ח למניה &nbsp;|&nbsp; כמות: 100 מניות</strong></p>
+        <p>מלאו את הטבלה הבאה: עבור כל מחיר שוק אפשרי ביום הפקיעה, חשבו האם הקונה ימַמֵש, מה ה-Payoff למניה, מה הרווח/הפסד למניה (כולל פרמיה), ומה סה"כ הרווח/הפסד על 100 מניות.</p>
+    </div>
+
+    <div class="fill-table-wrapper">
+        <table class="fill-table" id="callTable">
+            <thead>
+                <tr>
+                    <th>מחיר שוק (S)</th>
+                    <th>מימוש? (כן/לא)</th>
+                    <th>Payoff למניה<br><small>max(S-K, 0)</small></th>
+                    <th>P&L למניה<br><small>Payoff - Premium</small></th>
+                    <th>P&L סה"כ<br><small>× 100 מניות</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="given">30 ש"ח</td>
+                    <td><input type="number" data-answer="0" data-table="call" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="0" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="-4" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="-400" data-table="call" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">40 ש"ח</td>
+                    <td><input type="number" data-answer="0" data-table="call" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="0" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="-4" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="-400" data-table="call" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">50 ש"ח</td>
+                    <td><input type="number" data-answer="0" data-table="call" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="0" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="-4" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="-400" data-table="call" placeholder="?"></td>
+                </tr>
+                <tr style="background:#fffbeb;">
+                    <td class="given">54 ש"ח <small>(נק' איזון)</small></td>
+                    <td><input type="number" data-answer="1" data-table="call" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="4" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="0" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="0" data-table="call" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">60 ש"ח</td>
+                    <td><input type="number" data-answer="1" data-table="call" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="10" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="6" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="600" data-table="call" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">70 ש"ח</td>
+                    <td><input type="number" data-answer="1" data-table="call" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="20" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="16" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="1600" data-table="call" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">80 ש"ח</td>
+                    <td><input type="number" data-answer="1" data-table="call" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="30" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="26" data-table="call" placeholder="?"></td>
+                    <td><input type="number" data-answer="2600" data-table="call" placeholder="?"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="check-table-btn" onclick="checkTable('call')"><i class="fas fa-check-circle"></i> בדוק תשובות</button>
+    <button class="show-answers-btn" onclick="showAnswers('call')"><i class="fas fa-eye"></i> הצג פתרון</button>
+    <div class="table-feedback" id="callTableFeedback"></div>
+</section>
+
+<!-- ===== SECTION 8: FILL-IN TABLE 2 — PUT ===== -->
+<section class="section-card">
+    <div class="section-header">
+        <i class="fas fa-table"></i>
+        <h2>טבלת מילוי עצמי 2: אופציית PUT</h2>
+    </div>
+
+    <div class="scenario-box">
+        <h4><i class="fas fa-file-alt"></i> נתוני התרחיש</h4>
+        <p>משקיע <strong>קנה אופציית PUT</strong> על מניית "ביו-פארמה בע"מ" עם הפרטים הבאים:</p>
+        <p><strong>מחיר מימוש (K) = 80 ש"ח &nbsp;|&nbsp; פרמיה = 5 ש"ח למניה &nbsp;|&nbsp; כמות: 200 מניות</strong></p>
+    </div>
+
+    <div class="fill-table-wrapper">
+        <table class="fill-table" id="putTable">
+            <thead>
+                <tr>
+                    <th>מחיר שוק (S)</th>
+                    <th>מימוש? (כן/לא)</th>
+                    <th>Payoff למניה<br><small>max(K-S, 0)</small></th>
+                    <th>P&L למניה<br><small>Payoff - Premium</small></th>
+                    <th>P&L סה"כ<br><small>× 200 מניות</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="given">50 ש"ח</td>
+                    <td><input type="number" data-answer="1" data-table="put" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="30" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="25" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="5000" data-table="put" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">60 ש"ח</td>
+                    <td><input type="number" data-answer="1" data-table="put" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="20" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="15" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="3000" data-table="put" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">70 ש"ח</td>
+                    <td><input type="number" data-answer="1" data-table="put" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="10" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="5" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="1000" data-table="put" placeholder="?"></td>
+                </tr>
+                <tr style="background:#fffbeb;">
+                    <td class="given">75 ש"ח <small>(נק' איזון)</small></td>
+                    <td><input type="number" data-answer="1" data-table="put" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="5" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="0" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="0" data-table="put" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">80 ש"ח</td>
+                    <td><input type="number" data-answer="0" data-table="put" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="0" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="-5" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="-1000" data-table="put" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">90 ש"ח</td>
+                    <td><input type="number" data-answer="0" data-table="put" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="0" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="-5" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="-1000" data-table="put" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">100 ש"ח</td>
+                    <td><input type="number" data-answer="0" data-table="put" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="0" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="-5" data-table="put" placeholder="?"></td>
+                    <td><input type="number" data-answer="-1000" data-table="put" placeholder="?"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="check-table-btn" onclick="checkTable('put')"><i class="fas fa-check-circle"></i> בדוק תשובות</button>
+    <button class="show-answers-btn" onclick="showAnswers('put')"><i class="fas fa-eye"></i> הצג פתרון</button>
+    <div class="table-feedback" id="putTableFeedback"></div>
+</section>
+
+<!-- ===== SECTION 9: WRITER TABLE ===== -->
+<section class="section-card">
+    <div class="section-header">
+        <i class="fas fa-table"></i>
+        <h2>טבלת מילוי עצמי 3: צד הכותב (Short)</h2>
+    </div>
+
+    <div class="scenario-box">
+        <h4><i class="fas fa-pen-nib"></i> נתוני התרחיש — כותב אופציית CALL</h4>
+        <p>משקיע <strong>כתב (מכר) אופציית CALL</strong> על מניית "אנרג'י גלובל" עם הפרטים הבאים:</p>
+        <p><strong>מחיר מימוש (K) = 200 ש"ח &nbsp;|&nbsp; פרמיה שנתקבלה = 12 ש"ח למניה &nbsp;|&nbsp; כמות: 50 מניות</strong></p>
+        <p>שימו לב: הכותב <strong>מקבל</strong> את הפרמיה, לכן הנוסחה הפוכה: P&L כותב = Premium − max(S−K, 0)</p>
+    </div>
+
+    <div class="fill-table-wrapper">
+        <table class="fill-table" id="writerTable">
+            <thead>
+                <tr>
+                    <th>מחיר שוק (S)</th>
+                    <th>הקונה מממש?</th>
+                    <th>Payoff קונה<br><small>max(S-K, 0)</small></th>
+                    <th>P&L כותב למניה<br><small>Prem − Payoff</small></th>
+                    <th>P&L כותב סה"כ<br><small>× 50 מניות</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="given">170 ש"ח</td>
+                    <td><input type="number" data-answer="0" data-table="writer" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="0" data-table="writer" placeholder="?"></td>
+                    <td><input type="number" data-answer="12" data-table="writer" placeholder="?"></td>
+                    <td><input type="number" data-answer="600" data-table="writer" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">200 ש"ח</td>
+                    <td><input type="number" data-answer="0" data-table="writer" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="0" data-table="writer" placeholder="?"></td>
+                    <td><input type="number" data-answer="12" data-table="writer" placeholder="?"></td>
+                    <td><input type="number" data-answer="600" data-table="writer" placeholder="?"></td>
+                </tr>
+                <tr style="background:#fffbeb;">
+                    <td class="given">212 ש"ח <small>(נק' איזון)</small></td>
+                    <td><input type="number" data-answer="1" data-table="writer" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="12" data-table="writer" placeholder="?"></td>
+                    <td><input type="number" data-answer="0" data-table="writer" placeholder="?"></td>
+                    <td><input type="number" data-answer="0" data-table="writer" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">230 ש"ח</td>
+                    <td><input type="number" data-answer="1" data-table="writer" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="30" data-table="writer" placeholder="?"></td>
+                    <td><input type="number" data-answer="-18" data-table="writer" placeholder="?"></td>
+                    <td><input type="number" data-answer="-900" data-table="writer" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">260 ש"ח</td>
+                    <td><input type="number" data-answer="1" data-table="writer" placeholder="0=לא, 1=כן"></td>
+                    <td><input type="number" data-answer="60" data-table="writer" placeholder="?"></td>
+                    <td><input type="number" data-answer="-48" data-table="writer" placeholder="?"></td>
+                    <td><input type="number" data-answer="-2400" data-table="writer" placeholder="?"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="check-table-btn" onclick="checkTable('writer')"><i class="fas fa-check-circle"></i> בדוק תשובות</button>
+    <button class="show-answers-btn" onclick="showAnswers('writer')"><i class="fas fa-eye"></i> הצג פתרון</button>
+    <div class="table-feedback" id="writerTableFeedback"></div>
+
+    <div class="danger-box" style="margin-top: 2rem;">
+        <p><strong><i class="fas fa-skull-crossbones"></i> מסקנה מהטבלה:</strong> שימו לב שככל שהמחיר עולה, הכותב מפסיד יותר ויותר — <strong>ללא גבול עליון!</strong> ב-260 ש"ח הוא כבר מפסיד 2,400 ש"ח על פוזיציה שממנה הרוויח רק 600 ש"ח מהפרמיה. כתיבת אופציות ללא כיסוי (Naked) היא אחת מהפעולות המסוכנות ביותר בשוק ההון.</p>
+    </div>
+</section>
+
+<!-- ===== SECTION 10: REAL WORLD CASES ===== -->
+<section class="section-card">
+    <div class="section-header">
+        <i class="fas fa-globe"></i>
+        <h2>אופציות בעולם האמיתי: מקרי בוחן</h2>
+    </div>
+
+    <h3>מקרה 1: חקלאי חיטה קונה PUT להגנה</h3>
+    <div class="scenario-box">
+        <p>חקלאי ישראלי מגדל חיטה. הוא יודע שבעוד 4 חודשים יקצור <strong>500 טון חיטה</strong>. היום מחיר החיטה הוא <strong>300$ לטון</strong>. החקלאי חושש מירידת מחירים (שפע יבוא מאוקראינה). הוא קונה <strong>אופציית PUT</strong> עם K = 290$ לטון, בפרמיה של 10$ לטון.</p>
+
+        <h4>תרחיש A: המחיר ירד ל-250$ לטון</h4>
+        <div class="math-breakdown">
+Put Payoff = max(290 - 250, 0) = 40$ לטון
+Put P&L = 40 - 10 = +30$ לטון
+Total P&L = 500 × 30 = +15,000$
+
+הכנסה ממכירת חיטה בשוק: 500 × 250 = 125,000$
++ רווח מ-PUT: +15,000$
+= הכנסה אפקטיבית: 140,000$ (≈ 280$ לטון אפקטיבי)
+        </div>
+
+        <h4>תרחיש B: המחיר עלה ל-350$ לטון</h4>
+        <div class="math-breakdown">
+Put Payoff = max(290 - 350, 0) = 0 (לא ימומש!)
+Put P&L = 0 - 10 = -10$ לטון (הפסיד רק את הפרמיה)
+
+הכנסה ממכירת חיטה בשוק: 500 × 350 = 175,000$
+- עלות פרמיה: 500 × 10 = -5,000$
+= הכנסה אפקטיבית: 170,000$ (≈ 340$ לטון)
+        </div>
+
+        <div class="success-box">
+            <p><strong>המסקנה:</strong> בניגוד לחוזה עתידי שנועל הכל, ה-PUT הגן על החקלאי מפני ירידה (רצפת מחיר של ~280$), אך <strong>אפשר לו ליהנות מהעלייה</strong>. המחיר? פרמיה של 10$ לטון. זהו בדיוק ההבדל בין Forward לבין Option!</p>
+        </div>
+    </div>
+
+    <h3>מקרה 2: ספקולנט קונה CALL על מניית AI-Corp</h3>
+    <div class="scenario-box">
+        <p>ספקולנט מאמין שמניית AI-Corp, הנסחרת היום ב-100$, צפויה לזנק אחרי דוח רווחים. הוא שוקל שתי חלופות:</p>
+
+        <div class="compare-grid">
+            <div class="compare-card" style="background: #f0f9ff; border-color: var(--secondary);">
+                <h4>חלופה א': קנייה ישירה</h4>
+                <p>קונה 100 מניות × 100$ = השקעה 10,000$</p>
+                <p>אם המניה עולה ל-120$: רווח = 2,000$ (תשואה 20%)</p>
+                <p>אם המניה יורדת ל-80$: הפסד = 2,000$ (הפסד 20%)</p>
+            </div>
+            <div class="compare-card" style="background: #f5f3ff; border-color: var(--purple);">
+                <h4>חלופה ב': קניית CALL</h4>
+                <p>קונה CALL עם K=100$, פרמיה=5$, על 100 מניות = השקעה 500$</p>
+                <p>אם המניה עולה ל-120$: Payoff = 20×100 = 2,000$, P&L = 2,000−500 = <strong>+1,500$</strong> (תשואה <strong>300%!</strong>)</p>
+                <p>אם המניה יורדת ל-80$: הפסד = 500$ בלבד (הפסד 100% מההשקעה, אבל רק 500$!)</p>
+            </div>
+        </div>
+
+        <div class="alert-box">
+            <div class="alert-title"><i class="fas fa-bolt"></i> אפקט המנוף של אופציות</div>
+            <p>בחלופה א' הספקולנט הרוויח 20% על השקעה של 10,000$. בחלופה ב' הוא הרוויח 300% על השקעה של 500$ בלבד! זהו המנוף: <strong>רווח עצום באחוזים, על הון קטן</strong>. אבל שימו לב — אם המניה לא זזה או יורדת, הספקולנט מפסיד <strong>100% מההשקעה באופציה</strong> (כל הפרמיה), לעומת הפסד חלקי בלבד בקנייה ישירה.</p>
+        </div>
+    </div>
+
+    <div class="mcq-box">
+        <div class="mcq-title">בחן את עצמך: Forward לעומת Option</div>
+        <div class="mcq-options">
+            <label class="mcq-option"><input type="radio" name="q_rw1"><span>א. יבואן שרוצה לגדר שער מט"ח אך גם ליהנות אם השער ירד לטובתו, יעדיף חוזה Forward על פני אופציה.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_rw1"><span>ב. אופציה זולה יותר מ-Forward כי היא מגנה רק בכיוון אחד.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_rw1"><span>ג. היתרון של אופציה על Forward הוא שהיא מגנה כמו ביטוח (כן, יש עלות פרמיה), אך משאירה את ה"אפסייד" פתוח.</span></label>
+            <label class="mcq-option"><input type="radio" name="q_rw1"><span>ד. Forward ואופציה נותנים בדיוק אותה תוצאה בכל תרחיש.</span></label>
+        </div>
+        <details class="mcq-solution">
+            <summary>הצג פתרון</summary>
+            <div class="mcq-answer-content">
+                <strong>התשובה הנכונה היא ג'.</strong><br>
+                זהו ההבדל המהותי: אופציה = ביטוח (משלמים פרמיה, מוגנים לכיוון אחד, חופשיים ליהנות מהכיוון השני). Forward = נעילה מוחלטת (בחינם, אבל לשני הכיוונים). א' שגויה (יבואן שרוצה אפסייד יעדיף אופציה). ב' חלקית אבל מטעה (אופציה עולה פרמיה, Forward בדר"כ בחינם). ד' שגויה לחלוטין.
+            </div>
+        </details>
+    </div>
+</section>
+
+<!-- ===== SECTION 11: ADVANCED FILL TABLE — COMBINED ===== -->
+<section class="section-card" style="border: 2px solid var(--purple);">
+    <div class="section-header">
+        <i class="fas fa-brain" style="background: rgba(139,92,246,0.1); color: var(--purple);"></i>
+        <h2>טבלת מילוי מתקדמת: קונה ומוכר יחד</h2>
+    </div>
+
+    <div class="scenario-box">
+        <h4><i class="fas fa-chess"></i> תרחיש מורכב</h4>
+        <p>נתונה אופציית <strong>CALL</strong> על מדד ת"א-35 עם הפרטים הבאים:</p>
+        <p><strong>מחיר מימוש (K) = 1,800 נקודות &nbsp;|&nbsp; פרמיה = 50 נקודות &nbsp;|&nbsp; מכפיל: 100 ש"ח לנקודה</strong></p>
+        <p>מלאו <strong>גם עבור הקונה וגם עבור הכותב</strong> את כל השדות. שימו לב: P&L כותב = −P&L קונה (משחק סכום אפס).</p>
+    </div>
+
+    <div class="fill-table-wrapper">
+        <table class="fill-table" id="comboTable">
+            <thead>
+                <tr>
+                    <th>מדד (S)</th>
+                    <th>Payoff קונה</th>
+                    <th>P&L קונה<br><small>(נקודות)</small></th>
+                    <th>P&L קונה ₪<br><small>× 100</small></th>
+                    <th>P&L כותב<br><small>(נקודות)</small></th>
+                    <th>P&L כותב ₪<br><small>× 100</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="given">1,600</td>
+                    <td><input type="number" data-answer="0" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="-50" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="-5000" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="50" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="5000" data-table="combo" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">1,800</td>
+                    <td><input type="number" data-answer="0" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="-50" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="-5000" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="50" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="5000" data-table="combo" placeholder="?"></td>
+                </tr>
+                <tr style="background:#fffbeb;">
+                    <td class="given">1,850 <small>(B.E.)</small></td>
+                    <td><input type="number" data-answer="50" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="0" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="0" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="0" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="0" data-table="combo" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">1,900</td>
+                    <td><input type="number" data-answer="100" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="50" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="5000" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="-50" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="-5000" data-table="combo" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">2,000</td>
+                    <td><input type="number" data-answer="200" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="150" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="15000" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="-150" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="-15000" data-table="combo" placeholder="?"></td>
+                </tr>
+                <tr>
+                    <td class="given">2,200</td>
+                    <td><input type="number" data-answer="400" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="350" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="35000" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="-350" data-table="combo" placeholder="?"></td>
+                    <td><input type="number" data-answer="-35000" data-table="combo" placeholder="?"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="check-table-btn" onclick="checkTable('combo')"><i class="fas fa-check-circle"></i> בדוק תשובות</button>
+    <button class="show-answers-btn" onclick="showAnswers('combo')"><i class="fas fa-eye"></i> הצג פתרון</button>
+    <div class="table-feedback" id="comboTableFeedback"></div>
+</section>
+
+<!-- ===== SECTION 12: EXERCISES ===== -->
+<section class="section-card" style="background: #f8fafc; border: 2px solid var(--secondary);">
+    <div class="section-header">
+        <i class="fas fa-pencil-ruler"></i>
+        <h2>שעת תרגול: מרמת בסיס ועד מורכבות גבוהה</h2>
+    </div>
+
+    <!-- Q1 -->
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">שאלה 1</span> הבנה בסיסית
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                משקיע קנה אופציית CALL על מניית "דלתא" עם מחיר מימוש K = 40$, ושילם פרמיה של 3$. ביום הפקיעה מחיר המניה הוא 48$. <br>
+                א) האם המשקיע ימַמֵש? מדוע? <br>
+                ב) מהו ה-Payoff? <br>
+                ג) מהו הרווח הנקי (P&L)?
+            </p>
+        </div>
+        <details>
+            <summary>הצג פתרון מלא</summary>
+            <div class="exercise-solution">
+                <p><strong>א)</strong> כן, ימַמֵש! מחיר השוק (48$) > מחיר המימוש (40$). כדאי לו לקנות ב-40 ולמכור ב-48.</p>
+                <div class="math-breakdown">
+ב) Payoff = max(S - K, 0) = max(48 - 40, 0) = 8$
+ג) P&L = Payoff - Premium = 8 - 3 = +5$ (רווח!)
+                </div>
+            </div>
+        </details>
+    </div>
+
+    <!-- Q2 -->
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">שאלה 2</span> PUT בסיסי
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                משקיע קנה אופציית PUT על מניית "גמא" עם K = 60$, ושילם פרמיה של 4$. ביום הפקיעה המניה נסחרת ב-55$. <br>
+                א) מהו ה-Payoff? <br>
+                ב) מהו ה-P&L? <br>
+                ג) מה היה ה-P&L אילו המניה הייתה ב-65$ ביום הפקיעה?
+            </p>
+        </div>
+        <details>
+            <summary>הצג פתרון מלא</summary>
+            <div class="exercise-solution">
+                <div class="math-breakdown">
+א) Payoff = max(K - S, 0) = max(60 - 55, 0) = 5$
+ב) P&L = 5 - 4 = +1$ (רווח צנוע)
+ג) אם S = 65:
+   Payoff = max(60 - 65, 0) = 0 (לא ימומש)
+   P&L = 0 - 4 = -4$ (הפסד = הפרמיה בלבד)
+                </div>
+            </div>
+        </details>
+    </div>
+
+    <!-- Q3 -->
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">שאלה 3</span> נקודת איזון (Break-Even)
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                משקיע קנה אופציית CALL עם K = 150$ ופרמיה = 12$. <br>
+                א) מהי נקודת האיזון? <br>
+                ב) באיזה מחיר שוק הרווח הנקי יהיה בדיוק 20$ למניה? <br>
+                ג) אם שילם על 200 מניות, כמה הפסיד מקסימום?
+            </p>
+        </div>
+        <details>
+            <summary>הצג פתרון מלא</summary>
+            <div class="exercise-solution">
+                <div class="math-breakdown">
+א) Break-Even (Long Call) = K + Premium = 150 + 12 = 162$
+   (מעל 162$ יש רווח, מתחת — הפסד)
+
+ב) נרצה P&L = 20:
+   (S - K) - Premium = 20
+   S - 150 - 12 = 20
+   S = 182$
+
+ג) הפסד מקסימלי = Premium × כמות = 12 × 200 = 2,400$
+                </div>
+            </div>
+        </details>
+    </div>
+
+    <!-- Q4 -->
+    <div class="exercise-box" style="border-right: 4px solid var(--accent);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background: var(--accent);">שאלה 4 (חישובית)</span> כותב PUT — חישוב מלא
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                כותב מכר אופציית PUT על מניית "בנק ראשון" עם K = 90 ש"ח ופרמיה שנתקבלה = 7 ש"ח למניה. הוא מכר אופציות על 300 מניות. <br>
+                א) מהו הרווח המקסימלי של הכותב? <br>
+                ב) מהו ההפסד המקסימלי התיאורטי של הכותב? <br>
+                ג) מהי נקודת האיזון של הכותב? <br>
+                ד) אם ביום הפקיעה המניה נסחרת ב-75 ש"ח, מהו ה-P&L הכולל של הכותב?
+            </p>
+        </div>
+        <details>
+            <summary>הצג פתרון מלא</summary>
+            <div class="exercise-solution">
+                <div class="math-breakdown">
+א) רווח מקסימלי = פרמיה × כמות = 7 × 300 = 2,100 ש"ח
+   (כשהמניה ≥ 90 — הקונה לא מממש)
+
+ב) הפסד מקסימלי (אם המניה יורדת ל-0):
+   P&L כותב = Premium - max(K - S, 0)
+   = 7 - max(90 - 0, 0) = 7 - 90 = -83 ש"ח למניה
+   סה"כ = -83 × 300 = -24,900 ש"ח
+
+ג) נקודת איזון (Short Put) = K - Premium = 90 - 7 = 83 ש"ח
+
+ד) S = 75:
+   Payoff קונה = max(90 - 75, 0) = 15
+   P&L כותב = 7 - 15 = -8 ש"ח למניה
+   סה"כ = -8 × 300 = -2,400 ש"ח (הפסד)
+                </div>
+            </div>
+        </details>
+    </div>
+
+    <!-- Q5 -->
+    <div class="exercise-box" style="border-right: 4px solid var(--accent);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background: var(--accent);">שאלה 5 (חישובית)</span> השוואת מנוף: מניה לעומת CALL
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                מניית "טק-ישראל" נסחרת ב-200 ש"ח. אופציית CALL עם K = 200, פרמיה = 15 ש"ח. לסוחר יש תקציב של 3,000 ש"ח. <br>
+                א) כמה מניות יכול לקנות ישירות? <br>
+                ב) כמה אופציות CALL יכול לקנות? <br>
+                ג) אם המניה עולה ל-230 ש"ח, מה הרווח בכל חלופה? <br>
+                ד) מהי תשואת ה-ROI בכל חלופה? <br>
+                ה) אם המניה יורדת ל-190 ש"ח, מה ההפסד בכל חלופה?
+            </p>
+        </div>
+        <details>
+            <summary>הצג פתרון מלא</summary>
+            <div class="exercise-solution">
+                <div class="math-breakdown">
+א) מניות ישירות = 3,000 / 200 = 15 מניות
+
+ב) אופציות CALL = 3,000 / 15 = 200 אופציות (כל אחת על מניה אחת)
+
+ג) מניה עולה ל-230:
+   חלופה א' (מניות): רווח = 15 × (230-200) = 15 × 30 = 450 ש"ח
+   חלופה ב' (CALL): Payoff = 230-200 = 30, P&L = 30-15 = 15
+   רווח כולל = 200 × 15 = 3,000 ש"ח
+
+ד) ROI:
+   חלופה א': 450 / 3,000 = 15%
+   חלופה ב': 3,000 / 3,000 = 100% (!!!)
+
+ה) מניה יורדת ל-190:
+   חלופה א': הפסד = 15 × (200-190) = 15 × 10 = -150 ש"ח (הפסד 5%)
+   חלופה ב': CALL לא מומש, הפסד = כל הפרמיה = -3,000 ש"ח (הפסד 100%)
+                </div>
+                <div class="danger-box" style="margin-top:1rem;">
+                    <p><strong>מסקנה:</strong> המנוף חותך לשני הכיוונים! ב-CALL הרווחתם פי 6.7 יותר כשהמניה עלתה, אבל הפסדתם פי 20 יותר כשהיא ירדה. אופציות מתאימות למי שבטוח בכיוון ומוכן לספוג הפסד מלא של הפרמיה.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+
+    <!-- Q6 -->
+    <div class="exercise-box" style="border-right: 4px solid var(--danger);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background: var(--danger);">שאלה 6 (מורכבת)</span> גידור תיק מניות עם אופציית PUT (Protective Put)
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                מנהלת תיק מחזיקה <strong>1,000 מניות</strong> של חברת "סולאר-טק" שנקנו ב-<strong>120 ש"ח למניה</strong>. 
+                שווי התיק: 120,000 ש"ח. היא חוששת מירידת מחירים לפני פרסום דוח רבעוני, ולכן קונה <strong>אופציות PUT</strong> עם K = 115 ש"ח ופרמיה = 4 ש"ח למניה, על כל 1,000 מניותיה. <br><br>
+                א) מהי העלות הכוללת של הביטוח (הפרמיה)? <br>
+                ב) אם המניה צונחת ל-90 ש"ח, מהו ההפסד הכולל <em>ללא</em> ה-PUT? <br>
+                ג) מהו ההפסד הכולל <em>עם</em> ה-PUT? <br>
+                ד) מהו ההפסד המקסימלי האפשרי בפוזיציה המשולבת (מניה + PUT)? <br>
+                ה) אם המניה עולה ל-150 ש"ח, כמה הרוויחה (כולל עלות ה-PUT)?
+            </p>
+        </div>
+        <details>
+            <summary>הצג פתרון מפורט</summary>
+            <div class="exercise-solution">
+                <div class="math-breakdown">
+א) עלות ביטוח = 4 × 1,000 = 4,000 ש"ח
+
+ב) ללא PUT, S = 90:
+   הפסד = 1,000 × (90 - 120) = -30,000 ש"ח
+
+ג) עם PUT, S = 90:
+   הפסד מניות: 1,000 × (90 - 120) = -30,000
+   רווח PUT: 1,000 × max(115 - 90, 0) = 1,000 × 25 = +25,000
+   עלות פרמיה: -4,000
+   סה"כ P&L = -30,000 + 25,000 - 4,000 = -9,000 ש"ח
+   (במקום -30,000 → חסכה 21,000 ש"ח!)
+
+ד) ההפסד המקסימלי בפוזיציה המשולבת:
+   הרצפה של ה-PUT הוא K = 115.
+   הפסד מניה מקסימלי = 120 - 115 = 5 ש"ח למניה
+   + פרמיה = 4 ש"ח
+   הפסד מקסימלי למניה = 5 + 4 = 9 ש"ח
+   סה"כ = 9 × 1,000 = 9,000 ש"ח (בלי קשר כמה המניה צונחת!)
+
+ה) S = 150:
+   רווח מניות: 1,000 × (150 - 120) = +30,000
+   PUT לא מומש: Payoff = 0
+   עלות פרמיה: -4,000
+   סה"כ = 30,000 - 4,000 = +26,000 ש"ח
+                </div>
+                <div class="success-box" style="margin-top:1rem;">
+                    <p><strong>תובנה:</strong> אסטרטגיית Protective Put היא "ביטוח" לתיק מניות. ההפסד המקסימלי מוגבל ל-9,000 ש"ח (7.5% מהתיק), גם אם המניה קורסת לאפס. בתמורה, הרווח מופחת ב-4,000 ש"ח (עלות הפרמיה). זוהי אחת מאסטרטגיות הגידור הנפוצות ביותר בקרב מנהלי תיקים מקצועיים.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+
+    <!-- Q7 -->
+    <div class="exercise-box" style="border-right: 4px solid var(--danger);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background: var(--danger);">שאלה 7 (מורכבת)</span> יבואן ישראלי — CALL על דולר/שקל
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                יבואן ישראלי של רהיטים צריך לשלם לספק אמריקאי <strong>$200,000</strong> בעוד חודשיים. שער הספוט היום: <strong>3.70 ₪/$</strong>. היבואן קונה <strong>אופציית CALL על הדולר</strong> (זכות לקנות דולרים) עם K = 3.75 ₪/$ ופרמיה = 0.08 ₪/$. <br><br>
+                א) מהי העלות הכוללת של הפרמיה בשקלים? <br>
+                ב) אם שער הדולר ביום הפקיעה הוא 3.95 ₪/$, מהו ההפסד שנחסך? <br>
+                ג) אם שער הדולר ירד ל-3.60 ₪/$, מה קורה? <br>
+                ד) מהו שער הדולר האפקטיבי המקסימלי שהיבואן ישלם?
+            </p>
+        </div>
+        <details>
+            <summary>הצג פתרון מפורט</summary>
+            <div class="exercise-solution">
+                <div class="math-breakdown">
+א) עלות פרמיה = $200,000 × 0.08 ₪/$ = 16,000 ₪
+
+ב) S = 3.95:
+   ללא אופציה: 200,000 × 3.95 = 790,000 ₪
+   עם אופציה: ממש את ה-CALL, קונה ב-3.75
+   עלות דולרים: 200,000 × 3.75 = 750,000 ₪
+   + פרמיה: 16,000 ₪
+   סה"כ: 766,000 ₪
+   חיסכון = 790,000 - 766,000 = 24,000 ₪
+
+ג) S = 3.60:
+   לא ימומש! (3.60 < 3.75 — עדיף לקנות בשוק)
+   עלות דולרים: 200,000 × 3.60 = 720,000 ₪
+   + פרמיה: 16,000 ₪
+   סה"כ: 736,000 ₪
+   (היבואן נהנה מהירידה, בניכוי הפרמיה)
+
+ד) שער אפקטיבי מקסימלי = K + Premium = 3.75 + 0.08 = 3.83 ₪/$
+   עלות מקסימלית = 200,000 × 3.83 = 766,000 ₪
+                </div>
+            </div>
+        </details>
+    </div>
+
+    <!-- Q8 -->
+    <div class="exercise-box" style="border-right: 4px solid #8b5cf6;">
+        <div class="exercise-question">
+            <span class="q-badge" style="background: #8b5cf6;">שאלה 8 (אינטגרטיבית)</span> השוואה מלאה: Forward vs CALL vs PUT
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                יצואן ישראלי צפוי לקבל <strong>$1,000,000</strong> בעוד 3 חודשים. שער הספוט: 3.70 ₪/$. שער Forward ל-3 חודשים: 3.72 ₪/$. הוא שוקל 3 חלופות: <br>
+                (א) לא לגדר כלל <br>
+                (ב) למכור Forward ב-3.72 <br>
+                (ג) לקנות PUT על הדולר עם K = 3.70, פרמיה = 0.06 ₪/$ <br><br>
+                חשבו את ההכנסה בשקלים בכל חלופה עבור שני תרחישים: דולר ב-3.50 ודולר ב-4.00.
+            </p>
+        </div>
+        <details>
+            <summary>הצג פתרון מפורט</summary>
+            <div class="exercise-solution">
+                <p><strong>עלות פרמיה (חלופה ג'):</strong> $1,000,000 × 0.06 = 60,000 ₪</p>
+
+                <h4>תרחיש 1: דולר = 3.50 ₪/$</h4>
+                <div class="math-breakdown">
+(א) ללא גידור: 1,000,000 × 3.50 = 3,500,000 ₪
+(ב) Forward 3.72: 1,000,000 × 3.72 = 3,720,000 ₪ ← הכי טוב!
+(ג) PUT (K=3.70):
+    PUT Payoff = max(3.70 - 3.50, 0) = 0.20 ₪/$
+    הכנסה מדולרים: 3,500,000
+    + רווח PUT: 1,000,000 × 0.20 = 200,000
+    - פרמיה: 60,000
+    = 3,640,000 ₪
+                </div>
+
+                <h4>תרחיש 2: דולר = 4.00 ₪/$</h4>
+                <div class="math-breakdown">
+(א) ללא גידור: 1,000,000 × 4.00 = 4,000,000 ₪ ← הכי טוב!
+(ב) Forward 3.72: 1,000,000 × 3.72 = 3,720,000 ₪ (נעול!)
+(ג) PUT (K=3.70):
+    PUT Payoff = max(3.70 - 4.00, 0) = 0 (לא ימומש)
+    הכנסה מדולרים: 4,000,000
+    - פרמיה: 60,000
+    = 3,940,000 ₪
+                </div>
+
+                <table class="summary-table" style="margin-top: 1.5rem;">
+                    <thead><tr><th>חלופה</th><th>דולר=3.50</th><th>דולר=4.00</th></tr></thead>
+                    <tbody>
+                        <tr><td>ללא גידור</td><td style="color:var(--danger);">3,500,000 ₪</td><td style="color:var(--success);">4,000,000 ₪</td></tr>
+                        <tr><td>Forward 3.72</td><td>3,720,000 ₪</td><td>3,720,000 ₪</td></tr>
+                        <tr><td>PUT (K=3.70)</td><td>3,640,000 ₪</td><td>3,940,000 ₪</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="purple-box" style="margin-top: 1rem;">
+                    <p><strong>מסקנה:</strong> ה-PUT נותן את "הטוב משני העולמות" — הגנה בירידה (3.64M לעומת 3.5M ללא גידור) ושמירה על אפסייד (3.94M לעומת 3.72M ב-Forward). המחיר: 60,000 ₪ פרמיה שנגבית בכל מקרה.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+
+</section>
+
+<!-- ===== SECTION 13: TERMINOLOGY SUMMARY ===== -->
+<section class="section-card">
+    <div class="section-header">
+        <i class="fas fa-book"></i>
+        <h2>מילון מונחים מסכם — פרק 2</h2>
+    </div>
+
+    <table class="summary-table">
+        <thead>
+            <tr><th>מונח</th><th>English</th><th>הסבר</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>אופציית רכש</strong></td><td>Call Option</td><td>זכות לקנות נכס בסיס ב-K</td></tr>
+            <tr><td><strong>אופציית מכר</strong></td><td>Put Option</td><td>זכות למכור נכס בסיס ב-K</td></tr>
+            <tr><td><strong>מחיר מימוש</strong></td><td>Strike Price (K)</td><td>המחיר הקבוע מראש בחוזה האופציה</td></tr>
+            <tr><td><strong>פרמיה</strong></td><td>Premium</td><td>המחיר ששולם עבור הזכות</td></tr>
+            <tr><td><strong>קונה אופציה</strong></td><td>Long / Buyer</td><td>מי שמשלם פרמיה ומקבל זכות</td></tr>
+            <tr><td><strong>כותב אופציה</strong></td><td>Short / Writer</td><td>מי שמקבל פרמיה ומתחייב</td></tr>
+            <tr><td><strong>Payoff</strong></td><td>Payoff</td><td>תזרים ביום הפקיעה לפני הפרמיה</td></tr>
+            <tr><td><strong>P&L</strong></td><td>Profit & Loss</td><td>רווח/הפסד נטו כולל פרמיה</td></tr>
+            <tr><td><strong>נקודת איזון</strong></td><td>Break-Even</td><td>CALL: K+Prem, PUT: K−Prem</td></tr>
+            <tr><td><strong>ITM</strong></td><td>In The Money</td><td>האופציה "בכסף" — כדאי לממש</td></tr>
+            <tr><td><strong>OTM</strong></td><td>Out of The Money</td><td>האופציה "מחוץ לכסף" — לא כדאי לממש</td></tr>
+            <tr><td><strong>ATM</strong></td><td>At The Money</td><td>S ≈ K, האופציה "על הכסף"</td></tr>
+            <tr><td><strong>Protective Put</strong></td><td>Protective Put</td><td>קנייה משולבת: מניה + PUT להגנה</td></tr>
+        </tbody>
+    </table>
+</section>
+
+</main>
+
+<footer style="text-align: center; padding: 4rem 1rem 2rem; color: var(--text-muted); background: white; border-top: 1px solid var(--border-color); margin-top: 3rem;">
+    <i class="fas fa-university" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1.5rem;"></i>
+    <h3 style="margin-top:0; color:var(--primary); font-size:1.3rem;">ניהול פיננסי / שוק ההון</h3>
+    <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 1.5rem;">פרק 2 הסתיים. בחלק הבא (פרק 3) נתקדם למודלים מתמטיים לתמחור אופציות: Binomial Model, Black-Scholes, ו-Greeks.</p>
+    <p style="font-size: 0.95rem;">כל הזכויות שמורות &copy; 2026. צוות ההוראה.</p>
+</footer>
+
+<script>
+// ===== PLAYGROUND: CALL =====
+function calcCall() {
+    var K = parseFloat(document.getElementById('callK').value);
+    var P = parseFloat(document.getElementById('callPremium').value);
+    var S = parseFloat(document.getElementById('callS').value);
+
+    var payoff = Math.max(S - K, 0);
+    var exercised = S > K;
+    var buyerPL = payoff - P;
+    var writerPL = P - payoff;
+    var be = K + P;
+
+    document.getElementById('callExercise').textContent = exercised ? 'כן! ✓' : 'לא ✗';
+    document.getElementById('callExercise').className = 'value ' + (exercised ? 'profit' : 'loss');
+
+    document.getElementById('callPayoff').textContent = payoff.toFixed(2) + '$';
+    document.getElementById('callPayoff').className = 'value ' + (payoff > 0 ? 'profit' : 'neutral');
+
+    document.getElementById('callBuyerPL').textContent = (buyerPL >= 0 ? '+' : '') + buyerPL.toFixed(2) + '$';
+    document.getElementById('callBuyerPL').className = 'value ' + (buyerPL > 0 ? 'profit' : buyerPL < 0 ? 'loss' : 'neutral');
+
+    document.getElementById('callWriterPL').textContent = (writerPL >= 0 ? '+' : '') + writerPL.toFixed(2) + '$';
+    document.getElementById('callWriterPL').className = 'value ' + (writerPL > 0 ? 'profit' : writerPL < 0 ? 'loss' : 'neutral');
+
+    document.getElementById('callBE').textContent = be.toFixed(2) + '$';
+    document.getElementById('callBE').className = 'value neutral';
+}
+
+// ===== PLAYGROUND: PUT =====
+function calcPut() {
+    var K = parseFloat(document.getElementById('putK').value);
+    var P = parseFloat(document.getElementById('putPremium').value);
+    var S = parseFloat(document.getElementById('putS').value);
+
+    var payoff = Math.max(K - S, 0);
+    var exercised = S < K;
+    var buyerPL = payoff - P;
+    var writerPL = P - payoff;
+    var be = K - P;
+
+    document.getElementById('putExercise').textContent = exercised ? 'כן! ✓' : 'לא ✗';
+    document.getElementById('putExercise').className = 'value ' + (exercised ? 'profit' : 'loss');
+
+    document.getElementById('putPayoff').textContent = payoff.toFixed(2) + '$';
+    document.getElementById('putPayoff').className = 'value ' + (payoff > 0 ? 'profit' : 'neutral');
+
+    document.getElementById('putBuyerPL').textContent = (buyerPL >= 0 ? '+' : '') + buyerPL.toFixed(2) + '$';
+    document.getElementById('putBuyerPL').className = 'value ' + (buyerPL > 0 ? 'profit' : buyerPL < 0 ? 'loss' : 'neutral');
+
+    document.getElementById('putWriterPL').textContent = (writerPL >= 0 ? '+' : '') + writerPL.toFixed(2) + '$';
+    document.getElementById('putWriterPL').className = 'value ' + (writerPL > 0 ? 'profit' : writerPL < 0 ? 'loss' : 'neutral');
+
+    document.getElementById('putBE').textContent = be.toFixed(2) + '$';
+    document.getElementById('putBE').className = 'value neutral';
+}
+
+// ===== TABLE CHECK =====
+function checkTable(tableId) {
+    var inputs = document.querySelectorAll('input[data-table="' + tableId + '"]');
+    var correct = 0;
+    var total = inputs.length;
+
+    inputs.forEach(function(input) {
+        var answer = parseFloat(input.getAttribute('data-answer'));
+        var userVal = parseFloat(input.value);
+        if (!isNaN(userVal) && Math.abs(userVal - answer) < 0.5) {
+            input.className = 'correct';
+            correct++;
+        } else if (input.value !== '') {
+            input.className = 'wrong';
+        }
+    });
+
+    var fb = document.getElementById(tableId + 'TableFeedback');
+    fb.style.display = 'block';
+    if (correct === total) {
+        fb.style.background = '#ecfdf5';
+        fb.style.color = '#047857';
+        fb.innerHTML = '<i class="fas fa-check-circle"></i> מצוין! ' + correct + '/' + total + ' תשובות נכונות!';
+    } else {
+        fb.style.background = '#fffbeb';
+        fb.style.color = '#92400e';
+        fb.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ' + correct + '/' + total + ' נכונות. תיקנו שגיאות (אדום) ונסו שנית.';
+    }
+}
+
+function showAnswers(tableId) {
+    var inputs = document.querySelectorAll('input[data-table="' + tableId + '"]');
+    inputs.forEach(function(input) {
+        input.value = input.getAttribute('data-answer');
+        input.className = 'correct';
+    });
+    var fb = document.getElementById(tableId + 'TableFeedback');
+    fb.style.display = 'block';
+    fb.style.background = '#eff6ff';
+    fb.style.color = '#1e40af';
+    fb.innerHTML = '<i class="fas fa-eye"></i> מוצגות התשובות הנכונות.';
+}
+
+// ===== CHARTS =====
+document.addEventListener('DOMContentLoaded', function() {
+
+    // Long Call Chart
+    var callLabels = [], callData = [];
+    var callK = 100, callPrem = 8;
+    for (var s = 70; s <= 140; s += 2) {
+        callLabels.push(s);
+        callData.push(Math.max(s - callK, 0) - callPrem);
+    }
+    new Chart(document.getElementById('longCallChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: callLabels,
+            datasets: [{
+                label: 'Long Call P&L (K=100, Premium=8)',
+                data: callData,
+                borderColor: '#10b981',
+                backgroundColor: function(context) {
+                    var v = context.dataset.data[context.dataIndex];
+                    return v >= 0 ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.1)';
+                },
+                borderWidth: 3,
+                fill: true,
+                tension: 0,
+                pointRadius: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+                annotation: {
+                    annotations: {
+                        zeroline: { type: 'line', yMin: 0, yMax: 0, borderColor: '#94a3b8', borderWidth: 1, borderDash: [4,4] },
+                        beLine: { type: 'line', xMin: 108, xMax: 108, borderColor: '#f59e0b', borderWidth: 2, borderDash: [6,6],
+                            label: { content: 'B.E. = 108', display: true, position: 'start', backgroundColor: '#f59e0b', font: {size:11} }
+                        }
+                    }
+                },
+                legend: { labels: { font: { family: "'Assistant'", size: 14, weight: 'bold' } } }
+            },
+            scales: {
+                y: { title: { display: true, text: 'רווח / הפסד ($)', font: { family: "'Assistant'", size: 13, weight: 'bold' } } },
+                x: { title: { display: true, text: 'מחיר נכס בסיס ביום הפקיעה ($)', font: { family: "'Assistant'", size: 13, weight: 'bold' } },
+                    ticks: { callback: function(v,i) { return i % 5 === 0 ? callLabels[i] : ''; } }
+                }
+            }
+        }
+    });
+
+    // Long Put Chart
+    var putLabels = [], putData = [];
+    var putK = 100, putPrem = 6;
+    for (var s2 = 60; s2 <= 130; s2 += 2) {
+        putLabels.push(s2);
+        putData.push(Math.max(putK - s2, 0) - putPrem);
+    }
+    new Chart(document.getElementById('longPutChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: putLabels,
+            datasets: [{
+                label: 'Long Put P&L (K=100, Premium=6)',
+                data: putData,
+                borderColor: '#ef4444',
+                backgroundColor: function(context) {
+                    var v = context.dataset.data[context.dataIndex];
+                    return v >= 0 ? 'rgba(239,68,68,0.15)' : 'rgba(239,68,68,0.05)';
+                },
+                borderWidth: 3,
+                fill: true,
+                tension: 0,
+                pointRadius: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+                annotation: {
+                    annotations: {
+                        zeroline: { type: 'line', yMin: 0, yMax: 0, borderColor: '#94a3b8', borderWidth: 1, borderDash: [4,4] },
+                        beLine: { type: 'line', xMin: 94, xMax: 94, borderColor: '#f59e0b', borderWidth: 2, borderDash: [6,6],
+                            label: { content: 'B.E. = 94', display: true, position: 'start', backgroundColor: '#f59e0b', font: {size:11} }
+                        }
+                    }
+                },
+                legend: { labels: { font: { family: "'Assistant'", size: 14, weight: 'bold' } } }
+            },
+            scales: {
+                y: { title: { display: true, text: 'רווח / הפסד ($)', font: { family: "'Assistant'", size: 13, weight: 'bold' } } },
+                x: { title: { display: true, text: 'מחיר נכס בסיס ביום הפקיעה ($)', font: { family: "'Assistant'", size: 13, weight: 'bold' } },
+                    ticks: { callback: function(v,i) { return i % 5 === 0 ? putLabels[i] : ''; } }
+                }
+            }
+        }
+    });
+
+    // Short Call + Short Put Chart
+    var shortLabels = [], shortCallData = [], shortPutData = [];
+    var sK = 100, sPremC = 8, sPremP = 6;
+    for (var s3 = 60; s3 <= 140; s3 += 2) {
+        shortLabels.push(s3);
+        shortCallData.push(sPremC - Math.max(s3 - sK, 0));
+        shortPutData.push(sPremP - Math.max(sK - s3, 0));
+    }
+    new Chart(document.getElementById('shortChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: shortLabels,
+            datasets: [
+                {
+                    label: 'Short Call P&L (K=100, Prem=8)',
+                    data: shortCallData,
+                    borderColor: '#2563eb',
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0,
+                    pointRadius: 0
+                },
+                {
+                    label: 'Short Put P&L (K=100, Prem=6)',
+                    data: shortPutData,
+                    borderColor: '#d97706',
+                    borderWidth: 3,
+                    borderDash: [8, 4],
+                    fill: false,
+                    tension: 0,
+                    pointRadius: 0
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+                annotation: {
+                    annotations: {
+                        zeroline: { type: 'line', yMin: 0, yMax: 0, borderColor: '#94a3b8', borderWidth: 1, borderDash: [4,4] }
+                    }
+                },
+                legend: { labels: { font: { family: "'Assistant'", size: 14, weight: 'bold' } } }
+            },
+            scales: {
+                y: { title: { display: true, text: 'רווח / הפסד ($)', font: { family: "'Assistant'", size: 13, weight: 'bold' } } },
+                x: { title: { display: true, text: 'מחיר נכס בסיס ביום הפקיעה ($)', font: { family: "'Assistant'", size: 13, weight: 'bold' } },
+                    ticks: { callback: function(v,i) { return i % 5 === 0 ? shortLabels[i] : ''; } }
+                }
+            }
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
