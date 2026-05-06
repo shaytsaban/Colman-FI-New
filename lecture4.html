@@ -1,0 +1,2158 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרק 4 - אסטרטגיות אופציות: תרגול מעמיק</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <style>
+        :root {
+            --primary: #0f172a; --primary-light: #1e293b;
+            --secondary: #3b82f6; --secondary-dark: #2563eb;
+            --accent: #f59e0b; --success: #10b981; --danger: #ef4444;
+            --purple: #8b5cf6; --teal: #14b8a6; --pink: #ec4899;
+            --bg-page: #f8fafc; --surface: #ffffff;
+            --text-dark: #334155; --text-muted: #64748b; --border-color: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Assistant', sans-serif; }
+        body { background-color: var(--bg-page); color: var(--text-dark); line-height: 1.7; font-size: 18px; -webkit-font-smoothing: antialiased; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #09010f 0%, #130829 40%, #1e0c42 70%, #0d0129 100%);
+            color: white; padding: 6rem 0 8rem; position: relative; overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; right: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 15% 30%, rgba(236,72,153,0.18) 0%, transparent 42%),
+                        radial-gradient(circle at 85% 70%, rgba(139,92,246,0.28) 0%, transparent 42%),
+                        radial-gradient(circle at 50% 50%, rgba(59,130,246,0.1) 0%, transparent 55%);
+            pointer-events: none;
+        }
+        .hero-badge {
+            background: rgba(236,72,153,0.2); border: 1px solid rgba(236,72,153,0.5);
+            color: #f9a8d4; padding: 0.5rem 1.5rem; border-radius: 999px;
+            font-weight: 700; font-size: 1rem; display: inline-flex; align-items: center; gap: 0.5rem;
+            margin-bottom: 1.5rem; position: relative; z-index: 2;
+        }
+        .hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; text-shadow: 0 4px 6px rgba(0,0,0,0.4); position: relative; z-index: 2; }
+        .hero p { font-size: 1.3rem; color: #e9d5ff; max-width: 850px; position: relative; z-index: 2; }
+
+        /* LAYOUT */
+        .content-wrapper { margin-top: -4rem; position: relative; z-index: 10; }
+        .section-card { background: var(--surface); border-radius: 16px; padding: 3rem; margin-bottom: 3rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
+        .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; border-bottom: 3px solid var(--bg-page); padding-bottom: 1rem; }
+        .section-header i { background: rgba(139,92,246,0.1); color: #6d28d9; padding: 1rem; border-radius: 12px; font-size: 1.5rem; }
+        .section-header h2 { font-size: 2.2rem; color: var(--primary); font-weight: 800; margin: 0; }
+        h3 { font-size: 1.6rem; color: var(--primary-light); margin: 2rem 0 1rem; font-weight: 700; }
+        h4 { font-size: 1.3rem; color: var(--primary); margin: 1.5rem 0 0.8rem; font-weight: 700; }
+        p { margin-bottom: 1.2rem; }
+        strong { color: var(--primary); font-weight: 700; }
+
+        /* STRATEGY BANNER */
+        .strategy-banner {
+            color: white; padding: 1.5rem 2rem; border-radius: 12px 12px 0 0;
+            margin: -3rem -3rem 2rem -3rem;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+        }
+        .strategy-banner .strat-name { font-size: 1.8rem; font-weight: 800; }
+        .strategy-banner .strat-name small { font-size: 1rem; font-weight: 400; color: rgba(255,255,255,0.75); display: block; margin-top: 0.3rem; }
+        .strategy-banner .strat-tag { background: rgba(255,255,255,0.15); padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.9rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.25); }
+
+        /* META GRID */
+        .strat-meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .meta-item { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem 1.2rem; }
+        .meta-item .meta-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.3rem; }
+        .meta-item .meta-val { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+        .meta-item.bullish { border-color: var(--success); background: #ecfdf5; } .meta-item.bullish .meta-val { color: #047857; }
+        .meta-item.bearish { border-color: var(--danger); background: #fef2f2; } .meta-item.bearish .meta-val { color: #b91c1c; }
+        .meta-item.neutral { border-color: var(--accent); background: #fffbeb; } .meta-item.neutral .meta-val { color: #b45309; }
+        .meta-item.volatile { border-color: var(--purple); background: #f5f3ff; } .meta-item.volatile .meta-val { color: #6d28d9; }
+
+        /* BOXES */
+        .concept-box { background: #eff6ff; border-right: 5px solid var(--secondary); padding: 1.5rem 2rem; border-radius: 8px 0 0 8px; margin: 2rem 0; }
+        .concept-title { color: var(--secondary-dark); font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .alert-box { background: #fffbeb; border-right: 5px solid var(--accent); padding: 1.5rem 2rem; border-radius: 8px 0 0 8px; margin: 2rem 0; }
+        .alert-title { color: #b45309; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .danger-box { background: #fef2f2; border-right: 5px solid var(--danger); padding: 1.5rem 2rem; border-radius: 8px 0 0 8px; margin: 2rem 0; }
+        .success-box { background: #ecfdf5; border-right: 5px solid var(--success); padding: 1.5rem 2rem; border-radius: 8px 0 0 8px; margin: 2rem 0; }
+        .purple-box { background: #f5f3ff; border-right: 5px solid var(--purple); padding: 1.5rem 2rem; border-radius: 8px 0 0 8px; margin: 2rem 0; }
+        .teal-box { background: #f0fdfa; border-right: 5px solid var(--teal); padding: 1.5rem 2rem; border-radius: 8px 0 0 8px; margin: 2rem 0; }
+
+        .recap-strip { background: linear-gradient(135deg, #eef2ff, #f5f3ff); border: 2px solid #c7d2fe; color: var(--text-dark); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; }
+        .recap-strip h3 { color: #4338ca; margin-top: 0; font-size: 1.3rem; }
+        .recap-strip ul { margin-right: 1.5rem; }
+        .recap-strip li { margin-bottom: 0.4rem; }
+
+        /* SCENARIO */
+        .scenario-box { background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); border: 2px solid #cbd5e1; padding: 2.5rem; border-radius: 16px; margin: 2rem 0; }
+
+        /* MCQ */
+        .mcq-box { background: #ffffff; border: 2px solid var(--border-color); border-radius: 12px; padding: 2rem; margin: 2.5rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.02); position: relative; }
+        .mcq-box::before { content: '\f059'; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; top: -15px; right: 2rem; background: var(--accent); color: white; padding: 0.3rem 1rem; border-radius: 20px; font-size: 1.1rem; box-shadow: 0 4px 6px rgba(245,158,11,0.3); }
+        .mcq-title { color: var(--primary); font-weight: 800; margin-bottom: 1.5rem; font-size: 1.3rem; }
+        .mcq-options { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+        .mcq-option { display: flex; align-items: center; gap: 1rem; background: #f8fafc; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .mcq-option:hover { border-color: var(--secondary); background: #eff6ff; }
+        .mcq-option input[type="radio"] { transform: scale(1.3); accent-color: var(--secondary); }
+        .mcq-solution summary { color: white; background: var(--secondary); padding: 0.8rem 1.5rem; border-radius: 8px; display: inline-flex; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .mcq-solution summary:hover { background: var(--secondary-dark); }
+        .mcq-answer-content { margin-top: 1.5rem; padding: 1.5rem; background: #ecfdf5; border-right: 4px solid var(--success); border-radius: 8px; }
+
+        /* EXERCISES */
+        .exercise-box { background: white; border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 2rem; overflow: hidden; }
+        .exercise-question { padding: 1.5rem; background: #f1f5f9; font-weight: 600; font-size: 1.2rem; border-bottom: 1px solid var(--border-color); }
+        .exercise-question .q-badge { background: var(--secondary); color: white; padding: 0.2rem 0.8rem; border-radius: 6px; margin-left: 0.5rem; font-size: 1rem; }
+        .exercise-box details summary { padding: 1rem 1.5rem; cursor: pointer; font-weight: 700; color: var(--secondary-dark); list-style: none; display: flex; align-items: center; gap: 0.5rem; background: white; transition: background 0.2s; }
+        .exercise-box details summary::-webkit-details-marker { display: none; }
+        .exercise-box details summary:hover { background: #f8fafc; }
+        .exercise-box details summary::before { content: "\f0da"; font-family: "Font Awesome 6 Free"; font-weight: 900; transition: transform 0.2s; }
+        .exercise-box details[open] summary::before { transform: rotate(90deg); }
+        .exercise-solution { padding: 1.5rem; border-top: 1px dashed var(--border-color); background: #ecfdf5; }
+        .math-breakdown { background: #ffffff; border: 1px solid #cbd5e1; padding: 1rem 1.5rem; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 1.05rem; direction: ltr; text-align: left; margin: 1rem 0; color: var(--primary); white-space: pre-wrap; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+
+        /* ── Formula display (main P&L sections) ── */
+        .formula-block {
+            background: #f8fafc; border: 2px solid #e2e8f0;
+            border-right: 5px solid var(--primary); border-radius: 10px;
+            padding: 1.4rem 2rem; margin: 1rem 0 1.5rem;
+            direction: ltr; text-align: left;
+            font-size: 1.08rem; color: var(--primary); line-height: 2.2;
+        }
+        .formula-block .f-main {
+            display: block; font-size: 1.2rem; font-weight: 700;
+            background: white; border: 1px solid #dbeafe; border-radius: 6px;
+            padding: 0.5rem 1rem; margin-bottom: 0.8rem; letter-spacing: 0.01em;
+        }
+        .formula-block .f-case {
+            display: block; font-size: 1rem; color: var(--text-dark); padding: 0.05rem 0;
+        }
+        .var-legend {
+            display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem;
+            background: #f1f5f9; border-radius: 8px;
+            padding: 0.7rem 1.2rem; margin-bottom: 0.5rem; direction: rtl;
+        }
+        .var-legend span { font-size: 0.9rem; color: var(--text-muted); white-space: nowrap; }
+        .var-legend code { font-family: Georgia,'Times New Roman',serif; font-weight: 700; color: var(--primary); font-size: 0.95rem; font-style: italic; }
+
+        /* PLAYGROUND */
+        .playground { background: #f0f9ff; border: 2px solid #93c5fd; border-radius: 16px; padding: 2.5rem; margin: 2.5rem 0; color: var(--text-dark); box-shadow: 0 10px 25px rgba(59,130,246,0.08); }
+        .playground h3 { color: var(--secondary-dark); margin-top: 0; }
+        .playground.purple { background: #f5f3ff; border-color: #c4b5fd; } .playground.purple h3 { color: #6d28d9; }
+        .playground.red   { background: #fef2f2; border-color: #fca5a5; } .playground.red   h3 { color: #b91c1c; }
+        .playground.green { background: #f0fdf4; border-color: #86efac; } .playground.green h3 { color: #047857; }
+        .playground.orange{ background: #fff7ed; border-color: #fdba74; } .playground.orange h3 { color: #c2410c; }
+        .playground.pink  { background: #fdf2f8; border-color: #f0abfc; } .playground.pink  h3 { color: #a21caf; }
+        .playground.teal  { background: #f0fdfa; border-color: #5eead4; } .playground.teal  h3 { color: #0f766e; }
+        .playground-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem; }
+        .pg-inputs { display: flex; flex-direction: column; gap: 1rem; }
+        .pg-input-group label { display: block; color: var(--secondary-dark); font-weight: 700; margin-bottom: 0.3rem; font-size: 0.95rem; }
+        .playground.purple .pg-input-group label { color: #6d28d9; }
+        .playground.red    .pg-input-group label { color: #b91c1c; }
+        .playground.green  .pg-input-group label { color: #047857; }
+        .playground.orange .pg-input-group label { color: #c2410c; }
+        .playground.pink   .pg-input-group label { color: #a21caf; }
+        .playground.teal   .pg-input-group label { color: #0f766e; }
+        .pg-input-group input { width: 100%; padding: 0.8rem 1rem; border: 2px solid #cbd5e1; border-radius: 8px; background: #ffffff; color: var(--text-dark); font-size: 1.1rem; font-family: 'Assistant', sans-serif; transition: border-color 0.2s; }
+        .pg-input-group input:focus { outline: none; border-color: var(--secondary); }
+        .pg-btn { color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; font-family: 'Assistant', sans-serif; width: 100%; margin-top: 0.5rem; }
+        .pg-btn:hover { transform: translateY(-2px); }
+        .pg-btn.blue   { background: linear-gradient(135deg, var(--secondary), #1d4ed8); }
+        .pg-btn.purple { background: linear-gradient(135deg, var(--purple), #6d28d9); }
+        .pg-btn.red    { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+        .pg-btn.green  { background: linear-gradient(135deg, var(--success), #065f46); }
+        .pg-btn.orange { background: linear-gradient(135deg, var(--accent), #c2410c); }
+        .pg-btn.pink   { background: linear-gradient(135deg, #ec4899, #a21caf); }
+        .pg-btn.teal   { background: linear-gradient(135deg, var(--teal), #0f766e); }
+        .pg-results { display: flex; flex-direction: column; gap: 0.8rem; justify-content: center; }
+        .pg-result-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem 1.2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .pg-result-card .label { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.3rem; }
+        .pg-result-card .value { font-size: 1.6rem; font-weight: 800; direction: ltr; unicode-bidi: isolate; display: block; }
+        .pg-result-card .value.profit { color: #059669; }
+        .pg-result-card .value.loss   { color: #dc2626; }
+        .pg-result-card .value.neutral{ color: #d97706; }
+
+        /* CHARTS */
+        .chart-container { width: 100%; max-width: 850px; height: 420px; margin: 2rem auto; background: white; padding: 1rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
+
+        /* TABLES */
+        .summary-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 1rem; }
+        .summary-table th, .summary-table td { padding: 0.8rem 1rem; border: 1px solid var(--border-color); text-align: center; }
+        .summary-table thead th { background: #dbeafe; color: var(--primary); font-weight: 700; border-bottom: 2px solid #93c5fd; }
+        .summary-table tbody tr:nth-child(even) { background: #f8fafc; }
+
+        .fill-table-wrapper { overflow-x: auto; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+        .fill-table { width: 100%; border-collapse: collapse; font-size: 1rem; background: white; }
+        .fill-table thead th { background: #dbeafe; color: var(--primary); padding: 1rem 0.8rem; font-weight: 700; text-align: center; white-space: nowrap; border-bottom: 2px solid #93c5fd; }
+        .fill-table tbody td { padding: 0.8rem; text-align: center; border-bottom: 1px solid var(--border-color); }
+        .fill-table tbody tr:hover { background: #f1f5f9; }
+        .fill-table .given { background: #f0f9ff; font-weight: 600; color: var(--primary); }
+        .fill-table input[type="number"] { width: 90px; padding: 0.5rem; border: 2px solid #cbd5e1; border-radius: 6px; text-align: center; font-size: 1rem; font-family: 'Assistant', sans-serif; transition: border-color 0.2s; }
+        .fill-table input[type="number"]:focus { outline: none; border-color: var(--secondary); }
+        .fill-table input.correct { border-color: var(--success); background: #ecfdf5; }
+        .fill-table input.wrong   { border-color: var(--danger);  background: #fef2f2; }
+        .check-table-btn { background: var(--secondary); color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 1rem; font-family: 'Assistant', sans-serif; transition: 0.2s; }
+        .check-table-btn:hover { background: var(--secondary-dark); }
+        .show-answers-btn { background: var(--accent); color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 1rem; margin-right: 1rem; font-family: 'Assistant', sans-serif; transition: 0.2s; }
+        .show-answers-btn:hover { background: #d97706; }
+        .table-feedback { margin-top: 1rem; padding: 1rem; border-radius: 8px; font-weight: 700; display: none; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .section-card { padding: 1.5rem; }
+            .strategy-banner { margin: -1.5rem -1.5rem 2rem -1.5rem; }
+            .playground-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+    <div class="container">
+        <span class="hero-badge"><i class="fas fa-layer-group"></i> פרק 4</span>
+        <h1>אסטרטגיות אופציות: <br>תרגול מעמיק</h1>
+        <p>המשך ישיר לפרק 3 — לאחר שתרגלנו Covered Call ו-Protective Put לעומק, הפרק הזה מביא הסבר מלא, סימולטורים ותרגולים כמותיים לכל 9 האסטרטגיות הנותרות: Collar, Straddle, Strangle, Spreads, Butterfly ו-Iron Condor.</p>
+    </div>
+</header>
+
+<main class="container content-wrapper">
+
+<!-- ===== RECAP ===== -->
+<section class="section-card">
+    <div class="section-header">
+        <i class="fas fa-history"></i>
+        <h2>מה עשינו בפרק 3? — רענון מהיר</h2>
+    </div>
+
+    <div class="recap-strip">
+        <h3><i class="fas fa-check-double"></i> אסטרטגיות שתרגלנו לעומק בפרק 3</h3>
+        <ul>
+            <li><strong>Covered Call (קול מכוסה):</strong> Long Stock + Short Call. אסטרטגיית הכנסה — "שכר דירה" על המניה. הרווח מוגבל עד K, הגנה מינורית מפני ירידות (בגובה הפרמיה בלבד). P&L = (S−S₀) + Prem − max(S−K, 0).</li>
+            <li><strong>Protective Put (פוט הגנתי):</strong> Long Stock + Long Put. ביטוח על המניה. יוצר רצפה ברורה להפסד, אפסייד לא מוגבל. P&L = (S−S₀) + max(K−S, 0) − Prem.</li>
+            <li><strong>הכלל הזהב:</strong> כל אסטרטגיה = חיבור פשוט של פוזיציות בסיס. חשבו P&L לכל רכיב בנפרד ואז חברו.</li>
+            <li><strong>מכפיל (Multiplier):</strong> בכל אופציית מדד או מט"ח — P&L סופי = Payoff נקודות × מכפיל × מספר חוזים.</li>
+        </ul>
+    </div>
+
+    <div class="recap-strip">
+        <h3><i class="fas fa-list-ol"></i> 11 האסטרטגיות שהוצגו בפרק 3 — מפת הקורס</h3>
+        <table class="summary-table" style="margin-top:1rem;">
+            <thead><tr><th>#</th><th>אסטרטגיה</th><th>תפיסת שוק</th><th>סטטוס</th></tr></thead>
+            <tbody>
+                <tr><td>1</td><td>Covered Call</td><td>שורי מתון / נייטרלי</td><td style="color:#047857; font-weight:700;">✅ תורגל בפרק 3</td></tr>
+                <tr><td>2</td><td>Protective Put</td><td>שורי עם הגנה</td><td style="color:#047857; font-weight:700;">✅ תורגל בפרק 3</td></tr>
+                <tr><td>3</td><td>Collar</td><td>שורי-נייטרלי</td><td style="color:#2563eb; font-weight:700;">🔵 מתורגל היום</td></tr>
+                <tr><td>4</td><td>Long Straddle</td><td>תנודתיות גבוהה</td><td style="color:#2563eb; font-weight:700;">🔵 מתורגל היום</td></tr>
+                <tr><td>5</td><td>Short Straddle</td><td>שוק רגוע</td><td style="color:#2563eb; font-weight:700;">🔵 מתורגל היום</td></tr>
+                <tr><td>6</td><td>Long Strangle</td><td>תנודתיות, תקציב נמוך</td><td style="color:#2563eb; font-weight:700;">🔵 מתורגל היום</td></tr>
+                <tr><td>7</td><td>Bull Call Spread</td><td>שורי מתון</td><td style="color:#2563eb; font-weight:700;">🔵 מתורגל היום</td></tr>
+                <tr><td>8</td><td>Bear Put Spread</td><td>דובי מתון</td><td style="color:#2563eb; font-weight:700;">🔵 מתורגל היום</td></tr>
+                <tr><td>9</td><td>Bull Put / Bear Call Spread</td><td>קרדיט — שוק תקוע</td><td style="color:#2563eb; font-weight:700;">🔵 מתורגל היום</td></tr>
+                <tr><td>10</td><td>Long Butterfly</td><td>מחיר ספציפי</td><td style="color:#2563eb; font-weight:700;">🔵 מתורגל היום</td></tr>
+                <tr><td>11</td><td>Iron Condor</td><td>טווח רחב</td><td style="color:#2563eb; font-weight:700;">🔵 מתורגל היום</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert-box">
+        <div class="alert-title"><i class="fas fa-lightbulb"></i> איך לגשת לכל אסטרטגיה היום</div>
+        <p>לכל אסטרטגיה: (1) הבינו את ה<strong>מבנה</strong> — אילו רכיבים קונים/מוכרים. (2) זכרו את ה<strong>נוסחה</strong> — P&L בנקודות שונות. (3) <strong>תרגלו מספרית</strong> לפני שתפתחו את הפתרון. (4) הריצו את <strong>הסימולטור</strong> עם ערכים שונים וצפו מה קורה לרווח/הפסד.</p>
+    </div>
+</section>
+
+<!-- ===== COLLAR ===== -->
+<section class="section-card">
+    <div class="strategy-banner" style="background: linear-gradient(135deg, #0284c7, #0369a1);">
+        <div class="strat-name">אסטרטגיה 3: Collar (קולר / צווארון)<small>Long Stock + Long PUT + Short CALL</small></div>
+        <span class="strat-tag">תפיסת שוק: שורי-נייטרלי, חרד מירידות</span>
+    </div>
+
+    <p>ה-Collar הוא שילוב של Covered Call ו-Protective Put באותו תיק. אנו <strong>מממנים את הביטוח (PUT) על ידי כתיבת CALL</strong>. כשהפרמיות שוות — מקבלים ביטוח חינמי. המחיר: ויתרנו על אפסייד מעל K_call.</p>
+
+    <div class="strat-meta-grid">
+        <div class="meta-item"><div class="meta-label">בנייה</div><div class="meta-val">Stock + Long Put(K_p) + Short Call(K_c)</div></div>
+        <div class="meta-item bullish"><div class="meta-label">רווח מקסימלי</div><div class="meta-val">(K_c − S₀) + (P_c − P_p)</div></div>
+        <div class="meta-item bearish"><div class="meta-label">הפסד מקסימלי</div><div class="meta-val">(S₀ − K_p) − (P_c − P_p)</div></div>
+        <div class="meta-item neutral"><div class="meta-label">נקודת איזון</div><div class="meta-val">S₀ − (P_c − P_p)</div></div>
+    </div>
+
+    <h3>נוסחת P&L — Collar</h3>
+    <div class="var-legend">
+        <span><code>S</code> = מחיר נכס הבסיס ביום הפקיעה</span>
+        <span><code>S₀</code> = מחיר קנייה של המניה</span>
+        <span><code>K_p</code> = מחיר מימוש ה-PUT (רצפה)</span>
+        <span><code>K_c</code> = מחיר מימוש ה-CALL (תקרה)</span>
+        <span><code>P_p</code> = פרמיה ששולמה על ה-PUT</span>
+        <span><code>P_c</code> = פרמיה שנתקבלה מכתיבת ה-CALL</span>
+    </div>
+    <div class="formula-block">
+        <span class="f-main">P&amp;L = (S − S₀) + max(K_p − S, 0) − max(S − K_c, 0) + (P_c − P_p)</span>
+        <span class="f-case">Case 1 — S &lt; K_p  →  P&amp;L = (K_p − S₀) + (P_c − P_p)  &nbsp;[רצפה — ערך קבוע]</span>
+        <span class="f-case">Case 2 — K_p ≤ S ≤ K_c  →  P&amp;L = (S − S₀) + (P_c − P_p)  &nbsp;[אזור ליניארי]</span>
+        <span class="f-case">Case 3 — S &gt; K_c  →  P&amp;L = (K_c − S₀) + (P_c − P_p)  &nbsp;[תקרה — ערך קבוע]</span>
+    </div>
+
+    <h3>דוגמה: Zero-Cost Collar</h3>
+    <div class="scenario-box">
+        <p>מנהל קרן מחזיק <strong>200 מניות של "בנק לאומי"</strong> שנקנו ב-<strong>S₀ = 50 ש"ח</strong>. לפני פרסום דוח הוא בונה Collar:
+        <br>— Long PUT (K_p = 45), פרמיה = 2 ש"ח
+        <br>— Short CALL (K_c = 55), פרמיה = 2 ש"ח
+        <br><strong>עלות נטו: 0 ש"ח! (Zero-Cost Collar)</strong></p>
+
+        <h4>תרחיש A: מניה ב-40 ש"ח</h4>
+        <div class="math-breakdown">P&L_Stock = (S − S₀) × q = (40 − 50) × 200 = −2,000 ₪
+P&L_Put   = (max(K_p − S, 0) − P_p) × q = (max(45−40, 0) − 2) × 200 = +600 ₪
+P&L_Call  = (P_c − max(S − K_c, 0)) × q = (2 − 0) × 200 = +400 ₪
+Net P&L   = −2,000 + 600 + 400 = −1,000 ₪
+Floor check: (K_p − S₀) × q = (45 − 50) × 200 = −1,000 ₪  ✓</div>
+        <h4>תרחיש B: מניה ב-50 ש"ח (לא זזה)</h4>
+        <div class="math-breakdown">P&L_Stock = 0
+P&L_Put   = (0 − 2) × 200 = −400 ₪
+P&L_Call  = (2 − 0) × 200 = +400 ₪
+Net P&L   = 0 ₪  [P_c = P_p → Zero-Cost Collar]</div>
+        <h4>תרחיש C: מניה ב-65 ש"ח (זינוק)</h4>
+        <div class="math-breakdown">P&L_Stock = (S − S₀) × q = (65 − 50) × 200 = +3,000 ₪
+P&L_Put   = (0 − 2) × 200 = −400 ₪
+P&L_Call  = (P_c − (S − K_c)) × q = (2 − 10) × 200 = −1,600 ₪
+Net P&L   = 3,000 − 400 − 1,600 = +1,000 ₪
+Ceiling check: (K_c − S₀) × q = (55 − 50) × 200 = +1,000 ₪  ✓</div>
+    </div>
+
+    <h3>גרף: Collar לעומת מניה רגילה</h3>
+    <div class="chart-container"><canvas id="collarChart"></canvas></div>
+
+    <!-- Playground: Collar -->
+    <div class="playground blue">
+        <h3><i class="fas fa-sliders-h"></i> סימולטור Collar</h3>
+        <div class="playground-grid">
+            <div class="pg-inputs">
+                <div class="pg-input-group"><label>מחיר קנייה S₀</label><input type="number" id="col_S0" value="50" step="1"></div>
+                <div class="pg-input-group"><label>K_put (רצפה)</label><input type="number" id="col_Kp" value="45" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה PUT ששולמה</label><input type="number" id="col_Pp" value="2" step="0.5"></div>
+                <div class="pg-input-group"><label>K_call (תקרה)</label><input type="number" id="col_Kc" value="55" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה CALL שנתקבלה</label><input type="number" id="col_Pc" value="2" step="0.5"></div>
+                <div class="pg-input-group"><label>מחיר ביום פקיעה S</label><input type="number" id="col_S" value="60" step="1"></div>
+                <div class="pg-input-group"><label>מספר מניות</label><input type="number" id="col_qty" value="200" step="1"></div>
+                <button class="pg-btn blue" onclick="calcCollar()"><i class="fas fa-calculator"></i> &nbsp;חשב</button>
+            </div>
+            <div class="pg-results">
+                <div class="pg-result-card"><div class="label">עלות נטו לפתיחה (למניה)</div><div class="value neutral" id="col_netcost">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L מניה</div><div class="value neutral" id="col_stock">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L PUT</div><div class="value neutral" id="col_put">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L CALL (קצר)</div><div class="value neutral" id="col_call">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L סה"כ לתיק</div><div class="value neutral" id="col_total">—</div></div>
+                <div class="pg-result-card"><div class="label">רצפה / תקרה / BE</div><div class="value neutral" id="col_limits" style="font-size:1rem;">—</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">תרגיל 1</span> Collar — ניתוח תרחישים
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                יצואן מחזיק 1,000 מניות של חברת "מכירות גלובל" שנקנו ב-<strong>S₀ = 80 ש"ח</strong>. לפני עונת הדיווח הוא בונה Collar:
+                Long PUT (K=75, פרמיה=3 ש"ח) + Short CALL (K=90, פרמיה=4 ש"ח).
+                <br>א) מהי העלות נטו לפתיחה?
+                <br>ב) מהו הרווח המקסימלי לתיק?
+                <br>ג) מהו ההפסד המקסימלי לתיק?
+                <br>ד) מהי נקודת האיזון?
+                <br>ה) מה ה-P&L אם המניה ב-70 ש"ח? ואם ב-95 ש"ח?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">נתונים: S₀=80, K_p=75, P_p=3, K_c=90, P_c=4, qty=1,000
+Net Credit = P_c − P_p = 4 − 3 = +1 ש"ח למניה (קיבלנו נטו!)
+
+א) עלות פתיחה = −1 × 1,000 = +1,000 ₪ (קרדיט! קיבלנו כסף בפתיחה)
+
+ב) רווח מקסימלי למניה = (K_c − S₀) + (P_c − P_p) = (90−80) + 1 = 11 ₪
+   לתיק = 11 × 1,000 = +11,000 ₪
+
+ג) הפסד מקסימלי למניה = (S₀ − K_p) − (P_c − P_p) = (80−75) − 1 = 4 ₪
+   לתיק = −4 × 1,000 = −4,000 ₪
+
+ד) נקודת איזון = S₀ − (P_c − P_p) = 80 − 1 = 79 ₪
+
+ה) S = 70 (מתחת ל-K_p, PUT ממומש):
+   P&L = (70−80) + (75−70) − 3 + 4 = −10 + 5 − 3 + 4 = −4 ₪/מניה
+   לתיק: −4 × 1,000 = −4,000 ₪ (ההפסד המקסימלי ✓)
+
+   S = 95 (מעל K_c, CALL ממומש נגדנו):
+   P&L = (95−80) + 0 − (95−90) + 4 − 3 = 15 − 5 + 1 = 11 ₪/מניה
+   לתיק: +11,000 ₪ (הרווח המקסימלי ✓)</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">תרגיל 2</span> Collar — תרחיש מדד עם מכפיל
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                קרן פנסיה מחזיקה תיק צמוד למדד ת"א-35 (כעת ב-<strong>2,000 נקודות</strong>). <strong>מכפיל: 100 ש"ח/נקודה</strong>, 50 חוזים.
+                <br>היא בונה Collar: Long PUT (K=1,900, פרמיה=40 נק') + Short CALL (K=2,100, פרמיה=45 נק').
+                <br>א) כמה כסף נכנס לקרן ביום הפתיחה?
+                <br>ב) מהו ההפסד המקסימלי בש"ח?
+                <br>ג) מה P&L הכולל בש"ח אם המדד ב-1,800 בפקיעה?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Net Credit = 45 − 40 = +5 נקודות לחוזה
+× מכפיל 100 = 500 ₪ לחוזה × 50 = +25,000 ₪ נכנסו ביום הפתיחה
+
+הפסד מקסימלי לחוזה = (S₀ − K_p) − Net = (2000−1900) − 5 = 95 נקודות
+= 95 × 100 × 50 = 475,000 ₪
+
+S = 1,800 (מתחת ל-K_p):
+P&L מדד = (1800−2000) × 100 × 50 = −1,000,000 ₪
+P&L PUT = (max(1900−1800,0) − 40) × 100 × 50 = (100−40) × 100 × 50 = +300,000 ₪
+P&L CALL = (45 − 0) × 100 × 50 = +225,000 ₪
+סה"כ = −1,000,000 + 300,000 + 225,000 = −475,000 ₪ (ההפסד המקסימלי ✓)</div>
+        </div></details>
+    </div>
+
+    <div class="mcq-box">
+        <div class="mcq-title">בחן את עצמך: Collar</div>
+        <div class="mcq-options">
+            <label class="mcq-option"><input type="radio" name="mcq_collar"><span>א. ב-Zero-Cost Collar — מקבלים הגנה מלאה כנגד כל ירידה מתחת לרמת ה-PUT.</span></label>
+            <label class="mcq-option"><input type="radio" name="mcq_collar"><span>ב. הרווח מקסימלי של Collar לא מוגבל, כי המניה יכולה לעלות לאינסוף.</span></label>
+            <label class="mcq-option"><input type="radio" name="mcq_collar"><span>ג. ב-Collar אנו קונים PUT (ביטוח) ומממנים אותו על ידי כתיבת CALL — ומוותרים על אפסייד מעל K_call.</span></label>
+            <label class="mcq-option"><input type="radio" name="mcq_collar"><span>ד. Collar מתאים רק לספקולנטים ולא למנהלי תיקים מוסדיים.</span></label>
+        </div>
+        <details class="mcq-solution"><summary>הצג פתרון מוסתר</summary>
+        <div class="mcq-answer-content"><strong>תשובה ג'.</strong> Collar = ביטוח ממומן. א' שגוי — ה-PUT מגן רק ממחיר K_p ומטה, לא מכל ירידה. ב' שגוי — יש תקרת רווח ב-K_call. ד' שגוי — Collar היא האסטרטגיה הבסיסית ביותר של מוסדיים.</div>
+        </details>
+    </div>
+</section>
+
+<!-- ===== LONG STRADDLE ===== -->
+<section class="section-card">
+    <div class="strategy-banner" style="background: linear-gradient(135deg, #c2410c, #9a3412);">
+        <div class="strat-name">אסטרטגיה 4: Long Straddle (סטרדל ארוך)<small>Long CALL (K) + Long PUT (K) — אותו מחיר מימוש</small></div>
+        <span class="strat-tag">תפיסת שוק: תנודתיות גבוהה — לא משנה לאיזה כיוון!</span>
+    </div>
+
+    <p>הימור טהור על <strong>תנודתיות</strong>. אנו קונים גם CALL וגם PUT באותו K. לא משנה לאיזה כיוון ינוע הנכס — נרוויח, כל עוד התנועה גדולה מספיק לכסות את שתי הפרמיות.</p>
+
+    <div class="strat-meta-grid">
+        <div class="meta-item"><div class="meta-label">בנייה</div><div class="meta-val">Long Call(K) + Long Put(K)</div></div>
+        <div class="meta-item bullish"><div class="meta-label">רווח מקסימלי</div><div class="meta-val">לא מוגבל (שני כיוונים)</div></div>
+        <div class="meta-item bearish"><div class="meta-label">הפסד מקסימלי</div><div class="meta-val">P_call + P_put (כש-S=K)</div></div>
+        <div class="meta-item volatile"><div class="meta-label">נקודות איזון</div><div class="meta-val">K − Total Prem | K + Total Prem</div></div>
+    </div>
+
+    <h3>נוסחת P&L — Long Straddle</h3>
+    <div class="var-legend">
+        <span><code>S</code> = מחיר נכס הבסיס ביום הפקיעה</span>
+        <span><code>K</code> = מחיר מימוש (זהה ל-CALL ול-PUT)</span>
+        <span><code>P_c</code> = פרמיית ה-CALL</span>
+        <span><code>P_p</code> = פרמיית ה-PUT</span>
+        <span><code>Total Prem</code> = P_c + P_p (סך העלות)</span>
+    </div>
+    <div class="formula-block">
+        <span class="f-main">P&amp;L = max(S − K, 0) + max(K − S, 0) − (P_c + P_p) = |S − K| − Total Prem</span>
+        <span class="f-case">Case 1 — S &gt; K  →  P&amp;L = (S − K) − Total Prem</span>
+        <span class="f-case">Case 2 — S &lt; K  →  P&amp;L = (K − S) − Total Prem</span>
+        <span class="f-case">Case 3 — S = K  →  P&amp;L = −Total Prem  &nbsp;[הפסד מקסימלי — שוק לא זזה!]</span>
+        <span class="f-case">Break-Even: S = K − Total Prem  &nbsp;|&nbsp;  S = K + Total Prem</span>
+    </div>
+
+    <h3>דוגמה: לפני דוח רווחים</h3>
+    <div class="scenario-box">
+        <p>מניית "פארמה ישראלית" עומדת ב-<strong>S = 100 ש"ח</strong>. עוד שבוע מתפרסם דוח FDA — המניה תזוז הרבה, לא ידוע לאן.
+        <br>קניית Straddle: CALL(K=100, P=8) + PUT(K=100, P=7). <strong>סה"כ עלות: 15 ש"ח</strong>.</p>
+        <h4>נקודות איזון</h4>
+        <div class="math-breakdown">Lower B.E. = 100 − 15 = 85 ₪
+Upper B.E. = 100 + 15 = 115 ₪
+→ המניה חייבת לזוז לפחות 15% לרווח!</div>
+        <h4>תרחיש A: אישור FDA — מניה זינקה ל-135 ש"ח</h4>
+        <div class="math-breakdown">CALL Payoff = max(135−100, 0) = 35
+PUT Payoff  = max(100−135, 0) = 0
+P&L = 35 + 0 − 15 = +20 ₪ למניה (תשואה 133% על ה-15 ₪!)</div>
+        <h4>תרחיש B: כישלון — מניה קרסה ל-75 ש"ח</h4>
+        <div class="math-breakdown">CALL Payoff = 0
+PUT Payoff  = max(100−75, 0) = 25
+P&L = 0 + 25 − 15 = +10 ₪ למניה (גם ירידה = רווח!)</div>
+        <h4>תרחיש C: אדישות — מניה נשארה ב-100 ש"ח</h4>
+        <div class="math-breakdown">P&L = 0 + 0 − 15 = −15 ₪</div>
+    </div>
+
+    <h3>גרף: Long Straddle — צורת V</h3>
+    <div class="chart-container"><canvas id="straddleChart"></canvas></div>
+
+    <!-- Playground: Long Straddle -->
+    <div class="playground orange">
+        <h3><i class="fas fa-bolt"></i> סימולטור Long Straddle</h3>
+        <div class="playground-grid">
+            <div class="pg-inputs">
+                <div class="pg-input-group"><label>מחיר מימוש K</label><input type="number" id="ls_K" value="100" step="1"></div>
+                <div class="pg-input-group"><label>פרמיית CALL</label><input type="number" id="ls_Pc" value="8" step="0.5"></div>
+                <div class="pg-input-group"><label>פרמיית PUT</label><input type="number" id="ls_Pp" value="7" step="0.5"></div>
+                <div class="pg-input-group"><label>מחיר ביום פקיעה S</label><input type="number" id="ls_S" value="130" step="1"></div>
+                <button class="pg-btn orange" onclick="calcLStraddle()"><i class="fas fa-calculator"></i> &nbsp;חשב</button>
+            </div>
+            <div class="pg-results">
+                <div class="pg-result-card"><div class="label">סה"כ פרמיה ששולמה</div><div class="value neutral" id="ls_totalprem">—</div></div>
+                <div class="pg-result-card"><div class="label">Payoff CALL</div><div class="value neutral" id="ls_callpayoff">—</div></div>
+                <div class="pg-result-card"><div class="label">Payoff PUT</div><div class="value neutral" id="ls_putpayoff">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L סופי</div><div class="value neutral" id="ls_total">—</div></div>
+                <div class="pg-result-card"><div class="label">נקודות איזון</div><div class="value neutral" id="ls_be">—</div></div>
+                <div class="pg-result-card"><div class="label">תנועה מינימלית לרווח</div><div class="value neutral" id="ls_move">—</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">תרגיל 1</span> Long Straddle — חישוב מלא
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                סוחר קונה Long Straddle על מניית "טכנולוגיה מתקדמת" (S₀=150 ש"ח): CALL(K=150, P=12) + PUT(K=150, P=10). על 500 מניות.
+                <br>א) מה עלות פתיחה כוללת?
+                <br>ב) מהן נקודות האיזון?
+                <br>ג) מה P&L לתיק אם המניה ב-190 ש"ח?
+                <br>ד) מה P&L לתיק אם המניה ב-120 ש"ח?
+                <br>ה) מה P&L לתיק אם המניה ב-150 ש"ח?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Total Prem = 12 + 10 = 22 ₪/מניה
+עלות פתיחה = 22 × 500 = 11,000 ₪
+
+ב) B.E.: 150 − 22 = 128 ₪ | 150 + 22 = 172 ₪
+
+ג) S = 190:
+   P&L = (190−150) + 0 − 22 = 40 − 22 = +18 ₪/מניה
+   לתיק: +18 × 500 = +9,000 ₪
+
+ד) S = 120:
+   P&L = 0 + (150−120) − 22 = 30 − 22 = +8 ₪/מניה
+   לתיק: +8 × 500 = +4,000 ₪
+
+ה) S = 150:
+   P&L = 0 + 0 − 22 = −22 ₪/מניה
+   לתיק: −22 × 500 = −11,000 ₪ (הפסד מלא של הפרמיה)</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box" style="border-right: 4px solid var(--accent);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background:var(--accent);">תרגיל 2 — מכפיל</span> Long Straddle על מדד S&P 500
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                סוחר קונה Straddle על S&P 500 (עומד ב-5,200 נקודות): CALL(K=5,200, P=60 נק') + PUT(K=5,200, P=55 נק').
+                <strong>מכפיל: 50$ לנקודה.</strong> 3 חוזים.
+                <br>א) עלות פתיחה בדולרים?
+                <br>ב) נקודות איזון?
+                <br>ג) P&L כולל אם המדד ב-5,050 בפקיעה?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Total Prem = 60 + 55 = 115 נקודות
+× $50 × 3 = $17,250 עלות פתיחה
+
+B.E.: 5,200 − 115 = 5,085 | 5,200 + 115 = 5,315
+
+S = 5,050 (מתחת ל-B.E. התחתון 5,085 ← רווח!):
+PUT Payoff = max(5200−5050, 0) = 150 נק'
+P&L לחוזה = (150 − 115) × $50 = +$1,750
+× 3 חוזים = +$5,250</div>
+        </div></details>
+    </div>
+</section>
+
+<!-- ===== SHORT STRADDLE ===== -->
+<section class="section-card">
+    <div class="strategy-banner" style="background: linear-gradient(135deg, #7f1d1d, #991b1b);">
+        <div class="strat-name">אסטרטגיה 5: Short Straddle (סטרדל קצר)<small>Short CALL (K) + Short PUT (K)</small></div>
+        <span class="strat-tag">תפיסת שוק: שוק רגוע ⚠️ סיכון עצום!</span>
+    </div>
+
+    <p>תמונת המראה של Long Straddle. אנו <strong>כותבים</strong> שתי אופציות וגובים את שתי הפרמיות. מרוויחים כשהשוק ישן, מפסידים בלי תקרה כשהשוק מתפוצץ.</p>
+
+    <div class="strat-meta-grid">
+        <div class="meta-item"><div class="meta-label">בנייה</div><div class="meta-val">Short Call(K) + Short Put(K)</div></div>
+        <div class="meta-item bullish"><div class="meta-label">רווח מקסימלי</div><div class="meta-val">P_call + P_put (כש-S=K)</div></div>
+        <div class="meta-item bearish"><div class="meta-label">הפסד מקסימלי</div><div class="meta-val">לא מוגבל!</div></div>
+        <div class="meta-item volatile"><div class="meta-label">נקודות איזון</div><div class="meta-val">K ± (P_c + P_p)</div></div>
+    </div>
+
+    <div class="danger-box">
+        <div class="alert-title" style="color:#991b1b;"><i class="fas fa-skull-crossbones"></i> אזהרת בטיחות</div>
+        <p>Short Straddle היא מהפעולות המסוכנות ביותר. ב-2020 עם פרוץ הקורונה, סוחרים שכתבו Straddles על מדדים פשטו את הרגל בלילה. ההפסד הפוטנציאלי אינסופי לשני הכיוונים. הבורסה דורשת ביטחונות (Margin) עצומים.</p>
+    </div>
+
+    <h3>נוסחת P&L — Short Straddle</h3>
+    <div class="var-legend">
+        <span><code>S</code> = מחיר נכס הבסיס ביום הפקיעה</span>
+        <span><code>K</code> = מחיר מימוש משותף</span>
+        <span><code>P_c</code> = פרמיה שנגבתה על ה-CALL</span>
+        <span><code>P_p</code> = פרמיה שנגבתה על ה-PUT</span>
+    </div>
+    <div class="formula-block">
+        <span class="f-main">P&amp;L = (P_c + P_p) − max(S − K, 0) − max(K − S, 0) = Total Prem − |S − K|</span>
+        <span class="f-case">S = K  →  P&amp;L = +Total Prem  &nbsp;[רווח מקסימלי]</span>
+        <span class="f-case">S &gt;&gt; K  →  P&amp;L → −∞  &nbsp;[הפסד בלתי מוגבל!]</span>
+        <span class="f-case">S &lt;&lt; K  →  P&amp;L → −∞  &nbsp;[הפסד בלתי מוגבל!]</span>
+        <span class="f-case">Break-Even: S = K − Total Prem  &nbsp;|&nbsp;  S = K + Total Prem</span>
+    </div>
+
+    <h3>גרף: Short Straddle לעומת Long Straddle</h3>
+    <div class="chart-container"><canvas id="shortStraddleChart"></canvas></div>
+
+    <!-- Playground: Short Straddle -->
+    <div class="playground red">
+        <h3><i class="fas fa-exclamation-triangle"></i> סימולטור Short Straddle</h3>
+        <div class="playground-grid">
+            <div class="pg-inputs">
+                <div class="pg-input-group"><label>מחיר מימוש K</label><input type="number" id="ss_K" value="100" step="1"></div>
+                <div class="pg-input-group"><label>פרמיית CALL שנגבתה</label><input type="number" id="ss_Pc" value="8" step="0.5"></div>
+                <div class="pg-input-group"><label>פרמיית PUT שנגבתה</label><input type="number" id="ss_Pp" value="7" step="0.5"></div>
+                <div class="pg-input-group"><label>מחיר ביום פקיעה S</label><input type="number" id="ss_S" value="105" step="1"></div>
+                <button class="pg-btn red" onclick="calcSStraddle()"><i class="fas fa-calculator"></i> &nbsp;חשב</button>
+            </div>
+            <div class="pg-results">
+                <div class="pg-result-card"><div class="label">קרדיט שנגבה בפתיחה</div><div class="value profit" id="ss_credit">—</div></div>
+                <div class="pg-result-card"><div class="label">הפסד מ-CALL</div><div class="value neutral" id="ss_call_loss">—</div></div>
+                <div class="pg-result-card"><div class="label">הפסד מ-PUT</div><div class="value neutral" id="ss_put_loss">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L סופי</div><div class="value neutral" id="ss_total">—</div></div>
+                <div class="pg-result-card"><div class="label">נקודות איזון (אזור רווח)</div><div class="value neutral" id="ss_be">—</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">תרגיל</span> Short Straddle — ניתוח סיכון
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                כותב Short Straddle על מניה ב-200 ש"ח: Short CALL(K=200, P=10) + Short PUT(K=200, P=9). 100 מניות.
+                <br>א) כמה כסף נגבה בפתיחה?
+                <br>ב) מהן נקודות האיזון?
+                <br>ג) מה P&L אם המניה ב-210 ש"ח? ואם ב-220 ש"ח?
+                <br>ד) מה ההפרש ב-P&L בין שתי התוצאות בסעיף ג? מה המשמעות?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">א) קרדיט נגבה = (10 + 9) × 100 = 1,900 ₪
+
+ב) B.E.: 200 − 19 = 181 | 200 + 19 = 219
+   אזור רווח: 181 ≤ S ≤ 219
+
+ג) S = 210:
+   P&L = (10+9) − (210−200) − 0 = 19 − 10 = +9 ₪/מניה → +900 ₪
+   
+   S = 220:
+   P&L = 19 − (220−200) − 0 = 19 − 20 = −1 ₪/מניה → −100 ₪
+
+ד) הפרש ב-P&L = 900 − (−100) = 1,000 ₪ — כלומר, כל נקודה שהמניה עולה מעל ה-B.E.
+   גורמת להפסד של 1 ₪/מניה × 100 = 100 ₪. 
+   הסיכון: אם המניה תגיע ל-270 (עלייה של 35%) — ההפסד יהיה
+   (19 − 70) × 100 = −5,100 ₪. אין גבול!</div>
+        </div></details>
+    </div>
+</section>
+
+<!-- ===== LONG STRANGLE ===== -->
+<section class="section-card">
+    <div class="strategy-banner" style="background: linear-gradient(135deg, #5b21b6, #4c1d95);">
+        <div class="strat-name">אסטרטגיה 6: Long Strangle (סטרנגל ארוך)<small>Long CALL (K_high) + Long PUT (K_low) — מחירי מימוש שונים</small></div>
+        <span class="strat-tag">תפיסת שוק: תנודתיות גדולה בתקציב זול יותר</span>
+    </div>
+
+    <p>גרסת התקציב של Long Straddle. במקום לקנות שתי אופציות ATM (יקרות), אנו קונים שתי אופציות <strong>OTM</strong> — ה-CALL מעל המחיר וה-PUT מתחתיו. הפרמיות זולות יותר, אך המניה חייבת לזוז יותר לרווח.</p>
+
+    <div class="strat-meta-grid">
+        <div class="meta-item"><div class="meta-label">בנייה</div><div class="meta-val">Long Call(K_c) + Long Put(K_p), K_p &lt; K_c</div></div>
+        <div class="meta-item bullish"><div class="meta-label">רווח מקסימלי</div><div class="meta-val">לא מוגבל</div></div>
+        <div class="meta-item bearish"><div class="meta-label">הפסד מקסימלי</div><div class="meta-val">P_c + P_p (כש K_p ≤ S ≤ K_c)</div></div>
+        <div class="meta-item volatile"><div class="meta-label">נקודות איזון</div><div class="meta-val">K_p − Total | K_c + Total</div></div>
+    </div>
+
+    <h3>נוסחת P&L — Long Strangle</h3>
+    <div class="var-legend">
+        <span><code>S</code> = מחיר נכס הבסיס ביום הפקיעה</span>
+        <span><code>K_c</code> = מחיר מימוש ה-CALL (גבוה מ-S)</span>
+        <span><code>K_p</code> = מחיר מימוש ה-PUT (נמוך מ-S)</span>
+        <span><code>P_c, P_p</code> = פרמיות ה-CALL וה-PUT</span>
+        <span><code>Total Prem</code> = P_c + P_p</span>
+    </div>
+    <div class="formula-block">
+        <span class="f-main">P&amp;L = max(S − K_c, 0) + max(K_p − S, 0) − (P_c + P_p)</span>
+        <span class="f-case">Case 1 — S &gt; K_c  →  P&amp;L = (S − K_c) − Total Prem</span>
+        <span class="f-case">Case 2 — K_p ≤ S ≤ K_c  →  P&amp;L = −Total Prem  &nbsp;[הפסד מקסימלי — "הבטן"]</span>
+        <span class="f-case">Case 3 — S &lt; K_p  →  P&amp;L = (K_p − S) − Total Prem</span>
+        <span class="f-case">Break-Even: S = K_p − Total Prem  &nbsp;|&nbsp;  S = K_c + Total Prem</span>
+    </div>
+
+    <h3>השוואה ויזואלית: Strangle לעומת Straddle</h3>
+    <div class="chart-container"><canvas id="strangleChart"></canvas></div>
+
+    <h3>דוגמה: לפני ריבית הפד</h3>
+    <div class="scenario-box">
+        <p>סוחרת מאמינה ש-USD/ILS יזוז חזק לפני ישיבת הפד. שער נוכחי: <strong>3.70 ש"ח/$</strong>. <strong>מכפיל: $10,000 לחוזה.</strong>
+        <br>קניית Strangle: Long PUT(K_p=3.60, P=0.03) + Long CALL(K_c=3.80, P=0.03). <strong>עלות: 0.06 ש"ח/$</strong>.</p>
+        <h4>נקודות איזון</h4>
+        <div class="math-breakdown">Lower B.E. = K_p − Total = 3.60 − 0.06 = 3.54 ₪/$
+Upper B.E. = K_c + Total = 3.80 + 0.06 = 3.86 ₪/$</div>
+        <h4>תרחיש: הפד הפתיע — דולר ב-3.92</h4>
+        <div class="math-breakdown">CALL Payoff = max(S − K_c, 0) = max(3.92 − 3.80, 0) = 0.12 ₪/$
+P&L = Payoff − Total Prem = 0.12 − 0.06 = +0.06 ₪/$
+    × $10,000 = +600 ₪/contract  [ROI = 100%]</div>
+    </div>
+
+    <!-- Playground: Strangle -->
+    <div class="playground purple">
+        <h3><i class="fas fa-wave-square"></i> סימולטור Long Strangle</h3>
+        <div class="playground-grid">
+            <div class="pg-inputs">
+                <div class="pg-input-group"><label>K_put (נמוך)</label><input type="number" id="str_Kp" value="90" step="1"></div>
+                <div class="pg-input-group"><label>פרמיית PUT</label><input type="number" id="str_Pp" value="3" step="0.5"></div>
+                <div class="pg-input-group"><label>K_call (גבוה)</label><input type="number" id="str_Kc" value="110" step="1"></div>
+                <div class="pg-input-group"><label>פרמיית CALL</label><input type="number" id="str_Pc" value="3" step="0.5"></div>
+                <div class="pg-input-group"><label>מחיר ביום פקיעה S</label><input type="number" id="str_S" value="120" step="1"></div>
+                <button class="pg-btn purple" onclick="calcStrangle()"><i class="fas fa-calculator"></i> &nbsp;חשב</button>
+            </div>
+            <div class="pg-results">
+                <div class="pg-result-card"><div class="label">סה"כ פרמיה</div><div class="value neutral" id="str_prem">—</div></div>
+                <div class="pg-result-card"><div class="label">Payoff CALL</div><div class="value neutral" id="str_cp">—</div></div>
+                <div class="pg-result-card"><div class="label">Payoff PUT</div><div class="value neutral" id="str_pp">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L סופי</div><div class="value neutral" id="str_total">—</div></div>
+                <div class="pg-result-card"><div class="label">נקודות איזון</div><div class="value neutral" id="str_be">—</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">תרגיל 1</span> Long Strangle — ניתוח מלא
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                Long Strangle על מניה ב-100 ש"ח: Long PUT(K=90, P=2) + Long CALL(K=110, P=2). 300 מניות.
+                <br>א) עלות פתיחה?
+                <br>ב) נקודות איזון?
+                <br>ג) P&L לתיק אם מניה ב-80?
+                <br>ד) P&L לתיק אם מניה ב-95?
+                <br>ה) השווה ל-Straddle עם K=100, P_call=5, P_put=5 — מי הרוויח יותר בתרחיש ג?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">א) עלות = (2+2) × 300 = 1,200 ₪
+
+ב) Lower B.E. = 90 − 4 = 86 | Upper B.E. = 110 + 4 = 114
+
+ג) S = 80 (מתחת ל-K_put ←  PUT רווחי):
+   P&L = (90−80) − 4 = +6 ₪/מניה → +6 × 300 = +1,800 ₪
+
+ד) S = 95 (בתוך הטווח 90-110):
+   P&L = 0 + 0 − 4 = −4 ₪/מניה → −4 × 300 = −1,200 ₪
+
+ה) השוואה ב-S=80:
+   Straddle: P&L = (100−80) − (5+5) = 20 − 10 = +10 ₪/מניה
+   Strangle: +6 ₪/מניה
+
+   Straddle ניצח! אבל שימו לב: Straddle עלה 10 ₪, Strangle עלה רק 4 ₪.
+   ROI Straddle = 10/10 = 100% | ROI Strangle = 6/4 = 150% ← Strangle ניצח באחוזים!</div>
+        </div></details>
+    </div>
+</section>
+
+<!-- ===== BULL CALL SPREAD ===== -->
+<section class="section-card">
+    <div class="strategy-banner" style="background: linear-gradient(135deg, #047857, #065f46);">
+        <div class="strat-name">אסטרטגיה 7: Bull Call Spread (פער קול שורי)<small>Long CALL (K1) + Short CALL (K2), K1 &lt; K2</small></div>
+        <span class="strat-tag">תפיסת שוק: שורי מתון — מצפה לעלייה עד K2</span>
+    </div>
+
+    <p>רוצים להימר על עלייה אבל לא לשלם פרמיה מלאה? <strong>Bull Call Spread</strong> קונה CALL זול יותר על ידי מכירת CALL גבוה יותר. מרוויחים אם המחיר עולה עד K2, מפסידים רק את ה-Net Debit.</p>
+
+    <div class="strat-meta-grid">
+        <div class="meta-item"><div class="meta-label">בנייה</div><div class="meta-val">Long Call(K1) + Short Call(K2)</div></div>
+        <div class="meta-item bullish"><div class="meta-label">רווח מקסימלי</div><div class="meta-val">(K2 − K1) − Net Debit</div></div>
+        <div class="meta-item bearish"><div class="meta-label">הפסד מקסימלי</div><div class="meta-val">Net Debit = P1 − P2</div></div>
+        <div class="meta-item neutral"><div class="meta-label">נקודת איזון</div><div class="meta-val">K1 + Net Debit</div></div>
+    </div>
+
+    <h3>נוסחת P&L — Bull Call Spread</h3>
+    <div class="var-legend">
+        <span><code>S</code> = מחיר נכס הבסיס ביום הפקיעה</span>
+        <span><code>K1</code> = מחיר מימוש ה-CALL הארוך (נמוך)</span>
+        <span><code>K2</code> = מחיר מימוש ה-CALL הקצר (גבוה), K1 &lt; K2</span>
+        <span><code>P1</code> = פרמיה ששולמה (CALL ארוך)</span>
+        <span><code>P2</code> = פרמיה שנגבתה (CALL קצר)</span>
+        <span><code>Net Debit</code> = P1 − P2 (עלות נטו)</span>
+    </div>
+    <div class="formula-block">
+        <span class="f-main">P&amp;L = max(S − K1, 0) − max(S − K2, 0) − Net Debit</span>
+        <span class="f-case">Case 1 — S ≤ K1  →  P&amp;L = −Net Debit  &nbsp;[הפסד מקסימלי]</span>
+        <span class="f-case">Case 2 — K1 &lt; S &lt; K2  →  P&amp;L = (S − K1) − Net Debit  &nbsp;[עלייה ליניארית]</span>
+        <span class="f-case">Case 3 — S ≥ K2  →  P&amp;L = (K2 − K1) − Net Debit  &nbsp;[תקרת רווח]</span>
+        <span class="f-case">Break-Even: S = K1 + Net Debit</span>
+    </div>
+
+    <h3>דוגמה: שורי מתון על מניה</h3>
+    <div class="scenario-box">
+        <p>מניה ב-<strong>100 ש"ח</strong>. הסוחר מאמין שתעלה ל-115 בחודש הקרוב. בונה:</p>
+        <ul style="margin-right:1.5rem;">
+            <li>Long CALL K1=100, P1=8 ש"ח</li>
+            <li>Short CALL K2=115, P2=3 ש"ח</li>
+            <li><strong>Net Debit = 5 ש"ח</strong></li>
+        </ul>
+        <h4>תרחיש A: מניה ב-107 (בין ה-Strikes)</h4>
+        <div class="math-breakdown">P&L = max(107−100,0) − max(107−115,0) − 5 = 7 − 0 − 5 = +2 ₪/מניה</div>
+        <h4>תרחיש B: מניה ב-115+ (תקרה)</h4>
+        <div class="math-breakdown">P&L = (K2 − K1) − Net Debit = (115−100) − 5 = +10 ₪/מניה  [תקרה]</div>
+        <h4>תרחיש C: מניה ב-90 (ירידה)</h4>
+        <div class="math-breakdown">P&L = 0 − 0 − 5 = −5 ₪/מניה  [= −Net Debit]</div>
+    </div>
+
+    <h3>גרף: Bull Call Spread</h3>
+    <div class="chart-container"><canvas id="bcsChart"></canvas></div>
+
+    <!-- Playground: Bull Call Spread -->
+    <div class="playground green">
+        <h3><i class="fas fa-arrow-trend-up"></i> סימולטור Bull Call Spread</h3>
+        <div class="playground-grid">
+            <div class="pg-inputs">
+                <div class="pg-input-group"><label>K1 (CALL ארוך, נמוך)</label><input type="number" id="bcs_K1" value="100" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P1</label><input type="number" id="bcs_P1" value="8" step="0.5"></div>
+                <div class="pg-input-group"><label>K2 (CALL קצר, גבוה)</label><input type="number" id="bcs_K2" value="115" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P2</label><input type="number" id="bcs_P2" value="3" step="0.5"></div>
+                <div class="pg-input-group"><label>מחיר ביום פקיעה S</label><input type="number" id="bcs_S" value="112" step="1"></div>
+                <div class="pg-input-group"><label>כמות מניות</label><input type="number" id="bcs_qty" value="100" step="1"></div>
+                <button class="pg-btn green" onclick="calcBCS()"><i class="fas fa-calculator"></i> &nbsp;חשב</button>
+            </div>
+            <div class="pg-results">
+                <div class="pg-result-card"><div class="label">Net Debit (עלות פתיחה)</div><div class="value neutral" id="bcs_debit">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L Long CALL</div><div class="value neutral" id="bcs_long">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L Short CALL</div><div class="value neutral" id="bcs_short">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L סה"כ לתיק</div><div class="value neutral" id="bcs_total">—</div></div>
+                <div class="pg-result-card"><div class="label">מקסימום | מינימום | BE</div><div class="value neutral" id="bcs_limits" style="font-size:1rem;">—</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">תרגיל 1</span> Bull Call Spread — חישוב מלא
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                בנינו Bull Call Spread: Long CALL(K1=80, P1=6) + Short CALL(K2=95, P2=2). 200 מניות.
+                <br>מלאו את הטבלה ב-S: 70, 80, 86, 90, 95, 105.
+                <br>ואז ענו: רווח מקסימלי, הפסד מקסימלי, נקודת איזון.
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Net Debit = 6 − 2 = 4 ₪   |   K2−K1=15   |   Max Profit = 15−4 = 11   |   BE = 80+4 = 84
+
+S=70:   0 − 0 − 4 = −4 ₪/מניה   → −800 ₪
+S=80:  −4                         → −800 ₪
+S=86:   6 − 0 − 4 = +2 ₪         → +400 ₪ (מעל ה-BE)
+S=90:   10 − 0 − 4 = +6 ₪        → +1,200 ₪
+S=95:   15 − 0 − 4 = +11 ₪       → +2,200 ₪ (מקסימום ✓)
+S=105:  25 − 10 − 4 = +11 ₪      → +2,200 ₪ (תקרה, לא עולה!)</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box" style="border-right: 4px solid var(--accent);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background:var(--accent);">תרגיל 2 — מכפיל</span> Bull Call Spread על מדד ת"א-35
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                סוחר בונה Bull Call Spread על ת"א-35 (כעת ב-2,000 נקודות): Long CALL(K1=2,000, P1=50 נק') + Short CALL(K2=2,100, P2=15 נק'). <strong>מכפיל: 100 ₪/נקודה.</strong> 4 חוזים.
+                <br>א) עלות פתיחה בש"ח?
+                <br>ב) רווח מקסימלי בש"ח?
+                <br>ג) P&L בש"ח אם המדד ב-2,060?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Net Debit = 50 − 15 = 35 נקודות
+× 100 ₪ × 4 חוזים = 14,000 ₪ עלות פתיחה
+
+רווח מקסימלי = (2100−2000) − 35 = 65 נקודות
+× 100 × 4 = 26,000 ₪
+
+S = 2,060:
+P&L לחוזה = max(2060−2000,0) − max(2060−2100,0) − 35
+           = 60 − 0 − 35 = 25 נקודות × 100 = 2,500 ₪ לחוזה
+× 4 = 10,000 ₪</div>
+        </div></details>
+    </div>
+</section>
+
+<!-- ===== BEAR PUT SPREAD ===== -->
+<section class="section-card">
+    <div class="strategy-banner" style="background: linear-gradient(135deg, #b91c1c, #7f1d1d);">
+        <div class="strat-name">אסטרטגיה 8: Bear Put Spread (פער פוט דובי)<small>Long PUT (K2) + Short PUT (K1), K1 &lt; K2</small></div>
+        <span class="strat-tag">תפיסת שוק: דובי מתון — מצפה לירידה עד K1</span>
+    </div>
+
+    <p>תמונת המראה של Bull Call Spread — אבל לכיוון הדובי. קונים PUT עם K גבוה וכותבים PUT עם K נמוך. מרוויחים אם המחיר יורד, עם תקרת רווח ב-K1.</p>
+
+    <div class="strat-meta-grid">
+        <div class="meta-item"><div class="meta-label">בנייה</div><div class="meta-val">Long Put(K2) + Short Put(K1), K1 &lt; K2</div></div>
+        <div class="meta-item bullish"><div class="meta-label">רווח מקסימלי</div><div class="meta-val">(K2 − K1) − Net Debit</div></div>
+        <div class="meta-item bearish"><div class="meta-label">הפסד מקסימלי</div><div class="meta-val">Net Debit = P2 − P1</div></div>
+        <div class="meta-item neutral"><div class="meta-label">נקודת איזון</div><div class="meta-val">K2 − Net Debit</div></div>
+    </div>
+
+    <h3>נוסחת P&L — Bear Put Spread</h3>
+    <div class="var-legend">
+        <span><code>S</code> = מחיר נכס הבסיס ביום הפקיעה</span>
+        <span><code>K2</code> = מחיר מימוש ה-PUT הארוך (גבוה)</span>
+        <span><code>K1</code> = מחיר מימוש ה-PUT הקצר (נמוך), K1 &lt; K2</span>
+        <span><code>P2</code> = פרמיה ששולמה (PUT ארוך)</span>
+        <span><code>P1</code> = פרמיה שנגבתה (PUT קצר)</span>
+        <span><code>Net Debit</code> = P2 − P1</span>
+    </div>
+    <div class="formula-block">
+        <span class="f-main">P&amp;L = max(K2 − S, 0) − max(K1 − S, 0) − Net Debit</span>
+        <span class="f-case">Case 1 — S ≥ K2  →  P&amp;L = −Net Debit  &nbsp;[הפסד מקסימלי]</span>
+        <span class="f-case">Case 2 — K1 &lt; S &lt; K2  →  P&amp;L = (K2 − S) − Net Debit  &nbsp;[ירידה ליניארית]</span>
+        <span class="f-case">Case 3 — S ≤ K1  →  P&amp;L = (K2 − K1) − Net Debit  &nbsp;[תקרת רווח]</span>
+        <span class="f-case">Break-Even: S = K2 − Net Debit</span>
+    </div>
+
+    <h3>גרף: Bear Put Spread</h3>
+    <div class="chart-container"><canvas id="bpsChart"></canvas></div>
+
+    <!-- Playground: Bear Put Spread -->
+    <div class="playground red">
+        <h3><i class="fas fa-arrow-trend-down"></i> סימולטור Bear Put Spread</h3>
+        <div class="playground-grid">
+            <div class="pg-inputs">
+                <div class="pg-input-group"><label>K2 (PUT ארוך, גבוה)</label><input type="number" id="bps_K2" value="100" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P2</label><input type="number" id="bps_P2" value="7" step="0.5"></div>
+                <div class="pg-input-group"><label>K1 (PUT קצר, נמוך)</label><input type="number" id="bps_K1" value="85" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P1</label><input type="number" id="bps_P1" value="2" step="0.5"></div>
+                <div class="pg-input-group"><label>מחיר ביום פקיעה S</label><input type="number" id="bps_S" value="88" step="1"></div>
+                <div class="pg-input-group"><label>כמות מניות</label><input type="number" id="bps_qty" value="100" step="1"></div>
+                <button class="pg-btn red" onclick="calcBPS()"><i class="fas fa-calculator"></i> &nbsp;חשב</button>
+            </div>
+            <div class="pg-results">
+                <div class="pg-result-card"><div class="label">Net Debit</div><div class="value neutral" id="bps_debit">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L Long PUT</div><div class="value neutral" id="bps_long">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L Short PUT</div><div class="value neutral" id="bps_short">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L סה"כ לתיק</div><div class="value neutral" id="bps_total">—</div></div>
+                <div class="pg-result-card"><div class="label">מקסימום | מינימום | BE</div><div class="value neutral" id="bps_limits" style="font-size:1rem;">—</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">תרגיל 1</span> Bear Put Spread — ניתוח מלא
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                Bear Put Spread: Long PUT(K2=120, P2=10) + Short PUT(K1=105, P1=3). 150 מניות.
+                <br>א) Net Debit; ב) רווח מקסימלי לתיק; ג) הפסד מקסימלי לתיק; ד) BE; ה) P&L לתיק אם S=112.
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">א) Net Debit = 10 − 3 = 7 ₪/מניה
+
+ב) Max Profit = (120−105) − 7 = 8 ₪/מניה → +8 × 150 = +1,200 ₪
+
+ג) Max Loss = 7 ₪/מניה → −7 × 150 = −1,050 ₪
+
+ד) BE = 120 − 7 = 113 ₪
+
+ה) S = 112 (מתחת ל-BE, כן ברווח):
+   P&L = max(120−112,0) − max(105−112,0) − 7
+       = 8 − 0 − 7 = +1 ₪/מניה
+   לתיק: +1 × 150 = +150 ₪</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box" style="border-right: 4px solid var(--accent);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background:var(--accent);">תרגיל 2 — השוואה</span> Bear Put Spread לעומת Long PUT לבד
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                מניה ב-100 ש"ח. שני חלופות:
+                <br>א. Long PUT לבד: K=100, P=8 ש"ח.
+                <br>ב. Bear Put Spread: Long PUT(K=100, P=8) + Short PUT(K=85, P=2). Net Debit=6.
+                <br>חשבו P&L שתי החלופות ב-S: 75, 85, 92, 100. מי עדיף ומתי?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">S=75:
+  Long PUT לבד:    max(100−75,0) − 8 = 25 − 8 = +17 ₪
+  Bear Put Spread: max(100−75,0) − max(85−75,0) − 6 = 25 − 10 − 6 = +9 ₪
+  → Long PUT ניצח! (הוא לא קרץ את הרווח ב-K1=85)
+
+S=85:
+  Long PUT לבד:    15 − 8 = +7 ₪
+  Bear Put Spread: 15 − 0 − 6 = +9 ₪
+  → Spread ניצח! (מתחת ל-K1 הוא תמיד בתקרה)
+
+S=92:
+  Long PUT לבד:    8 − 8 = 0 ₪
+  Bear Put Spread: 8 − 0 − 6 = +2 ₪
+  → Spread ניצח!
+
+S=100:
+  Long PUT לבד:    0 − 8 = −8 ₪
+  Bear Put Spread: 0 − 0 − 6 = −6 ₪
+  → Spread ניצח! (פחות הפסד)
+
+מסקנה: Bear Put Spread עדיף על Long PUT לבד בכל מקרה — פרט
+לתרחיש שבו המחיר יורד הרבה מתחת ל-K1. אם הירידה מתונה (עד K1),
+ה-Spread תמיד מביא תוצאה טובה יותר!</div>
+        </div></details>
+    </div>
+</section>
+
+<!-- ===== CREDIT SPREADS ===== -->
+<section class="section-card">
+    <div class="strategy-banner" style="background: linear-gradient(135deg, #0891b2, #0c4a6e);">
+        <div class="strat-name">אסטרטגיות 9א + 9ב: Credit Spreads<small>Bull Put Spread + Bear Call Spread — מקבלים פרמיה נטו</small></div>
+        <span class="strat-tag">תפיסת שוק: שוק תקוע — מהמרים שלא יזוז</span>
+    </div>
+
+    <p>בניגוד לכל מה שלמדנו עד כה (Debit = שילמנו פרמיה), ב-Credit Spreads <strong>מקבלים פרמיה</strong> ביום הפתיחה. הרווח המקסימלי הוא הקרדיט הזה, וההפסד המקסימלי מוגבל על ידי כנף ההגנה.</p>
+
+    <h3>9א: Bull Put Spread — שורי-נייטרלי, קרדיט</h3>
+    <div class="concept-box">
+        <div class="concept-title"><i class="fas fa-coins"></i> הרעיון: לגבות פרמיה כי מאמינים שהמחיר לא ירד</div>
+        <p><strong>בנייה:</strong> Short PUT (K2) + Long PUT (K1), כש-K1 &lt; K2. אנחנו כותבים PUT ליד המחיר הנוכחי (גובים פרמיה גדולה) וקונים PUT מגן הרחק מטה (משלמים פרמיה קטנה). ה<strong>Net Credit</strong> = P2 − P1.</p>
+    </div>
+
+    <div class="strat-meta-grid">
+        <div class="meta-item"><div class="meta-label">בנייה</div><div class="meta-val">Short Put(K2) + Long Put(K1), K1 &lt; K2</div></div>
+        <div class="meta-item bullish"><div class="meta-label">רווח מקסימלי</div><div class="meta-val">Net Credit (P2 − P1) ← כש-S ≥ K2</div></div>
+        <div class="meta-item bearish"><div class="meta-label">הפסד מקסימלי</div><div class="meta-val">(K2 − K1) − Net Credit ← כש-S ≤ K1</div></div>
+        <div class="meta-item neutral"><div class="meta-label">נקודת איזון</div><div class="meta-val">K2 − Net Credit</div></div>
+    </div>
+
+    <div class="var-legend">
+        <span><code>S</code> = מחיר נכס הבסיס ביום הפקיעה</span>
+        <span><code>K1</code> = מחיר מימוש ה-PUT הארוך (נמוך)</span>
+        <span><code>K2</code> = מחיר מימוש ה-PUT הקצר (גבוה)</span>
+        <span><code>Net Credit</code> = P2 − P1 (קרדיט נטו)</span>
+    </div>
+    <div class="formula-block">
+        <span class="f-main">P&amp;L = Net Credit − max(K2 − S, 0) + max(K1 − S, 0)</span>
+        <span class="f-case">Case 1 — S ≥ K2  →  P&amp;L = +Net Credit  [רווח מקסימלי]</span>
+        <span class="f-case">Case 2 — K1 &lt; S &lt; K2  →  P&amp;L = Net Credit − (K2 − S)</span>
+        <span class="f-case">Case 3 — S ≤ K1  →  P&amp;L = Net Credit − (K2 − K1) = −Max Loss</span>
+        <span class="f-case">Break-Even: S = K2 − Net Credit</span>
+    </div>
+
+    <h3>9ב: Bear Call Spread — דובי-נייטרלי, קרדיט</h3>
+    <div class="concept-box">
+        <div class="concept-title"><i class="fas fa-coins"></i> הרעיון: לגבות פרמיה כי מאמינים שהמחיר לא יעלה</div>
+        <p><strong>בנייה:</strong> Short CALL (K1) + Long CALL (K2), כש-K1 &lt; K2. כותבים CALL ליד המחיר (גובים) וקונים CALL מגן מעל (משלמים). <strong>Net Credit</strong> = P1 − P2.</p>
+    </div>
+
+    <div class="strat-meta-grid">
+        <div class="meta-item"><div class="meta-label">בנייה</div><div class="meta-val">Short Call(K1) + Long Call(K2), K1 &lt; K2</div></div>
+        <div class="meta-item bullish"><div class="meta-label">רווח מקסימלי</div><div class="meta-val">Net Credit (P1 − P2) ← כש-S ≤ K1</div></div>
+        <div class="meta-item bearish"><div class="meta-label">הפסד מקסימלי</div><div class="meta-val">(K2 − K1) − Net Credit ← כש-S ≥ K2</div></div>
+        <div class="meta-item neutral"><div class="meta-label">נקודת איזון</div><div class="meta-val">K1 + Net Credit</div></div>
+    </div>
+
+    <div class="var-legend">
+        <span><code>S</code> = מחיר נכס הבסיס ביום הפקיעה</span>
+        <span><code>K1</code> = מחיר מימוש ה-CALL הקצר (נמוך)</span>
+        <span><code>K2</code> = מחיר מימוש ה-CALL הארוך (גבוה)</span>
+        <span><code>Net Credit</code> = P1 − P2</span>
+    </div>
+    <div class="formula-block">
+        <span class="f-main">P&amp;L = Net Credit − max(S − K1, 0) + max(S − K2, 0)</span>
+        <span class="f-case">Case 1 — S ≤ K1  →  P&amp;L = +Net Credit  [רווח מקסימלי]</span>
+        <span class="f-case">Case 2 — K1 &lt; S &lt; K2  →  P&amp;L = Net Credit − (S − K1)</span>
+        <span class="f-case">Case 3 — S ≥ K2  →  P&amp;L = Net Credit − (K2 − K1) = −Max Loss</span>
+        <span class="f-case">Break-Even: S = K1 + Net Credit</span>
+    </div>
+
+    <h3>גרף: Bull Put Spread (Credit) לעומת Bear Call Spread (Credit)</h3>
+    <div class="chart-container"><canvas id="creditChart"></canvas></div>
+
+    <!-- Playground: Bull Put Spread -->
+    <div class="playground teal">
+        <h3><i class="fas fa-hand-holding-dollar"></i> סימולטור Bull Put Spread (Credit)</h3>
+        <div class="playground-grid">
+            <div class="pg-inputs">
+                <div class="pg-input-group"><label>K2 (Short PUT, גבוה)</label><input type="number" id="bpu_K2" value="100" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P2 (נגבתה)</label><input type="number" id="bpu_P2" value="6" step="0.5"></div>
+                <div class="pg-input-group"><label>K1 (Long PUT, נמוך)</label><input type="number" id="bpu_K1" value="88" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P1 (שולמה)</label><input type="number" id="bpu_P1" value="2" step="0.5"></div>
+                <div class="pg-input-group"><label>מחיר ביום פקיעה S</label><input type="number" id="bpu_S" value="105" step="1"></div>
+                <div class="pg-input-group"><label>כמות מניות</label><input type="number" id="bpu_qty" value="100" step="1"></div>
+                <button class="pg-btn teal" onclick="calcBullPut()"><i class="fas fa-calculator"></i> &nbsp;חשב</button>
+            </div>
+            <div class="pg-results">
+                <div class="pg-result-card"><div class="label">Net Credit (קרדיט שנגבה)</div><div class="value profit" id="bpu_credit">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L Short PUT</div><div class="value neutral" id="bpu_sput">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L Long PUT</div><div class="value neutral" id="bpu_lput">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L סה"כ לתיק</div><div class="value neutral" id="bpu_total">—</div></div>
+                <div class="pg-result-card"><div class="label">מקסימום | מינימום | BE</div><div class="value neutral" id="bpu_limits" style="font-size:1rem;">—</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">תרגיל 1</span> Bull Put Spread — ניתוח מלא
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                בנינו Bull Put Spread: Short PUT(K2=90, P2=5) + Long PUT(K1=78, P1=1.5). 200 מניות.
+                <br>א) Net Credit לתיק; ב) רווח מקסימלי לתיק; ג) הפסד מקסימלי לתיק; ד) BE;
+                <br>ה) P&L לתיק ב-S=84; ו) P&L לתיק ב-S=92.
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Net Credit = 5 − 1.5 = 3.5 ₪/מניה
+
+א) לתיק: 3.5 × 200 = +700 ₪ ביום פתיחה
+
+ב) רווח מקסימלי = +700 ₪ (כש-S ≥ 90, שניהם פוקעים חסרי ערך)
+
+ג) הפסד מקסימלי = (90−78) − 3.5 = 8.5 ₪/מניה → −8.5 × 200 = −1,700 ₪
+
+ד) BE = 90 − 3.5 = 86.5 ₪
+
+ה) S = 84 (מתחת ל-BE 86.5 → הפסד):
+   P&L = 3.5 − (90−84) + max(78−84,0) = 3.5 − 6 + 0 = −2.5 ₪/מניה
+   לתיק: −2.5 × 200 = −500 ₪
+
+ו) S = 92 (מעל K2 → שתיהן חסרות ערך):
+   P&L = 3.5 − 0 + 0 = +3.5 ₪/מניה
+   לתיק: +700 ₪ (רווח מקסימלי ✓)</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box" style="border-right: 4px solid var(--purple);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background:var(--purple);">תרגיל 2</span> Bear Call Spread — חישוב מלא
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                Bear Call Spread: Short CALL(K1=110, P1=7) + Long CALL(K2=125, P2=2). 300 מניות.
+                <br>א) Net Credit לתיק; ב) רווח מקסימלי; ג) הפסד מקסימלי; ד) BE;
+                <br>ה) P&L לתיק אם S=118; ו) מה ה-P&L אם S=130?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Net Credit = 7 − 2 = 5 ₪/מניה
+לתיק: 5 × 300 = +1,500 ₪
+
+ב) רווח מקסימלי = +1,500 ₪ (כש-S ≤ 110)
+
+ג) Max Loss = (125−110) − 5 = 10 ₪/מניה → −10 × 300 = −3,000 ₪
+
+ד) BE = 110 + 5 = 115 ₪
+
+ה) S = 118 (בין Strikes, מעל BE → הפסד):
+   P&L = 5 − (118−110) + 0 = 5 − 8 = −3 ₪/מניה
+   לתיק: −3 × 300 = −900 ₪
+
+ו) S = 130 (מעל K2 → הפסד מקסימלי):
+   P&L = 5 − (130−110) + (130−125) = 5 − 20 + 5 = −10 ₪/מניה
+   לתיק: −10 × 300 = −3,000 ₪ (הפסד מקסימלי ✓)</div>
+        </div></details>
+    </div>
+
+    <div class="mcq-box">
+        <div class="mcq-title">בחן את עצמך: Credit Spreads</div>
+        <div class="mcq-options">
+            <label class="mcq-option"><input type="radio" name="mcq_credit"><span>א. ב-Bull Put Spread אנחנו משלמים פרמיה נטו ביום הפתיחה.</span></label>
+            <label class="mcq-option"><input type="radio" name="mcq_credit"><span>ב. ב-Bear Call Spread הרווח המקסימלי מושג כשהמחיר נמצא מתחת ל-K1 ביום הפקיעה.</span></label>
+            <label class="mcq-option"><input type="radio" name="mcq_credit"><span>ג. ב-Credit Spread ההסתברות לרווח גבוהה, אך יחס רווח/סיכון פחות אטרקטיבי מ-Debit Spread.</span></label>
+            <label class="mcq-option"><input type="radio" name="mcq_credit"><span>ד. ב-Credit Spreads אין הפסד מקסימלי מוגדר — ההפסד לא מוגבל.</span></label>
+        </div>
+        <details class="mcq-solution"><summary>הצג פתרון מוסתר</summary>
+        <div class="mcq-answer-content"><strong>תשובות נכונות: ב' ו-ג'.</strong> ב' נכון — Bear Call מרוויח כשהמחיר תקוע מתחת ל-K1. ג' נכון — Credit Spreads סטטיסטית יותר רווחיים (OTM פוקעות ב-70%+ מהמקרים), אבל כשמפסידים — מפסידים יותר ממה שהרווחו. א' שגוי — מקבלים פרמיה. ד' שגוי — ההפסד מוגבל בגלל כנף ההגנה.</div>
+        </details>
+    </div>
+</section>
+
+<!-- ===== LONG BUTTERFLY ===== -->
+<section class="section-card">
+    <div class="strategy-banner" style="background: linear-gradient(135deg, #be185d, #9d174d);">
+        <div class="strat-name">אסטרטגיה 10: Long Butterfly (פרפר ארוך)<small>+1 Call(K1) − 2 Call(K2) +1 Call(K3) | K1 &lt; K2 &lt; K3</small></div>
+        <span class="strat-tag">תפיסת שוק: שוק תקוע על מחיר ספציפי בדיוק</span>
+    </div>
+
+    <p>הפרפר מציע <strong>תשואה מדהימה</strong> כשהמחיר נוחת בדיוק על K2, תוך <strong>הגבלת הסיכון לעלות הפתיחה בלבד</strong>. הוא שילוב של: Bull Call Spread (K1/K2) + Bear Call Spread (K2/K3). 4 אופציות, פרופיל רווח בצורת פרפר.</p>
+
+    <div class="strat-meta-grid">
+        <div class="meta-item"><div class="meta-label">בנייה</div><div class="meta-val">+Call(K1) −2×Call(K2) +Call(K3)</div></div>
+        <div class="meta-item bullish"><div class="meta-label">רווח מקסימלי</div><div class="meta-val">(K2 − K1) − Net Debit (ב-S=K2)</div></div>
+        <div class="meta-item bearish"><div class="meta-label">הפסד מקסימלי</div><div class="meta-val">Net Debit (ב-S ≤ K1 או S ≥ K3)</div></div>
+        <div class="meta-item neutral"><div class="meta-label">BE</div><div class="meta-val">K1 + Net Debit | K3 − Net Debit</div></div>
+    </div>
+
+    <div class="concept-box">
+        <div class="concept-title"><i class="fas fa-lightbulb"></i> הפרפר = Bull Spread + Bear Spread</div>
+        <p>ניתן לחשוב על פרפר כ-<strong>Bull Call Spread (K1/K2)</strong> שנמכר לצידו <strong>Bear Call Spread (K2/K3)</strong>. בפרדות ה-Bear Spread מממן את עלות ה-Bull Spread. <strong>תנאי חובה: K2 − K1 = K3 − K2 (מרחקים שווים).</strong></p>
+    </div>
+
+    <h3>נוסחת P&L — Long Butterfly</h3>
+    <div class="var-legend">
+        <span><code>S</code> = מחיר נכס הבסיס ביום הפקיעה</span>
+        <span><code>K1, K2, K3</code> = מחירי מימוש (K1 &lt; K2 &lt; K3), K2−K1 = K3−K2</span>
+        <span><code>Net Debit</code> = P1 − 2×P2 + P3 (עלות נטו)</span>
+    </div>
+    <div class="formula-block">
+        <span class="f-main">P&amp;L = max(S−K1,0) − 2·max(S−K2,0) + max(S−K3,0) − Net Debit</span>
+        <span class="f-case">Case 1 — S ≤ K1  →  P&amp;L = −Net Debit  [הפסד מקסימלי]</span>
+        <span class="f-case">Case 2 — K1 &lt; S &lt; K2  →  P&amp;L = (S − K1) − Net Debit</span>
+        <span class="f-case">Case 3 — S = K2  →  P&amp;L = (K2 − K1) − Net Debit  [רווח מקסימלי!]</span>
+        <span class="f-case">Case 4 — K2 &lt; S &lt; K3  →  P&amp;L = (K3 − S) − Net Debit</span>
+        <span class="f-case">Case 5 — S ≥ K3  →  P&amp;L = −Net Debit  [הפסד מקסימלי]</span>
+        <span class="f-case">Break-Even: S = K1 + Net Debit  &nbsp;|&nbsp;  S = K3 − Net Debit</span>
+    </div>
+
+    <h3>דוגמה מספרית</h3>
+    <div class="scenario-box">
+        <p>מניה ב-<strong>100 ש"ח</strong>. הסוחר בטוח שתישאר קרוב ל-100. הוא בונה:</p>
+        <ul style="margin-right:1.5rem;">
+            <li>+1 Long CALL K1=90, P=13</li>
+            <li>−2 Short CALL K2=100, P=7 כל אחד (נגבה 14)</li>
+            <li>+1 Long CALL K3=110, P=3</li>
+        </ul>
+        <div class="math-breakdown">Net Debit = 13 − 14 + 3 = 2 ₪/מניה (זול מאוד!)</div>
+        <h4>תרחיש A: S=100 (תרחיש החלום)</h4>
+        <div class="math-breakdown">+Call(K1=90):  max(100−90, 0) − 13 = 10 − 13 = −3
+−2×Call(K2=100): 2 × (7 − 0)       = +14
++Call(K3=110):  max(100−110, 0) − 3 = −3
+Net P&L = −3 + 14 − 3 = +8 ₪/share
+ROI = Max Profit / Net Debit = 8/2 = 400%</div>
+        <h4>תרחיש B: S=90 (קצה תחתון)</h4>
+        <div class="math-breakdown">+Call(K1=90):  0 − 13 = −13
+−2×Call(K2=100): +14
++Call(K3=110): −3
+Net P&L = −13 + 14 − 3 = −2 ₪  [= −Net Debit ✓]</div>
+        <h4>תרחיש C: S=106 (שיפוע יורד)</h4>
+        <div class="math-breakdown">+Call(K1=90):  16 − 13 = +3
+−2×Call(K2=100): 2 × (7 − 6) = +2
++Call(K3=110): 0 − 3 = −3
+Net P&L = 3 + 2 − 3 = +2 ₪  [above K2, profit declining]</div>
+    </div>
+
+    <h3>גרף: Long Butterfly — צורת הפרפר</h3>
+    <div class="chart-container"><canvas id="butterflyChart"></canvas></div>
+
+    <!-- Playground: Butterfly -->
+    <div class="playground pink">
+        <h3><i class="fas fa-dove"></i> סימולטור Long Butterfly</h3>
+        <div class="playground-grid">
+            <div class="pg-inputs">
+                <div class="pg-input-group"><label>K1 (Long Call, נמוך)</label><input type="number" id="bf_K1" value="90" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P1</label><input type="number" id="bf_P1" value="13" step="0.5"></div>
+                <div class="pg-input-group"><label>K2 (Short 2×Call, אמצעי)</label><input type="number" id="bf_K2" value="100" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P2 (לכל אחד)</label><input type="number" id="bf_P2" value="7" step="0.5"></div>
+                <div class="pg-input-group"><label>K3 (Long Call, גבוה)</label><input type="number" id="bf_K3" value="110" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P3</label><input type="number" id="bf_P3" value="3" step="0.5"></div>
+                <div class="pg-input-group"><label>מחיר ביום פקיעה S</label><input type="number" id="bf_S" value="100" step="1"></div>
+                <button class="pg-btn pink" onclick="calcButterfly()"><i class="fas fa-calculator"></i> &nbsp;חשב</button>
+            </div>
+            <div class="pg-results">
+                <div class="pg-result-card"><div class="label">Net Debit</div><div class="value neutral" id="bf_debit">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L Long Call K1</div><div class="value neutral" id="bf_c1">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L Short 2×Call K2</div><div class="value neutral" id="bf_c2">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L Long Call K3</div><div class="value neutral" id="bf_c3">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L סופי</div><div class="value neutral" id="bf_total">—</div></div>
+                <div class="pg-result-card"><div class="label">ROI על ההשקעה</div><div class="value neutral" id="bf_roi">—</div></div>
+                <div class="pg-result-card"><div class="label">Max Profit | Max Loss | BE</div><div class="value neutral" id="bf_limits" style="font-size:0.95rem;">—</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">תרגיל 1</span> Long Butterfly — חישוב מלא
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                מניה ב-150 ש"ח. Long Butterfly: +Call(140, P=14) − 2×Call(150, P=8) + Call(160, P=4). 200 מניות.
+                <br>א) Net Debit; ב) רווח מקסימלי לתיק; ג) הפסד מקסימלי לתיק; ד) נקודות BE;
+                <br>ה) P&L לתיק ב-S=150; ו) P&L לתיק ב-S=158; ז) P&L לתיק ב-S=140.
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">א) Net Debit = 14 − 2×8 + 4 = 14 − 16 + 4 = 2 ₪/מניה
+
+ב) Max Profit = (K2−K1) − Net Debit = (150−140) − 2 = 8 ₪/מניה
+   לתיק: +8 × 200 = +1,600 ₪
+
+ג) Max Loss = Net Debit = 2 ₪/מניה → −2 × 200 = −400 ₪
+
+ד) Lower BE = K1 + Net Debit = 140 + 2 = 142 ₪
+   Upper BE = K3 − Net Debit = 160 − 2 = 158 ₪
+
+ה) S = 150 (מקסימום):
+   (150−140) − 2×0 − 2 + 0 = 10 − 2 = +8 ₪ → +1,600 ₪ ✓
+
+ו) S = 158 (על ה-Upper BE):
+   (158−140) − 2×(158−150) + max(158−160,0) − 2
+   = 18 − 16 + 0 − 2 = 0 ₪ → ± 0 ₪ ✓
+
+ז) S = 140 (על ה-Lower BE):
+   max(0,0) − 2×0 + 0 − 2 = −2 ₪ → −400 ₪ (הפסד מקסימלי ✓)</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box" style="border-right: 4px solid var(--accent);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background:var(--accent);">תרגיל 2 — מכפיל</span> Butterfly על מדד ת"א-35
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                מדד ת"א-35 ב-1,900 נקודות. Butterfly: +CALL(1,850, P=75) − 2×CALL(1,900, P=45) + CALL(1,950, P=25). <strong>מכפיל: 100 ₪/נקודה.</strong> 3 חוזים.
+                <br>א) Net Debit בש"ח; ב) רווח מקסימלי בש"ח; ג) P&L בש"ח אם מדד ב-1,920; ד) ROI אם מדד ב-1,900.
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">א) Net Debit = 75 − 2×45 + 25 = 75 − 90 + 25 = 10 נקודות
+   × 100 ₪ × 3 חוזים = 3,000 ₪
+
+ב) Max Profit = (1900−1850) − 10 = 40 נקודות
+   × 100 × 3 = 12,000 ₪
+
+ג) S = 1,920 (מעל K2, אזור יורד):
+   לחוזה: max(70,0) − 2×max(20,0) + max(1920−1950,0) − 10
+         = 70 − 40 + 0 − 10 = +20 נקודות × 100 = 2,000 ₪ לחוזה
+   × 3 = 6,000 ₪
+
+ד) S = 1,900 (מקסימום):
+   לחוזה: max(50,0) − 2×0 + 0 − 10 = +40 נקודות = 4,000 ₪
+   × 3 = 12,000 ₪
+   ROI = 12,000 / 3,000 = 400%!</div>
+        </div></details>
+    </div>
+</section>
+
+<!-- ===== IRON CONDOR ===== -->
+<section class="section-card">
+    <div class="strategy-banner" style="background: linear-gradient(135deg, #7e22ce, #6b21a8);">
+        <div class="strat-name">אסטרטגיה 11: Iron Condor (איירון קונדור)<small>Bull Put Spread + Bear Call Spread בו-זמנית</small></div>
+        <span class="strat-tag">תפיסת שוק: שוק תקוע בטווח רחב</span>
+    </div>
+
+    <p>ה-Iron Condor הוא שילוב של שני Credit Spreads: <strong>Bull Put Spread בתחתית</strong> (מגן מירידה חדה) + <strong>Bear Call Spread בראש</strong> (מגן מעלייה חדה). גובים פרמיה נטו כשהשוק תקוע בתוך "הגוף" של הקונדור.</p>
+
+    <div class="strat-meta-grid">
+        <div class="meta-item"><div class="meta-label">בנייה (K0 &lt; K1 &lt; K2 &lt; K3)</div><div class="meta-val">+Put(K0) − Put(K1) − Call(K2) + Call(K3)</div></div>
+        <div class="meta-item bullish"><div class="meta-label">רווח מקסימלי</div><div class="meta-val">Net Credit (כש K1 ≤ S ≤ K2)</div></div>
+        <div class="meta-item bearish"><div class="meta-label">הפסד מקסימלי</div><div class="meta-val">(K1 − K0) − Net Credit = (K3 − K2) − Net Credit</div></div>
+        <div class="meta-item neutral"><div class="meta-label">נקודות איזון</div><div class="meta-val">K1 − Net Credit | K2 + Net Credit</div></div>
+    </div>
+
+    <div class="concept-box">
+        <div class="concept-title"><i class="fas fa-layer-group"></i> מי באמת משתמש ב-Iron Condor?</div>
+        <p>Iron Condor הוא אסטרטגיית ההכנסה הנפוצה ביותר בקרב <strong>סוחרי אופציות מקצועיים</strong> וקרנות Options-Income. מוכרים אותה מדי חודש לפני הפקיעה, גובים קרדיט, ומקווים שהשוק נשאר בתוך הטווח. עובד מצוין בשוקי צד ושוקי תנודתיות נמוכה. <em>הסיכון: תנועה אחת גדולה ומחיקה של חודשים של רווחים.</em></p>
+    </div>
+
+    <h3>נוסחת P&L — Iron Condor</h3>
+    <div class="var-legend">
+        <span><code>S</code> = מחיר נכס הבסיס ביום הפקיעה</span>
+        <span><code>K0</code> = Long PUT (כנף שמאל תחתון)</span>
+        <span><code>K1</code> = Short PUT (כנף ימין תחתון)</span>
+        <span><code>K2</code> = Short CALL (כנף ימין עליון)</span>
+        <span><code>K3</code> = Long CALL (כנף שמאל עליון)</span>
+        <span><code>Net Credit</code> = (P_K1−P_K0) + (P_K2−P_K3)</span>
+    </div>
+    <div class="formula-block">
+        <span class="f-main">P&amp;L = Net Credit + max(K0−S,0) − max(K1−S,0) − max(S−K2,0) + max(S−K3,0)</span>
+        <span class="f-case">Case 1 — S ≤ K0  →  P&amp;L = Net Credit − (K1−K0)  [הפסד מקסימלי — כנף שמאל]</span>
+        <span class="f-case">Case 2 — K0 &lt; S &lt; K1  →  P&amp;L = Net Credit − (K1−S)  [הפסד חלקי]</span>
+        <span class="f-case">Case 3 — K1 ≤ S ≤ K2  →  P&amp;L = +Net Credit  [רווח מקסימלי — "הגוף"]</span>
+        <span class="f-case">Case 4 — K2 &lt; S &lt; K3  →  P&amp;L = Net Credit − (S−K2)  [הפסד חלקי]</span>
+        <span class="f-case">Case 5 — S ≥ K3  →  P&amp;L = Net Credit − (K3−K2)  [הפסד מקסימלי — כנף ימין]</span>
+        <span class="f-case">Break-Even: S = K1 − Net Credit  &nbsp;|&nbsp;  S = K2 + Net Credit</span>
+    </div>
+
+    <h3>דוגמה: Iron Condor על שח/דולר</h3>
+    <div class="scenario-box">
+        <p>שער דולר: <strong>3.70 ₪/$</strong>. <strong>מכפיל: $10,000 לחוזה.</strong> 5 חוזים.
+        <br>Bull Put Spread: Short PUT(K1=3.60, P=0.05) + Long PUT(K0=3.50, P=0.015)
+        <br>Bear Call Spread: Short CALL(K2=3.80, P=0.04) + Long CALL(K3=3.90, P=0.012)
+        </p>
+        <div class="math-breakdown">Net Credit = (P_K1 − P_K0) + (P_K2 − P_K3)
+           = (0.05−0.015) + (0.04−0.012) = 0.035 + 0.028 = 0.063 ₪/$
+× $10,000/contract × 5 contracts = 3,150 ₪
+
+Max Loss/wing = Wing Width − Net Credit = (3.60−3.50) − 0.063 = 0.037 ₪/$
+× $10,000 × 5 = 1,850 ₪
+
+Profit zone: K1 ≤ S ≤ K2  →  3.60 ≤ S ≤ 3.80
+B.E. lower = K1 − Net Credit = 3.537 | B.E. upper = K2 + Net Credit = 3.863</div>
+        <h4>תרחיש A: דולר ב-3.72 (בתוך הגוף)</h4>
+        <div class="math-breakdown">All options expire OTM  →  P&L = +Net Credit = +3,150 ₪</div>
+        <h4>תרחיש B: דולר ב-3.90+ (פגיעה בכנף)</h4>
+        <div class="math-breakdown">P&L = Net Credit − (S − K2) = 0.063 − (3.90−3.80) = −0.037 ₪/$
+× 10,000 × 5 = −1,850 ₪  [= −Max Loss ✓]</div>
+    </div>
+
+    <h3>גרף: Iron Condor</h3>
+    <div class="chart-container"><canvas id="condorChart"></canvas></div>
+
+    <!-- Playground: Iron Condor -->
+    <div class="playground purple">
+        <h3><i class="fas fa-crown"></i> סימולטור Iron Condor</h3>
+        <div class="playground-grid">
+            <div class="pg-inputs">
+                <div class="pg-input-group"><label>K0 (Long PUT, נמוך)</label><input type="number" id="ic_K0" value="80" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P0 (שולמה)</label><input type="number" id="ic_P0" value="1" step="0.5"></div>
+                <div class="pg-input-group"><label>K1 (Short PUT)</label><input type="number" id="ic_K1" value="90" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P1 (נגבתה)</label><input type="number" id="ic_P1" value="4" step="0.5"></div>
+                <div class="pg-input-group"><label>K2 (Short CALL)</label><input type="number" id="ic_K2" value="110" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P2 (נגבתה)</label><input type="number" id="ic_P2" value="4" step="0.5"></div>
+                <div class="pg-input-group"><label>K3 (Long CALL, גבוה)</label><input type="number" id="ic_K3" value="120" step="1"></div>
+                <div class="pg-input-group"><label>פרמיה P3 (שולמה)</label><input type="number" id="ic_P3" value="1" step="0.5"></div>
+                <div class="pg-input-group"><label>מחיר ביום פקיעה S</label><input type="number" id="ic_S" value="100" step="1"></div>
+                <button class="pg-btn purple" onclick="calcCondor()"><i class="fas fa-calculator"></i> &nbsp;חשב</button>
+            </div>
+            <div class="pg-results">
+                <div class="pg-result-card"><div class="label">Net Credit בפתיחה</div><div class="value profit" id="ic_credit">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L Bull Put Spread</div><div class="value neutral" id="ic_bps">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L Bear Call Spread</div><div class="value neutral" id="ic_bcs">—</div></div>
+                <div class="pg-result-card"><div class="label">P&L סופי</div><div class="value neutral" id="ic_total">—</div></div>
+                <div class="pg-result-card"><div class="label">מצב (גוף / כנף / מחוץ)</div><div class="value neutral" id="ic_state">—</div></div>
+                <div class="pg-result-card"><div class="label">Max Profit | Max Loss | B.E.</div><div class="value neutral" id="ic_limits" style="font-size:0.9rem;">—</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">תרגיל 1</span> Iron Condor — ניתוח מלא
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                Iron Condor על מניה (היום ב-200 ש"ח): +PUT(175, P=1.5) − PUT(185, P=4) − CALL(215, P=4) + CALL(225, P=1.5). 100 מניות.
+                <br>א) Net Credit לתיק; ב) רווח מקסימלי; ג) הפסד מקסימלי לכל כנף; ד) B.E.; ה) P&L ב-S=192; ו) P&L ב-S=220.
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Net Credit = (4 − 1.5) + (4 − 1.5) = 2.5 + 2.5 = 5 ₪/מניה
+לתיק: 5 × 100 = +500 ₪
+
+ב) Max Profit = +500 ₪ (כש-185 ≤ S ≤ 215)
+
+ג) Max Loss per wing = (185−175) − 5 = 5 ₪/מניה → −500 ₪ לתיק
+
+ד) B.E. תחתון = 185 − 5 = 180 | B.E. עליון = 215 + 5 = 220
+
+ה) S = 192 (בגוף → רווח מלא):
+   כל האופציות OTM. P&L = +5 × 100 = +500 ₪
+
+ו) S = 220 (על B.E. העליון):
+   Bull Put Spread: כל אופציות PUT חסרות ערך → +2.5 ₪
+   Bear Call Spread: 4 − (220−215) − 1.5 = 4 − 5 − 1.5 = −2.5 ₪
+   סה"כ = 2.5 − 2.5 = 0 ₪ × 100 = 0 ₪ ✓ (על ה-BE)</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box" style="border-right: 4px solid var(--accent);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background:var(--accent);">תרגיל 2 — מכפיל</span> Iron Condor על S&P 500
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                S&P 500 ב-5,200 נקודות. Iron Condor: +PUT(5,000, P=10) − PUT(5,050, P=20) − CALL(5,350, P=20) + CALL(5,400, P=10). <strong>מכפיל: $50 לנקודה.</strong> 2 חוזים.
+                <br>א) Net Credit בדולרים; ב) Max Loss בדולרים; ג) P&L אם S&P ב-5,150; ד) P&L אם S&P ב-5,420.
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Net Credit לחוזה = (20−10) + (20−10) = 10 + 10 = 20 נקודות
+× $50 × 2 = $2,000
+
+Max Loss per wing לחוזה = (5050−5000) − 20 = 30 נקודות
+× $50 × 2 = $3,000
+
+ג) S = 5,150 (בגוף 5,050-5,350 → רווח מלא):
+   P&L = +$2,000
+
+ד) S = 5,420 (מעל K3=5,400 → כנף ימין פגועה):
+   Bear Call P&L לחוזה = 20 − (5420−5350) + (5420−5400) = 20 − 70 + 20 = −30 נק'
+   Bull Put P&L = +10 נק' (כל PUT חסרי ערך)
+   סה"כ לחוזה = −30 + 10 = −20... חכו:
+   
+   נוסחה ישירה:
+   P&L = 20 − max(5050−5420,0) + max(5000−5420,0) − max(5420−5350,0) + max(5420−5400,0)
+       = 20 − 0 + 0 − 70 + 20 = −30 נקודות
+   × $50 × 2 = −$3,000 (הפסד מקסימלי ✓)</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box" style="border-right: 4px solid var(--danger);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background:var(--danger);">תרגיל 3 — בנה בעצמך</span> Iron Condor מאפס
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                מניה ב-<strong>100 ש"ח</strong>. אופציות זמינות: PUT(80)=1, PUT(90)=4, PUT(95)=7, CALL(105)=6, CALL(110)=3, CALL(120)=0.8. על 200 מניות.
+                <br>א) בנה Iron Condor שייתן Net Credit גבוה ככל האפשר תוך הגבלת הסיכון ל-8 ₪/מניה לכל כיוון.
+                <br>ב) מהו ה-Net Credit שהצלחת לגבות?
+                <br>ג) מה אזור הרווח?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <p><strong>ניתוח:</strong> רוחב הכנף המקסימלי (לפי אילוץ הסיכון) הוא כ-10 ₪ (כי אם Net Credit ≈ 2, אז Max Loss = 10-2 = 8).</p>
+            <div class="math-breakdown">Bull Put Spread: Short PUT(90, P=4) + Long PUT(80, P=1) → Credit = 3 ₪
+   Max Loss wing = (90−80) − 3 = 7 ₪ ← תחת 8 ✓
+
+Bear Call Spread: Short CALL(110, P=3) + Long CALL(120, P=0.8) → Credit = 2.2 ₪
+   Max Loss wing = (120−110) − 2.2 = 7.8 ₪ ← תחת 8 ✓
+
+Net Credit = 3 + 2.2 = 5.2 ₪/מניה
+לתיק: 5.2 × 200 = 1,040 ₪ ביום פתיחה
+
+אזור רווח: 90 ≤ S ≤ 110
+B.E. תחתון = 90 − 5.2 = 84.8 | B.E. עליון = 110 + 5.2 = 115.2
+
+הערה: שימוש ב-Short PUT(95) היה נותן יותר פרמיה אבל מגדיל את הסיכון!</div>
+        </div></details>
+    </div>
+</section>
+
+<!-- ===== BIG FILL-IN TABLE ===== -->
+<section class="section-card" style="border: 2px solid var(--secondary);">
+    <div class="section-header">
+        <i class="fas fa-table"></i>
+        <h2>טבלת אינטגרציה: כל האסטרטגיות יחד</h2>
+    </div>
+    <p>מניה ב-<strong>S₀ = 100 ש"ח</strong>. כל האופציות עם אותו מועד פקיעה. נתונים:</p>
+    <div class="concept-box">
+        <div class="concept-title"><i class="fas fa-info-circle"></i> נתוני בסיס</div>
+        <div class="math-breakdown">CALL(95) = 9  |  CALL(100) = 6  |  CALL(105) = 3.5  |  CALL(110) = 2
+PUT(90)  = 1  |  PUT(95)  = 3  |  PUT(100) = 5  |  PUT(105) = 9</div>
+    </div>
+    <p>חשבו את P&L (למניה) של כל אסטרטגיה בנקודות S שלהלן. הכניסו תשובות ולחצו בדוק.</p>
+    <div class="fill-table-wrapper">
+        <table class="fill-table" id="bigTable">
+            <thead>
+                <tr>
+                    <th>S בפקיעה</th>
+                    <th>Collar<br><small>Stock(100)+Put(95)+Short Call(105)</small></th>
+                    <th>Long Straddle<br><small>Call(100)+Put(100)</small></th>
+                    <th>Bull Call Spread<br><small>Long C(95)+Short C(105)</small></th>
+                    <th>Bear Put Spread<br><small>Long P(105)+Short P(95)</small></th>
+                    <th>Bull Put Spread<br><small>Short P(100)+Long P(90)</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- S=80 -->
+                <!-- Collar(S0=100,Kp=95,Pp=3,Kc=105,Pc=3.5): net=(3.5-3)=+0.5. S=80: (80-100)+max(95-80)-3.5+max(80-105)+3.5= -20+(15-3)+(0+3.5)=-20+12+3.5=-4.5 -->
+                <!-- Collar: (S-100)+max(95-S,0)-max(S-105,0)+(3.5-3). S=80: -20+15-0+0.5=-4.5 -->
+                <!-- LStraddle: max(80-100)+max(100-80)-(6+5)= 0+20-11=9 -->
+                <!-- BCS: max(80-95)-max(80-105)-(9-3.5)=0-0-5.5=-5.5 -->
+                <!-- BPS(Long P105 Short P95): max(105-80)-max(95-80)-(9-3)=25-15-6=4 -->
+                <!-- BullPutSpread(Short P100 Long P90): (5-1)-max(100-80,0)+max(90-80,0)=4-(20)+(10)=-6 -->
+                <tr>
+                    <td class="given">80</td>
+                    <td><input type="number" data-answer="-4.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="9" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-5.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="4" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-6" data-table="big" placeholder="?"></td>
+                </tr>
+                <!-- S=95 -->
+                <!-- Collar: (95-100)+0-0+0.5=-4.5 -->
+                <!-- LStraddle: 0+(100-95)-11=5-11=-6 -->
+                <!-- BCS: 0-0-5.5=-5.5 -->
+                <!-- BPS: max(105-95)-max(95-95)-6=10-0-6=4 -->
+                <!-- BullPutSpread: 4-max(100-95)+max(90-95,0)=4-5+0=-1 -->
+                <tr>
+                    <td class="given">95</td>
+                    <td><input type="number" data-answer="-4.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-6" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-5.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="4" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-1" data-table="big" placeholder="?"></td>
+                </tr>
+                <!-- S=100 -->
+                <!-- Collar: 0+0+0.5=+0.5 -->
+                <!-- LStraddle: 0+0-11=-11 -->
+                <!-- BCS: max(100-95,0)-0-5.5=5-5.5=-0.5 -->
+                <!-- BPS: max(105-100)-0-6=5-6=-1 -->
+                <!-- BullPutSpread: 4-max(100-100,0)+0=4-0=4 -->
+                <tr>
+                    <td class="given">100</td>
+                    <td><input type="number" data-answer="0.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-11" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-0.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-1" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="4" data-table="big" placeholder="?"></td>
+                </tr>
+                <!-- S=105 -->
+                <!-- Collar: 5+0-0+0.5=5.5 -->
+                <!-- LStraddle: 5+0-11=-6 -->
+                <!-- BCS: 10-(105-105)-5.5=10-0-5.5=4.5 -->
+                <!-- BPS: max(105-105)-0-6=0-6=-6 (wait: Long P105: max(105-105)=0, Short P95: max(95-105)=0, so 0-0-6=-6) -->
+                <!-- BullPutSpread: 4-0+0=4 -->
+                <tr>
+                    <td class="given">105</td>
+                    <td><input type="number" data-answer="5.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-6" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="4.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-6" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="4" data-table="big" placeholder="?"></td>
+                </tr>
+                <!-- S=110 -->
+                <!-- Collar: 10+0-(110-105)+0.5=10-5+0.5=5.5 -->
+                <!-- LStraddle: 10+0-11=-1 -->
+                <!-- BCS: max(110-95)-max(110-105)-5.5=15-5-5.5=4.5 -->
+                <!-- BPS: 0-0-6=-6 -->
+                <!-- BullPutSpread: 4-0+0=4 -->
+                <tr>
+                    <td class="given">110</td>
+                    <td><input type="number" data-answer="5.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-1" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="4.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-6" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="4" data-table="big" placeholder="?"></td>
+                </tr>
+                <!-- S=120 -->
+                <!-- Collar: 20+0-(120-105)+0.5=20-15+0.5=5.5 -->
+                <!-- LStraddle: 20+0-11=9 -->
+                <!-- BCS: max(120-95)-max(120-105)-5.5=25-15-5.5=4.5 -->
+                <!-- BPS: 0-0-6=-6 -->
+                <!-- BullPutSpread: 4-0+0=4 -->
+                <tr>
+                    <td class="given">120</td>
+                    <td><input type="number" data-answer="5.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="9" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="4.5" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="-6" data-table="big" placeholder="?"></td>
+                    <td><input type="number" data-answer="4" data-table="big" placeholder="?"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="check-table-btn" onclick="checkTable('big')"><i class="fas fa-check-circle"></i> בדוק תשובות</button>
+    <button class="show-answers-btn" onclick="showAnswers('big')"><i class="fas fa-eye"></i> הצג פתרון</button>
+    <div class="table-feedback" id="bigTableFeedback"></div>
+    <div class="concept-box" style="margin-top:2rem;">
+        <div class="concept-title"><i class="fas fa-calculator"></i> נוסחאות לעזר</div>
+        <div class="math-breakdown">Collar(S₀=100, K_put=95, K_call=105, P_c=3.5, P_p=3):
+  = (S−100) + max(95−S,0) − max(S−105,0) + (3.5−3)
+
+Long Straddle(K=100, Pc=6, Pp=5):
+  = max(S−100,0) + max(100−S,0) − 11
+
+Bull Call Spread(K1=95 P1=9, K2=105 P2=3.5):
+  Net Debit = 5.5
+  = max(S−95,0) − max(S−105,0) − 5.5
+
+Bear Put Spread(K2=105 P2=9, K1=95 P1=3):
+  Net Debit = 6
+  = max(105−S,0) − max(95−S,0) − 6
+
+Bull Put Spread(Short P100 P=5, Long P90 P=1):
+  Net Credit = 4
+  = 4 − max(100−S,0) + max(90−S,0)</div>
+    </div>
+</section>
+
+<!-- ===== FINAL EXERCISE BANK ===== -->
+<section class="section-card" style="background:#f8fafc; border: 2px solid var(--secondary);">
+    <div class="section-header">
+        <i class="fas fa-pencil-ruler"></i>
+        <h2>בנק תרגילים — לקראת הבחינה</h2>
+    </div>
+    <p>8 שאלות מדורגות המשלבות את כל אסטרטגיות הפרק.</p>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">שאלה 1</span> זיהוי אסטרטגיה לפי תפיסת שוק
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                לכל תיאור בחרו את האסטרטגיה המתאימה ביותר:
+                <br>א) "אני מחזיק מניה ופוחד מירידה אבל לא רוצה לשלם פרמיה"
+                <br>ב) "אני בטוח שהמדד יזוז חזק לפני הבחירות, לא משנה לאיזה כיוון, ורוצה להוציא פחות כסף מ-Straddle"
+                <br>ג) "אני מאמין שהמניה תישאר בין 90 ל-110 ורוצה לגבות פרמיה"
+                <br>ד) "אני דובי מתון — צופה ירידה מ-150 ל-130, לא יותר"
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <p><strong>א) Collar (Zero-Cost):</strong> ממנים את ה-PUT בכתיבת CALL — עלות אפס.</p>
+            <p><strong>ב) Long Strangle:</strong> שתי אופציות OTM = עלות נמוכה יותר מ-Straddle, רווח בתנועה חזקה בכל כיוון.</p>
+            <p><strong>ג) Iron Condor:</strong> גובים פרמיה ממכירת PUT מתחת (90) וCALL מעל (110), עם כנפי הגנה.</p>
+            <p><strong>ד) Bear Put Spread:</strong> Long PUT(150) + Short PUT(130). מרוויחים את כל הרווח עד K1=130.</p>
+        </div></details>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">שאלה 2</span> Long Strangle — ניתוח ריבית בנק
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                לפני ישיבת בנק ישראל קונה סוחר Long Strangle על $/₪ (שער=3.70): Long PUT(3.60, P=0.025) + Long CALL(3.80, P=0.025). <strong>מכפיל: $10,000. 10 חוזים.</strong>
+                <br>א) עלות פתיחה בש"ח; ב) נקודות איזון; ג) P&L אם שער ב-3.55; ד) P&L אם שער ב-3.74.
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Total Prem = 0.025+0.025 = 0.05 ₪/$
+× $10,000 × 10 = 5,000 ₪ עלות פתיחה
+
+ב) Lower BE = 3.60 − 0.05 = 3.55 | Upper BE = 3.80 + 0.05 = 3.85
+
+ג) S = 3.55 (בדיוק על Lower BE):
+   PUT Payoff = 3.60 − 3.55 = 0.05 ₪/$
+   P&L = 0.05 − 0.05 = 0 × $10,000 × 10 = 0 ₪ (איזון ✓)
+
+ד) S = 3.74 (בין Strikes, הפסד):
+   P&L = −0.05 × $10,000 × 10 = −5,000 ₪ (הפסד מלא)</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box">
+        <div class="exercise-question">
+            <span class="q-badge">שאלה 3</span> Short Straddle — הסיכון בפרשה
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                כותב Short Straddle: Short CALL(K=200, P=12) + Short PUT(K=200, P=10). 100 מניות.
+                <br>א) כמה גבה הסוחר?
+                <br>ב) מהן נקודות האיזון?
+                <br>ג) אם המניה מגיעה ל-240 — מה P&L לתיק?
+                <br>ד) כמה צריכה המניה לרדת כדי שהסוחר יסבול הפסד של 5,000 ₪?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">א) (12+10) × 100 = 2,200 ₪ גביה
+
+ב) B.E.: 200−22 = 178 | 200+22 = 222
+
+ג) S = 240:
+   P&L = 22 − (240−200) − 0 = 22 − 40 = −18 ₪/מניה
+   לתיק: −18 × 100 = −1,800 ₪
+
+ד) הפסד 5,000 ₪ = −50 ₪/מניה:
+   22 − (200−S) = −50  →  S = 200 − 72 = 128 ₪
+   (ירידה של 36% מ-200!)</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box" style="border-right: 4px solid var(--accent);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background:var(--accent);">שאלה 4 — אינטגרציה</span> Debit לעומת Credit: השוואה אסטרטגית
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                מניה ב-100 ש"ח. שני סוחרים בחרו אסטרטגיות שונות:
+                <br><strong>סוחר א'</strong> — Bull Call Spread: Long CALL(K1=100, P=8) + Short CALL(K2=110, P=3). Net Debit = 5.
+                <br><strong>סוחר ב'</strong> — Bull Put Spread: Short PUT(K=100, P=7) + Long PUT(K=90, P=2). Net Credit = 5.
+                <br>חשבו P&L שניהם ב: S=85, 95, 100, 105, 110. מי עדיף ומתי?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Bull Call Spread P&L = max(S−100,0) − max(S−110,0) − 5
+Bull Put Spread P&L = 5 − max(100−S,0) + max(90−S,0)
+
+S=85:  BCS: 0−0−5 = −5 | BPS: 5−15+5 = −5    → שניהם שווים!
+S=95:  BCS: 0−0−5 = −5 | BPS: 5−5+0 = 0       → BPS ניצח
+S=100: BCS: 0−0−5 = −5 | BPS: 5−0+0 = +5      → BPS ניצח
+S=105: BCS: 5−0−5 = 0  | BPS: 5−0+0 = +5      → BPS ניצח
+S=110: BCS: 10−0−5=+5  | BPS: 5−0+0 = +5      → שניהם שווים!
+
+מסקנה: Bull Put Spread (Credit) עדיף בכל מחיר בין 90 ל-110!
+הסיבה: הוא מרוויח כבר מ-S=100 כלפי מטה ועד לאינסוף כלפי מעלה.
+Bull Call Spread מרוויח רק מ-105 ומעלה.
+אבל — BPS מסוכן אם המניה תרד הרבה מתחת ל-90 (הפסד 5 ₪).
+BCS — הפסד 5 ₪ בכל תרחיש ירידה (סימטרי לצד השני).</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box" style="border-right: 4px solid var(--purple);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background:var(--purple);">שאלה 5 — Iron Condor מורכב</span> ניהול פוזיציה
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                סוחרת בנתה Iron Condor על מניה (ב-200 ש"ח): +PUT(175, P=1) − PUT(185, P=3.5) − CALL(215, P=3.5) + CALL(225, P=1). 500 מניות.
+                <br>א) Net Credit לתיק; ב) שרטטו בדמיונכם את הטווח שבו היא מרוויחה; ג) P&L אם מניה ב-188; ד) P&L אם מניה ב-230; ה) רוחב הכנפיים שווה? (בדקו ווודאו).
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Net Credit = (3.5−1) + (3.5−1) = 2.5 + 2.5 = 5 ₪/מניה
+לתיק: 5 × 500 = +2,500 ₪
+
+ב) אזור רווח: 185 ≤ S ≤ 215
+   B.E.: 185−5=180 | 215+5=220
+
+ג) S = 188 (בגוף → רווח מלא):
+   לתיק: +2,500 ₪
+
+ד) S = 230 (מעל K3=225):
+   P&L לחוזה = 5 + max(175−230,0) − max(185−230,0) − max(230−215,0) + max(230−225,0)
+             = 5 + 0 − 0 − 15 + 5 = −5 ₪/מניה
+   לתיק: −5 × 500 = −2,500 ₪ (הפסד מקסימלי)
+
+ה) כנף שמאל (PUT): K1−K0 = 185−175 = 10
+   כנף ימין (CALL): K3−K2 = 225−215 = 10 ✓ (שוות!)</div>
+        </div></details>
+    </div>
+
+    <div class="exercise-box" style="border-right: 4px solid var(--danger);">
+        <div class="exercise-question">
+            <span class="q-badge" style="background:var(--danger);">שאלה 6 — אתגר!</span> Butterfly מול Iron Condor — מה לבחור?
+            <p style="margin-top:0.5rem; font-weight:400; font-size:1rem;">
+                מניה ב-100 ש"ח. שתי אפשרויות:
+                <br><strong>א) Long Butterfly:</strong> +Call(90, P=13) − 2×Call(100, P=7) + Call(110, P=3). Net Debit = 2.
+                <br><strong>ב) Iron Condor:</strong> +PUT(85, P=0.5) − PUT(90, P=2) − CALL(110, P=2) + CALL(115, P=0.5). Net Credit = 3.
+                <br>150 מניות. חשבו P&L שתיהן ב-S: 85, 92, 100, 108, 115. מה תמליצו ולמה?
+            </p>
+        </div>
+        <details><summary>הצג פתרון מלא</summary>
+        <div class="exercise-solution">
+            <div class="math-breakdown">Butterfly P&L = max(S−90,0) − 2×max(S−100,0) + max(S−110,0) − 2
+Condor P&L   = 3 + max(85−S,0) − max(90−S,0) − max(S−110,0) + max(S−115,0)
+
+S=85:  BF: 0−0+0−2 = −2 | IC: 3+(0)−(0)−0+0 = 3  → Condor ✓
+S=92:  BF: 2−0+0−2 = 0  | IC: 3+0−0−0+0 = 3       → Condor ✓
+S=100: BF: 10−0+0−2 = 8 | IC: 3+0−0−0+0 = 3       → Butterfly ✓✓
+S=108: BF: 18−16+0−2 = 0| IC: 3+0−0−0+0 = 3       → Condor ✓
+S=115: BF: 25−30+5−2 = -2| IC: 3+0−0−5+0 = -2     → שווה!
+
+× 150 מניות:
+S=85:  BF: −300  IC: +450
+S=92:  BF: 0     IC: +450
+S=100: BF: +1,200  IC: +450
+S=108: BF: 0     IC: +450
+S=115: BF: −300  IC: −300
+
+המלצה: Iron Condor עדיף לסוחר שרוצה רווח קבוע ויציב בטווח רחב (85-115).
+Butterfly עדיף לסוחר שבטוח שהמניה תגיע בדיוק ל-100 — התשואה 400%!</div>
+        </div></details>
+    </div>
+</section>
+
+</main>
+
+<footer style="text-align: center; padding: 3rem; background: var(--primary); color: white; margin-top: 2rem;">
+    <i class="fas fa-chart-line" style="font-size:2.5rem; margin-bottom:1rem; color:#c4b5fd;"></i>
+    <h3 style="margin-top:0; color:#e9d5ff;">ניהול פיננסי / שוק ההון — פרק 4</h3>
+    <p style="color:#a5b4fc; max-width:600px; margin:0 auto 1rem;">כל 9 האסטרטגיות הנותרות הושלמו. בפרק 5 נפנה לתמחור אופציות — מודל Black-Scholes והיוונים (Δ, Γ, Θ, ν).</p>
+    <p style="font-size:0.95rem; color:#64748b;">© 2026 — כל הזכויות שמורות</p>
+</footer>
+
+<script>
+/* ===== UTILS ===== */
+function fmt(n) {
+    const s = 'direction:ltr;unicode-bidi:isolate;display:inline-block;';
+    if (n > 0) return `<span class="profit" style="${s}">+${n.toFixed(2)}</span>`;
+    if (n < 0) return `<span class="loss"   style="${s}">${n.toFixed(2)}</span>`;
+    return `<span class="neutral" style="${s}">0.00</span>`;
+}
+
+/* ===== COLLAR ===== */
+function calcCollar() {
+    const S0 = +document.getElementById('col_S0').value;
+    const Kp = +document.getElementById('col_Kp').value;
+    const Pp = +document.getElementById('col_Pp').value;
+    const Kc = +document.getElementById('col_Kc').value;
+    const Pc = +document.getElementById('col_Pc').value;
+    const S  = +document.getElementById('col_S').value;
+    const q  = +document.getElementById('col_qty').value;
+    const net = Pc - Pp;
+    const stock = S - S0;
+    const put_pl = Math.max(Kp - S, 0) - Pp;
+    const call_pl = Pc - Math.max(S - Kc, 0);
+    const total = (stock + put_pl + call_pl) * q;
+    const maxP = ((Kc - S0) + net) * q;
+    const maxL = ((S0 - Kp) - net) * q;
+    const be = S0 - net;
+    document.getElementById('col_netcost').innerHTML = fmt(net);
+    document.getElementById('col_stock').innerHTML = fmt(stock);
+    document.getElementById('col_put').innerHTML = fmt(put_pl);
+    document.getElementById('col_call').innerHTML = fmt(call_pl);
+    document.getElementById('col_total').innerHTML = fmt(total);
+    document.getElementById('col_limits').innerHTML = `רצפה ${((Kp-S0)+net).toFixed(2)} | תקרה ${((Kc-S0)+net).toFixed(2)} | BE ${be.toFixed(2)}`;
+}
+
+/* ===== LONG STRADDLE ===== */
+function calcLStraddle() {
+    const K  = +document.getElementById('ls_K').value;
+    const Pc = +document.getElementById('ls_Pc').value;
+    const Pp = +document.getElementById('ls_Pp').value;
+    const S  = +document.getElementById('ls_S').value;
+    const tp = Pc + Pp;
+    const cp = Math.max(S - K, 0);
+    const pp = Math.max(K - S, 0);
+    const pl = cp + pp - tp;
+    document.getElementById('ls_totalprem').textContent = tp.toFixed(2);
+    document.getElementById('ls_callpayoff').innerHTML = fmt(cp);
+    document.getElementById('ls_putpayoff').innerHTML = fmt(pp);
+    document.getElementById('ls_total').innerHTML = fmt(pl);
+    document.getElementById('ls_be').textContent = `${(K-tp).toFixed(2)} | ${(K+tp).toFixed(2)}`;
+    document.getElementById('ls_move').textContent = `לפחות ±${(tp/K*100).toFixed(1)}% תנועה`;
+}
+
+/* ===== SHORT STRADDLE ===== */
+function calcSStraddle() {
+    const K  = +document.getElementById('ss_K').value;
+    const Pc = +document.getElementById('ss_Pc').value;
+    const Pp = +document.getElementById('ss_Pp').value;
+    const S  = +document.getElementById('ss_S').value;
+    const tp = Pc + Pp;
+    const call_loss = Pc - Math.max(S - K, 0);
+    const put_loss  = Pp - Math.max(K - S, 0);
+    const total = call_loss + put_loss;
+    document.getElementById('ss_credit').textContent = tp.toFixed(2);
+    document.getElementById('ss_call_loss').innerHTML = fmt(call_loss);
+    document.getElementById('ss_put_loss').innerHTML = fmt(put_loss);
+    document.getElementById('ss_total').innerHTML = fmt(total);
+    document.getElementById('ss_be').textContent = `${(K-tp).toFixed(2)} עד ${(K+tp).toFixed(2)}`;
+}
+
+/* ===== STRANGLE ===== */
+function calcStrangle() {
+    const Kp = +document.getElementById('str_Kp').value;
+    const Pp = +document.getElementById('str_Pp').value;
+    const Kc = +document.getElementById('str_Kc').value;
+    const Pc = +document.getElementById('str_Pc').value;
+    const S  = +document.getElementById('str_S').value;
+    const tp = Pc + Pp;
+    const cp = Math.max(S - Kc, 0);
+    const pp = Math.max(Kp - S, 0);
+    const pl = cp + pp - tp;
+    document.getElementById('str_prem').textContent = tp.toFixed(2);
+    document.getElementById('str_cp').innerHTML = fmt(cp);
+    document.getElementById('str_pp').innerHTML = fmt(pp);
+    document.getElementById('str_total').innerHTML = fmt(pl);
+    document.getElementById('str_be').textContent = `${(Kp-tp).toFixed(2)} | ${(Kc+tp).toFixed(2)}`;
+}
+
+/* ===== BULL CALL SPREAD ===== */
+function calcBCS() {
+    const K1 = +document.getElementById('bcs_K1').value;
+    const P1 = +document.getElementById('bcs_P1').value;
+    const K2 = +document.getElementById('bcs_K2').value;
+    const P2 = +document.getElementById('bcs_P2').value;
+    const S  = +document.getElementById('bcs_S').value;
+    const q  = +document.getElementById('bcs_qty').value;
+    const nd = P1 - P2;
+    const lc = Math.max(S - K1, 0) - P1;
+    const sc = P2 - Math.max(S - K2, 0);
+    const total = (lc + sc) * q;
+    const maxP = ((K2 - K1) - nd) * q;
+    const be = K1 + nd;
+    document.getElementById('bcs_debit').innerHTML = fmt(-nd);
+    document.getElementById('bcs_long').innerHTML = fmt(lc);
+    document.getElementById('bcs_short').innerHTML = fmt(sc);
+    document.getElementById('bcs_total').innerHTML = fmt(total);
+    document.getElementById('bcs_limits').innerHTML = `Max: <span class='profit'>+${((K2-K1)-nd).toFixed(2)}</span> | Min: <span class='loss'>-${nd.toFixed(2)}</span> | BE: ${be.toFixed(2)}`;
+}
+
+/* ===== BEAR PUT SPREAD ===== */
+function calcBPS() {
+    const K2 = +document.getElementById('bps_K2').value;
+    const P2 = +document.getElementById('bps_P2').value;
+    const K1 = +document.getElementById('bps_K1').value;
+    const P1 = +document.getElementById('bps_P1').value;
+    const S  = +document.getElementById('bps_S').value;
+    const q  = +document.getElementById('bps_qty').value;
+    const nd = P2 - P1;
+    const lp = Math.max(K2 - S, 0) - P2;
+    const sp = P1 - Math.max(K1 - S, 0);
+    const total = (lp + sp) * q;
+    const be = K2 - nd;
+    document.getElementById('bps_debit').innerHTML = fmt(-nd);
+    document.getElementById('bps_long').innerHTML = fmt(lp);
+    document.getElementById('bps_short').innerHTML = fmt(sp);
+    document.getElementById('bps_total').innerHTML = fmt(total);
+    document.getElementById('bps_limits').innerHTML = `Max: <span class='profit'>+${((K2-K1)-nd).toFixed(2)}</span> | Min: <span class='loss'>-${nd.toFixed(2)}</span> | BE: ${be.toFixed(2)}`;
+}
+
+/* ===== BULL PUT SPREAD ===== */
+function calcBullPut() {
+    const K2 = +document.getElementById('bpu_K2').value;
+    const P2 = +document.getElementById('bpu_P2').value;
+    const K1 = +document.getElementById('bpu_K1').value;
+    const P1 = +document.getElementById('bpu_P1').value;
+    const S  = +document.getElementById('bpu_S').value;
+    const q  = +document.getElementById('bpu_qty').value;
+    const nc = P2 - P1;
+    const sput = P2 - Math.max(K2 - S, 0);
+    const lput = Math.max(K1 - S, 0) - P1;
+    const total = (sput + lput) * q;
+    const be = K2 - nc;
+    document.getElementById('bpu_credit').textContent = (nc * q).toFixed(2);
+    document.getElementById('bpu_sput').innerHTML = fmt(sput);
+    document.getElementById('bpu_lput').innerHTML = fmt(lput);
+    document.getElementById('bpu_total').innerHTML = fmt(total);
+    document.getElementById('bpu_limits').innerHTML = `Max: <span class='profit'>+${(nc*q).toFixed(2)}</span> | Min: <span class='loss'>-${(((K2-K1)-nc)*q).toFixed(2)}</span> | BE: ${be.toFixed(2)}`;
+}
+
+/* ===== BUTTERFLY ===== */
+function calcButterfly() {
+    const K1 = +document.getElementById('bf_K1').value;
+    const P1 = +document.getElementById('bf_P1').value;
+    const K2 = +document.getElementById('bf_K2').value;
+    const P2 = +document.getElementById('bf_P2').value;
+    const K3 = +document.getElementById('bf_K3').value;
+    const P3 = +document.getElementById('bf_P3').value;
+    const S  = +document.getElementById('bf_S').value;
+    const nd = P1 - 2*P2 + P3;
+    const c1 = Math.max(S-K1,0) - P1;
+    const c2 = 2*(P2 - Math.max(S-K2,0));
+    const c3 = Math.max(S-K3,0) - P3;
+    const total = c1 + c2 + c3;
+    const maxP = (K2 - K1) - nd;
+    const lbe = K1 + nd;
+    const ube = K3 - nd;
+    const roi = nd > 0 ? ((total/nd)*100).toFixed(0) + '%' : 'N/A';
+    document.getElementById('bf_debit').innerHTML = fmt(-nd);
+    document.getElementById('bf_c1').innerHTML = fmt(c1);
+    document.getElementById('bf_c2').innerHTML = fmt(c2);
+    document.getElementById('bf_c3').innerHTML = fmt(c3);
+    document.getElementById('bf_total').innerHTML = fmt(total);
+    document.getElementById('bf_roi').innerHTML = total >= 0 ? `<span class="profit">${roi}</span>` : `<span class="loss">${roi}</span>`;
+    document.getElementById('bf_limits').innerHTML = `Max: <span class='profit'>+${maxP.toFixed(2)}</span> | Min: <span class='loss'>-${nd.toFixed(2)}</span> | BE: ${lbe.toFixed(2)}-${ube.toFixed(2)}`;
+}
+
+/* ===== IRON CONDOR ===== */
+function calcCondor() {
+    const K0 = +document.getElementById('ic_K0').value;
+    const P0 = +document.getElementById('ic_P0').value;
+    const K1 = +document.getElementById('ic_K1').value;
+    const P1 = +document.getElementById('ic_P1').value;
+    const K2 = +document.getElementById('ic_K2').value;
+    const P2 = +document.getElementById('ic_P2').value;
+    const K3 = +document.getElementById('ic_K3').value;
+    const P3 = +document.getElementById('ic_P3').value;
+    const S  = +document.getElementById('ic_S').value;
+    const nc = (P1-P0) + (P2-P3);
+    const bps_pl = (P1-P0) - Math.max(K1-S,0) + Math.max(K0-S,0);
+    const bcs_pl = (P2-P3) - Math.max(S-K2,0) + Math.max(S-K3,0);
+    const total = bps_pl + bcs_pl;
+    const maxL = (K1-K0) - nc;
+    const lbe = K1 - nc;
+    const ube = K2 + nc;
+    let state;
+    if (S >= K1 && S <= K2) state = '🟢 בגוף — רווח מלא';
+    else if ((S > K0 && S < K1) || (S > K2 && S < K3)) state = '🟡 כנף — הפסד חלקי';
+    else state = '🔴 מחוץ — הפסד מקסימלי';
+    document.getElementById('ic_credit').textContent = nc.toFixed(2);
+    document.getElementById('ic_bps').innerHTML = fmt(bps_pl);
+    document.getElementById('ic_bcs').innerHTML = fmt(bcs_pl);
+    document.getElementById('ic_total').innerHTML = fmt(total);
+    document.getElementById('ic_state').innerHTML = state;
+    document.getElementById('ic_limits').innerHTML = `Max: <span class='profit'>+${nc.toFixed(2)}</span> | Min: <span class='loss'>-${maxL.toFixed(2)}</span> | BE: ${lbe.toFixed(2)}-${ube.toFixed(2)}`;
+}
+
+/* ===== TABLE CHECK ===== */
+function checkTable(id) {
+    const inputs = document.querySelectorAll(`input[data-table="${id}"]`);
+    let correct = 0;
+    inputs.forEach(inp => {
+        inp.classList.remove('correct','wrong');
+        if (inp.value.trim() === '') return;
+        if (Math.abs(parseFloat(inp.value) - parseFloat(inp.dataset.answer)) < 0.1) {
+            inp.classList.add('correct'); correct++;
+        } else { inp.classList.add('wrong'); }
+    });
+    const fb = document.getElementById(`${id}TableFeedback`);
+    fb.style.display = 'block';
+    if (correct === inputs.length) {
+        fb.style.background='#ecfdf5'; fb.style.color='#047857';
+        fb.innerHTML = '<i class="fas fa-check-circle"></i> מצוין! כל התשובות נכונות!';
+    } else {
+        fb.style.background='#fffbeb'; fb.style.color='#b45309';
+        fb.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${correct} נכונות מתוך ${inputs.length}. תקנו את המסומנות באדום.`;
+    }
+}
+function showAnswers(id) {
+    document.querySelectorAll(`input[data-table="${id}"]`).forEach(inp => {
+        inp.value = inp.dataset.answer;
+        inp.classList.remove('correct','wrong');
+        inp.classList.add('correct');
+    });
+    document.getElementById(`${id}TableFeedback`).style.display='none';
+}
+
+/* ===== CHARTS ===== */
+function makeChart(id, title, datasets, prices) {
+    const ctx = document.getElementById(id).getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: { labels: prices.map(p=>''+p), datasets },
+        options: {
+            responsive:true, maintainAspectRatio:false,
+            plugins: {
+                title:{ display:true, text:title, font:{size:17,family:'Assistant',weight:'bold'} },
+                legend:{ labels:{ font:{family:'Assistant',size:14} } },
+                tooltip:{ rtl:true, bodyFont:{family:'Assistant',size:13}, callbacks:{ label: ctx => ctx.dataset.label+': '+ctx.parsed.y.toFixed(2) } }
+            },
+            scales: {
+                x:{ title:{ display:true, text:'S ביום פקיעה', font:{family:'Assistant'} } },
+                y:{ title:{ display:true, text:'P&L למניה', font:{family:'Assistant'} } }
+            },
+            elements:{ point:{radius:0}, line:{borderWidth:3} },
+            interaction:{ mode:'index', intersect:false }
+        },
+        plugins: [{
+            id:'zeroLine',
+            beforeDraw: c => {
+                const {ctx:cx, scales:{y, x}} = c;
+                const y0 = y.getPixelForValue(0);
+                cx.save(); cx.beginPath(); cx.moveTo(x.left, y0); cx.lineTo(x.right, y0);
+                cx.lineWidth=2; cx.strokeStyle='rgba(0,0,0,0.25)'; cx.setLineDash([6,4]); cx.stroke(); cx.restore();
+            }
+        }]
+    });
+}
+
+window.onload = function() {
+    // Run defaults
+    calcCollar(); calcLStraddle(); calcSStraddle(); calcStrangle(); calcBCS(); calcBPS(); calcBullPut(); calcButterfly(); calcCondor();
+
+    const p = Array.from({length:121},(_, i)=>50+i); // 50 to 170
+
+    // Collar S0=100, Kp=90, Pp=2, Kc=110, Pc=2 (zero-cost)
+    makeChart('collarChart','Collar (S₀=100, K_put=90, K_call=110, Net=0)',[
+        { label:'Long Stock', data:p.map(s=>s-100), borderColor:'#cbd5e1', borderDash:[5,5] },
+        { label:'Collar P&L', data:p.map(s=>(s-100)+Math.max(90-s,0)-Math.max(s-110,0)), borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.1)', fill:true }
+    ], p);
+
+    // Long Straddle K=100, Pc=8, Pp=7, Total=15
+    makeChart('straddleChart','Long Straddle (K=100, Total Prem=15)',[
+        { label:'Long Straddle P&L', data:p.map(s=>Math.max(s-100,0)+Math.max(100-s,0)-15), borderColor:'#f59e0b', backgroundColor:'rgba(245,158,11,0.1)', fill:true }
+    ], p);
+
+    // Short Straddle
+    makeChart('shortStraddleChart','Short Straddle לעומת Long Straddle (K=100, Prem=15)',[
+        { label:'Long Straddle', data:p.map(s=>Math.max(s-100,0)+Math.max(100-s,0)-15), borderColor:'#f59e0b', borderDash:[5,5] },
+        { label:'Short Straddle', data:p.map(s=>15-Math.max(s-100,0)-Math.max(100-s,0)), borderColor:'#ef4444', backgroundColor:'rgba(239,68,68,0.08)', fill:true }
+    ], p);
+
+    // Strangle K_put=85 K_call=115 prem=4 vs Straddle K=100 prem=15
+    makeChart('strangleChart','Strangle (85/115, Prem=4) לעומת Straddle (100, Prem=15)',[
+        { label:'Long Straddle (עלות 15)', data:p.map(s=>Math.max(s-100,0)+Math.max(100-s,0)-15), borderColor:'#f59e0b' },
+        { label:'Long Strangle (עלות 4)', data:p.map(s=>Math.max(s-115,0)+Math.max(85-s,0)-4), borderColor:'#8b5cf6', backgroundColor:'rgba(139,92,246,0.08)', fill:true }
+    ], p);
+
+    // Bull Call Spread K1=90 P1=8 K2=110 P2=2 Net=6
+    makeChart('bcsChart','Bull Call Spread (Long 90 / Short 110, Debit=6)',[
+        { label:'Bull Call Spread P&L', data:p.map(s=>Math.max(s-90,0)-Math.max(s-110,0)-6), borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.08)', fill:true }
+    ], p);
+
+    // Bear Put Spread Long K=110 P=9, Short K=90 P=3, Net=6
+    makeChart('bpsChart','Bear Put Spread (Long 110 / Short 90, Debit=6)',[
+        { label:'Bear Put Spread P&L', data:p.map(s=>Math.max(110-s,0)-Math.max(90-s,0)-6), borderColor:'#ef4444', backgroundColor:'rgba(239,68,68,0.08)', fill:true }
+    ], p);
+
+    // Credit Spreads: Bull Put (Short 100 P=6, Long 85 P=1.5 → Cr=4.5) + Bear Call (Short 115 P=5, Long 130 P=1.5 → Cr=3.5)
+    makeChart('creditChart','Bull Put Spread (Credit) vs Bear Call Spread (Credit)',[
+        { label:'Bull Put Spread — Credit=4.5 (Short P100, Long P85)', data:p.map(s=>4.5-Math.max(100-s,0)+Math.max(85-s,0)), borderColor:'#0891b2', backgroundColor:'rgba(8,145,178,0.06)', fill:true },
+        { label:'Bear Call Spread — Credit=3.5 (Short C115, Long C130)', data:p.map(s=>3.5-Math.max(s-115,0)+Math.max(s-130,0)), borderColor:'#7e22ce', backgroundColor:'rgba(126,34,206,0.06)', fill:true }
+    ], p);
+
+    // Butterfly K1=85 K2=100 K3=115, Net=2
+    makeChart('butterflyChart','Long Butterfly (85 / 2×100 / 115, Debit=2)',[
+        { label:'Butterfly P&L', data:p.map(s=>Math.max(s-85,0)-2*Math.max(s-100,0)+Math.max(s-115,0)-2), borderColor:'#ec4899', backgroundColor:'rgba(236,72,153,0.08)', fill:true }
+    ], p);
+
+    // Iron Condor K0=80 K1=90 K2=110 K3=120 Credit=6
+    makeChart('condorChart','Iron Condor (80 / 90 / 110 / 120, Net Credit=6)',[
+        { label:'Iron Condor P&L', data:p.map(s=>6+Math.max(80-s,0)-Math.max(90-s,0)-Math.max(s-110,0)+Math.max(s-120,0)), borderColor:'#7e22ce', backgroundColor:'rgba(126,34,206,0.08)', fill:true }
+    ], p);
+};
+</script>
+</body>
+</html>
